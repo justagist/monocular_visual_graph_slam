@@ -12,7 +12,6 @@
 #include "STAM.h"
 #include <fstream>
 #include <ros/ros.h>
-#include <nav_msgs/Odometry.h>
 #include <tf/transform_broadcaster.h>
 
 namespace vo = visual_odometry;
@@ -37,8 +36,8 @@ int main(int argc, char** argv){
 
     ros::init(argc, argv, "odometry_publisher");
     ros::NodeHandle n;
-    // ros::Publisher odom_pub = n.advertise<nav_msgs::Odometry>("vis_odom", 50);
-    tf::TransformBroadcaster odom_broadcaster;
+    ros::Publisher pose_pub = n.advertise<geometry_msgs::Pose>("vis_odom", 1000);
+    // tf::TransformBroadcaster odom_broadcaster;
     
     ros::Time current_time, last_time;
     current_time = ros::Time::now();
@@ -61,7 +60,7 @@ int main(int argc, char** argv){
     while( !(frame = video_source.readNextFrame(next_frame_format[SCENE-1])).empty() && n.ok()){
         ros::spinOnce();               // check for incoming messages
         current_time = ros::Time::now();
-        current_frame = STAM.process(frame);
+        current_frame = STAM.process(frame,false);
 
 
         if( SCENE > 1 && i%300 == 0 )
@@ -80,8 +79,19 @@ int main(int argc, char** argv){
         float z = 34.2;
         float th = 53;
 
-        geometry_msgs::Quaternion odom_quat = tf::createQuaternionMsgFromYaw(th);
-        // nav_msgs::Odometry odom;
+        geometry_msgs::Pose cam_pose;
+        cam_pose.position.x = current_frame->pose.at<double>(0,3);
+        cam_pose.position.y = current_frame->pose.at<double>(1,3);
+        cam_pose.position.z = current_frame->pose.at<double>(2,3);
+
+        double q1,q2,q3,q4;
+        current_frame->getQuaternion(q1,q2,q3,q4);
+        cam_pose.orientation.x = q1;
+        cam_pose.orientation.y = q2;
+        cam_pose.orientation.z = q3;
+        cam_pose.orientation.w = q4;
+
+        pose_pub.publish(cam_pose);
         // odom.header.stamp = current_time;
         // odom.header.frame_id = "odom";
 
@@ -92,23 +102,27 @@ int main(int argc, char** argv){
 
         // odom_pub.publish(odom);
 
-        // last_time = current_time;
-        // r.sleep();
+        last_time = current_time;
+        r.sleep();
 
         // TESTING ODOMETRY TRANSFORM BROADCASTING
 
-        geometry_msgs::TransformStamped odom_trans;
-        odom_trans.header.stamp = current_time;
-        odom_trans.header.frame_id = "odom";
-        odom_trans.child_frame_id = "base_link";
+        // double q1,q2,q3,q4;
+        // current_frame->getQuaternion(q1,q2,q3,q4);
+        // std::cout << q1 << " " << q2 << " " << q3 << " " << q4 << std::endl;
 
-        odom_trans.transform.translation.x = x;
-        odom_trans.transform.translation.y = y;
-        odom_trans.transform.translation.z = 0.0;
-        odom_trans.transform.rotation = odom_quat;
+        // geometry_msgs::TransformStamped odom_trans;
+        // odom_trans.header.stamp = current_time;
+        // odom_trans.header.frame_id = "odom";
+        // odom_trans.child_frame_id = "base_link";
 
-        //send the transform
-        odom_broadcaster.sendTransform(odom_trans);
+        // odom_trans.transform.translation.x = x;
+        // odom_trans.transform.translation.y = y;
+        // odom_trans.transform.translation.z = 0.0;
+        // odom_trans.transform.rotation = odom_quat;
+
+        // //send the transform
+        // odom_broadcaster.sendTransform(odom_trans);
 
     }
 
