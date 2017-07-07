@@ -81,10 +81,10 @@ int main(int argc, char** argv){
             traj_out << pM.at<double>(j, 0) << "," << pM.at<double>(j, 1) << "," << pM.at<double>(j, 2) << "," << pM.at<double>(j, 3) << std::endl;
 
         // TESTING ODOM PUBLISHING
-        float x = 1.2; 
-        float y = 3.2;
-        float z = 34.2;
-        float th = 53;
+        // float x = 1.2; 
+        // float y = 3.2;
+        // float z = 34.2;
+        // float th = 53;
 
         // geometry_msgs::PoseStamped cam_pose;
         // cam_pose.header.stamp = current_time;
@@ -127,9 +127,9 @@ int main(int argc, char** argv){
         odom_trans.transform.translation.x = -(current_frame->pose.at<double>(2,3))/scale_;
         odom_trans.transform.translation.y = (current_frame->pose.at<double>(0,3))/scale_;
         odom_trans.transform.translation.z = -(current_frame->pose.at<double>(1,3))/scale_;
-        odom_trans.transform.rotation.x = q1;
-        odom_trans.transform.rotation.y = q2;
-        odom_trans.transform.rotation.z = q3;
+        odom_trans.transform.rotation.x = -q1;
+        odom_trans.transform.rotation.y = -q2;
+        odom_trans.transform.rotation.z = -q3;
         odom_trans.transform.rotation.w = q4;
 
         //send the transform
