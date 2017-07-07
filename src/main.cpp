@@ -15,6 +15,7 @@
 #include <tf/transform_broadcaster.h>
 
 namespace vo = visual_odometry;
+bool visualize_flag;
 
 int main(int argc, char** argv){
 
@@ -24,12 +25,18 @@ int main(int argc, char** argv){
     }
     else{
         SCENE = atoi(argv[1]);
-
         if( SCENE > 3 || SCENE < 1 )
         {
              printf(" usage: ./stam <scene_number>\n where <scene_number> = 1|2|3\n\n");
              exit(1);
         }
+
+        if ( argc == 3 )
+        {
+            int flag = atoi(argv[2]);
+            visualize_flag = (flag == 1); 
+        }
+        else visualize_flag = false;
 
 
     }
@@ -60,11 +67,11 @@ int main(int argc, char** argv){
     while( !(frame = video_source.readNextFrame(next_frame_format[SCENE-1])).empty() && n.ok()){
         ros::spinOnce();               // check for incoming messages
         current_time = ros::Time::now();
-        current_frame = STAM.process(frame,false);
+        current_frame = STAM.process(frame,visualize_flag);
 
 
-        if( SCENE > 1 && i%300 == 0 )
-            STAM.optimise();
+        // if( SCENE > 1 && i%300 == 0 )
+        //     STAM.optimise();
 
         i++;
         cv::Mat p;
@@ -117,9 +124,9 @@ int main(int argc, char** argv){
         odom_trans.header.frame_id = "world_frame";
         odom_trans.child_frame_id = "cam_frame";
 
-        odom_trans.transform.translation.x = (current_frame->pose.at<double>(0,3))/100;
-        odom_trans.transform.translation.y = (current_frame->pose.at<double>(1,3))/100;
-        odom_trans.transform.translation.z = (current_frame->pose.at<double>(2,3))/100;
+        odom_trans.transform.translation.x = -(current_frame->pose.at<double>(2,3))/100;
+        odom_trans.transform.translation.y = (current_frame->pose.at<double>(0,3))/100;
+        odom_trans.transform.translation.z = -(current_frame->pose.at<double>(1,3))/100;
         odom_trans.transform.rotation.x = q1;
         odom_trans.transform.rotation.y = q2;
         odom_trans.transform.rotation.z = q3;
