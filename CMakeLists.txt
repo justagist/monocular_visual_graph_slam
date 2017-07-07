@@ -99,7 +99,7 @@ find_package(cvsba REQUIRED )
 #   cfg/DynReconf1.cfg
 #   cfg/DynReconf2.cfg
 # )
-find_library(STAM_LIBRARY libstam.so HINTS /home/saif/msc_workspace/STAM/build/)
+find_library(VISODOM_LIBRARY libvisodom.so HINTS /home/saif/msc_workspace/visodo_stam/build/)
 ###################################
 ## catkin specific configuration ##
 ###################################
@@ -123,7 +123,7 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-  /home/saif/msc_workspace/STAM/include
+  /home/saif/msc_workspace/visodo_stam/include
 # ${catkin_INCLUDE_DIRS}
 )
 
@@ -155,7 +155,7 @@ add_executable(${PROJECT_NAME}_node src/main.cpp)
 ## Specify libraries to link a library or executable target against
 target_link_libraries(${PROJECT_NAME}_node
    ${catkin_LIBRARIES}
-	${STAM_LIBRARY}	${OpenCV_LIBS} ${cvsba_LIBS}
+	${VISODOM_LIBRARY}	${OpenCV_LIBS} ${cvsba_LIBS}
 )
 
 

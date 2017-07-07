@@ -9,7 +9,7 @@
 
 
 #include "VideoSource.h"
-#include "STAM.h"
+#include "vis_odom.h"
 #include <fstream>
 #include <ros/ros.h>
 #include <tf/transform_broadcaster.h>
@@ -53,7 +53,7 @@ int main(int argc, char** argv){
 
     VideoSource video_source;
     cv::Mat frame;
-    vo::STAM STAM;
+    vo::VisOdom vOdom;
     std::stringstream traj_name;
     traj_name << "trajectory_scene" << argv[1] << ".txt";
     std::ofstream traj_out(traj_name.str());
@@ -61,13 +61,13 @@ int main(int argc, char** argv){
     std::string path_prefix[] = { "S01_INPUT" , "S02_INPUT", "S03_INPUT"};
     std::string next_frame_format[] = { "S01_INPUT/S01L03_VGA/S01L03_VGA_%04d.png", "S02_INPUT/S02L03_VGA/S02L03_VGA_%04d.png", "S03_INPUT/S03L03_VGA/S03L03_VGA_%04d.png"};
     int i = 0;
-    STAM.init(video_source.readNextFrame(next_frame_format[SCENE-1]));
+    vOdom.init(video_source.readNextFrame(next_frame_format[SCENE-1]));
 
     visual_odometry::Frame::Ptr current_frame;
     while( !(frame = video_source.readNextFrame(next_frame_format[SCENE-1])).empty() && n.ok()){
         ros::spinOnce();               // check for incoming messages
         current_time = ros::Time::now();
-        current_frame = STAM.process(frame,visualize_flag);
+        current_frame = vOdom.process(frame,visualize_flag);
 
 
         // if( SCENE > 1 && i%300 == 0 )
@@ -76,7 +76,7 @@ int main(int argc, char** argv){
         i++;
         cv::Mat p;
 
-        cv::Mat pM = STAM.intrinsics_*current_frame->projMatrix;//.mul(1.0/274759.971);
+        cv::Mat pM = vOdom.intrinsics_*current_frame->projMatrix;//.mul(1.0/274759.971);
         for (int j = 0; j < 3; j++)
             traj_out << pM.at<double>(j, 0) << "," << pM.at<double>(j, 1) << "," << pM.at<double>(j, 2) << "," << pM.at<double>(j, 3) << std::endl;
 
@@ -111,7 +111,7 @@ int main(int argc, char** argv){
         // odom.pose.pose.orientation = odom_quat;
 
         // odom_pub.publish(odom);
-
+        int scale_ = (SCENE == 1)?1000:100;
 
         // TESTING ODOMETRY TRANSFORM BROADCASTING
 
@@ -124,9 +124,9 @@ int main(int argc, char** argv){
         odom_trans.header.frame_id = "world_frame";
         odom_trans.child_frame_id = "cam_frame";
 
-        odom_trans.transform.translation.x = -(current_frame->pose.at<double>(2,3))/100;
-        odom_trans.transform.translation.y = (current_frame->pose.at<double>(0,3))/100;
-        odom_trans.transform.translation.z = -(current_frame->pose.at<double>(1,3))/100;
+        odom_trans.transform.translation.x = -(current_frame->pose.at<double>(2,3))/scale_;
+        odom_trans.transform.translation.y = (current_frame->pose.at<double>(0,3))/scale_;
+        odom_trans.transform.translation.z = -(current_frame->pose.at<double>(1,3))/scale_;
         odom_trans.transform.rotation.x = q1;
         odom_trans.transform.rotation.y = q2;
         odom_trans.transform.rotation.z = q3;
@@ -139,8 +139,8 @@ int main(int argc, char** argv){
         r.sleep();
     }
 
-    STAM.optimise();
-    STAM.dump();
+    vOdom.optimise();
+    vOdom.dump();
 
 
     traj_out.close();
