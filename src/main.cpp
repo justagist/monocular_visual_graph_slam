@@ -36,8 +36,8 @@ int main(int argc, char** argv){
 
     ros::init(argc, argv, "odometry_publisher");
     ros::NodeHandle n;
-    ros::Publisher pose_pub = n.advertise<geometry_msgs::PoseStamped>("vis_odom", 1000);
-    // tf::TransformBroadcaster odom_broadcaster;
+    // ros::Publisher pose_pub = n.advertise<geometry_msgs::PoseStamped>("vis_odom", 1000);
+    tf::TransformBroadcaster odom_broadcaster;
     
     ros::Time current_time, last_time;
     current_time = ros::Time::now();
@@ -79,22 +79,22 @@ int main(int argc, char** argv){
         float z = 34.2;
         float th = 53;
 
-        geometry_msgs::PoseStamped cam_pose;
-        cam_pose.header.stamp = current_time;
-        cam_pose.header.frame_id = "vis_odom";
-        cam_pose.header.seq = i;
-        cam_pose.pose.position.x = current_frame->pose.at<double>(0,3);
-        cam_pose.pose.position.y = current_frame->pose.at<double>(1,3);
-        cam_pose.pose.position.z = current_frame->pose.at<double>(2,3);
+        // geometry_msgs::PoseStamped cam_pose;
+        // cam_pose.header.stamp = current_time;
+        // cam_pose.header.frame_id = "world_frame";
+        // cam_pose.header.seq = i;
+        // cam_pose.pose.position.x = current_frame->pose.at<double>(0,3);
+        // cam_pose.pose.position.y = current_frame->pose.at<double>(1,3);
+        // cam_pose.pose.position.z = current_frame->pose.at<double>(2,3);
 
-        double q1,q2,q3,q4;
-        current_frame->getQuaternion(q1,q2,q3,q4);
-        cam_pose.pose.orientation.x = q1;
-        cam_pose.pose.orientation.y = q2;
-        cam_pose.pose.orientation.z = q3;
-        cam_pose.pose.orientation.w = q4;
+        // double q1,q2,q3,q4;
+        // current_frame->getQuaternion(q1,q2,q3,q4);
+        // cam_pose.pose.orientation.x = q1;
+        // cam_pose.pose.orientation.y = q2;
+        // cam_pose.pose.orientation.z = q3;
+        // cam_pose.pose.orientation.w = q4;
 
-        pose_pub.publish(cam_pose);
+        // pose_pub.publish(cam_pose);
         // odom.header.stamp = current_time;
         // odom.header.frame_id = "odom";
 
@@ -105,28 +105,31 @@ int main(int argc, char** argv){
 
         // odom_pub.publish(odom);
 
-        last_time = current_time;
-        r.sleep();
 
         // TESTING ODOMETRY TRANSFORM BROADCASTING
 
-        // double q1,q2,q3,q4;
-        // current_frame->getQuaternion(q1,q2,q3,q4);
+        double q1,q2,q3,q4;
+        current_frame->getQuaternion(q1,q2,q3,q4);
         // std::cout << q1 << " " << q2 << " " << q3 << " " << q4 << std::endl;
 
-        // geometry_msgs::TransformStamped odom_trans;
-        // odom_trans.header.stamp = current_time;
-        // odom_trans.header.frame_id = "odom";
-        // odom_trans.child_frame_id = "base_link";
+        geometry_msgs::TransformStamped odom_trans;
+        odom_trans.header.stamp = current_time;
+        odom_trans.header.frame_id = "world_frame";
+        odom_trans.child_frame_id = "cam_frame";
 
-        // odom_trans.transform.translation.x = x;
-        // odom_trans.transform.translation.y = y;
-        // odom_trans.transform.translation.z = 0.0;
-        // odom_trans.transform.rotation = odom_quat;
+        odom_trans.transform.translation.x = (current_frame->pose.at<double>(0,3))/100;
+        odom_trans.transform.translation.y = (current_frame->pose.at<double>(1,3))/100;
+        odom_trans.transform.translation.z = (current_frame->pose.at<double>(2,3))/100;
+        odom_trans.transform.rotation.x = q1;
+        odom_trans.transform.rotation.y = q2;
+        odom_trans.transform.rotation.z = q3;
+        odom_trans.transform.rotation.w = q4;
 
-        // //send the transform
-        // odom_broadcaster.sendTransform(odom_trans);
+        //send the transform
+        odom_broadcaster.sendTransform(odom_trans);
 
+        last_time = current_time;
+        r.sleep();
     }
 
     STAM.optimise();
