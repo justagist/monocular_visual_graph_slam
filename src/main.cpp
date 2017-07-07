@@ -36,7 +36,7 @@ int main(int argc, char** argv){
 
     ros::init(argc, argv, "odometry_publisher");
     ros::NodeHandle n;
-    ros::Publisher pose_pub = n.advertise<geometry_msgs::Pose>("vis_odom", 1000);
+    ros::Publisher pose_pub = n.advertise<geometry_msgs::PoseStamped>("vis_odom", 1000);
     // tf::TransformBroadcaster odom_broadcaster;
     
     ros::Time current_time, last_time;
@@ -79,17 +79,20 @@ int main(int argc, char** argv){
         float z = 34.2;
         float th = 53;
 
-        geometry_msgs::Pose cam_pose;
-        cam_pose.position.x = current_frame->pose.at<double>(0,3);
-        cam_pose.position.y = current_frame->pose.at<double>(1,3);
-        cam_pose.position.z = current_frame->pose.at<double>(2,3);
+        geometry_msgs::PoseStamped cam_pose;
+        cam_pose.header.stamp = current_time;
+        cam_pose.header.frame_id = "vis_odom";
+        cam_pose.header.seq = i;
+        cam_pose.pose.position.x = current_frame->pose.at<double>(0,3);
+        cam_pose.pose.position.y = current_frame->pose.at<double>(1,3);
+        cam_pose.pose.position.z = current_frame->pose.at<double>(2,3);
 
         double q1,q2,q3,q4;
         current_frame->getQuaternion(q1,q2,q3,q4);
-        cam_pose.orientation.x = q1;
-        cam_pose.orientation.y = q2;
-        cam_pose.orientation.z = q3;
-        cam_pose.orientation.w = q4;
+        cam_pose.pose.orientation.x = q1;
+        cam_pose.pose.orientation.y = q2;
+        cam_pose.pose.orientation.z = q3;
+        cam_pose.pose.orientation.w = q4;
 
         pose_pub.publish(cam_pose);
         // odom.header.stamp = current_time;
