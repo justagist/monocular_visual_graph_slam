@@ -1,0 +1,2 @@
+message("${SRC} -> ${DST}")
+file(COPY ${SRC} DESTINATION ${DST} NO_SOURCE_PERMISSIONS)

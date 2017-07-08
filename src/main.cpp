@@ -9,7 +9,7 @@
 
 
 #include "VideoSource.h"
-#include "vis_odom.h"
+#include "STAM.h"
 #include <fstream>
 #include <ros/ros.h>
 #include <tf/transform_broadcaster.h>
@@ -53,7 +53,7 @@ int main(int argc, char** argv){
 
     VideoSource video_source;
     cv::Mat frame;
-    vo::VisOdom vOdom;
+    vo::STAM vOdom;
     std::stringstream traj_name;
     traj_name << "trajectory_scene" << argv[1] << ".txt";
     std::ofstream traj_out(traj_name.str());
