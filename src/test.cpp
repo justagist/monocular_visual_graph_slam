@@ -32,8 +32,8 @@ int main(int argc, char** argv){
     }
     
     ros::init(argc, argv, "odometry_publisher");
-    ros::NodeHandle n;
-    // ros::Publisher pose_pub = n.advertise<geometry_msgs::PoseStamped>("vis_odom", 1000);
+    ros::NodeHandle rosNodeHandle;
+    // ros::Publisher pose_pub = rosNodeHandle.advertise<geometry_msgs::PoseStamped>("vis_odom", 1000);
     tf::TransformBroadcaster odom_broadcaster;
     
     ros::Time current_time, last_time;
@@ -54,50 +54,53 @@ int main(int argc, char** argv){
     vOdom.init(video_source.readNextFrame(next_frame_format[SCENE-1]));
 
     visual_odometry::Frame::Ptr current_frame;
-    // while( !(frame = video_source.readNextFrame(next_frame_format[SCENE-1])).empty() && n.ok()){
-    //     ros::spinOnce();               // check for incoming messages
-    //     current_time = ros::Time::now();
-    //     current_frame = vOdom.process(frame,visualize_flag);
+    while( !(frame = video_source.readNextFrame(next_frame_format[SCENE-1])).empty() && rosNodeHandle.ok()){
+        ros::spinOnce();               // check for incoming messages
+        current_time = ros::Time::now();
+        current_frame = vOdom.process(frame,visualize_flag);
 
 
-    //     // if( SCENE > 1 && i%300 == 0 )
-    //     //     STAM.optimise();
+        // if( SCENE > 1 && i%300 == 0 )
+        //     STAM.optimise();
 
-    //     i++;
-    //     cv::Mat p;
+        i++;
+        cv::Mat p;
 
-    //     cv::Mat pM = vOdom.intrinsics_*current_frame->projMatrix;//.mul(1.0/274759.971);
-    //     for (int j = 0; j < 3; j++)
-    //         traj_out << pM.at<double>(j, 0) << "," << pM.at<double>(j, 1) << "," << pM.at<double>(j, 2) << "," << pM.at<double>(j, 3) << std::endl;
+        cv::Mat pM = vOdom.intrinsics_*current_frame->projMatrix;//.mul(1.0/274759.971);
+        for (int j = 0; j < 3; j++)
+            traj_out << pM.at<double>(j, 0) << "," << pM.at<double>(j, 1) << "," << pM.at<double>(j, 2) << "," << pM.at<double>(j, 3) << std::endl;
 
-    //     int scale_ = (SCENE == 1)?1000:100;
+        int scale_ = (SCENE == 1)?1000:100;
 
-    //     // TESTING ODOMETRY TRANSFORM BROADCASTING
+        // TESTING ODOMETRY TRANSFORM BROADCASTING
 
-    //     double q1,q2,q3,q4;
-    //     current_frame->getQuaternion(q1,q2,q3,q4);
-    //     // std::cout << q1 << " " << q2 << " " << q3 << " " << q4 << std::endl;
+        double q1,q2,q3,q4;
+        current_frame->getQuaternion(q1,q2,q3,q4);
+        // std::cout << q1 << " " << q2 << " " << q3 << " " << q4 << std::endl;
+
+
+        geometry_msgs::TransformStamped odom_trans;
+        odom_trans.header.stamp = current_time;
+        odom_trans.header.frame_id = "world_frame";
+        odom_trans.child_frame_id = "cam_frame";
+
+        odom_trans.transform.translation.x = -(current_frame->pose.at<double>(2,3))/scale_;
+        odom_trans.transform.translation.y = (current_frame->pose.at<double>(0,3))/scale_;
+        odom_trans.transform.translation.z = -(current_frame->pose.at<double>(1,3))/scale_;
+        odom_trans.transform.rotation.x = -q1;
+        odom_trans.transform.rotation.y = -q2;
+        odom_trans.transform.rotation.z = -q3;
+        odom_trans.transform.rotation.w = q4;
+
+        //send the transform
+        odom_broadcaster.sendTransform(odom_trans);
+
+        last_time = current_time;
+        r.sleep();
         
-
-    //     geometry_msgs::TransformStamped odom_trans;
-    //     odom_trans.header.stamp = current_time;
-    //     odom_trans.header.frame_id = "world_frame";
-    //     odom_trans.child_frame_id = "cam_frame";
-
-    //     odom_trans.transform.translation.x = -(current_frame->pose.at<double>(2,3))/scale_;
-    //     odom_trans.transform.translation.y = (current_frame->pose.at<double>(0,3))/scale_;
-    //     odom_trans.transform.translation.z = -(current_frame->pose.at<double>(1,3))/scale_;
-    //     odom_trans.transform.rotation.x = -q1;
-    //     odom_trans.transform.rotation.y = -q2;
-    //     odom_trans.transform.rotation.z = -q3;
-    //     odom_trans.transform.rotation.w = q4;
-
-    //     //send the transform
-    //     odom_broadcaster.sendTransform(odom_trans);
-
-    //     last_time = current_time;
-    //     r.sleep();
-    // }
+        
+        break;
+    }
 
     // vOdom.optimise();
     // vOdom.dump();
@@ -105,7 +108,7 @@ int main(int argc, char** argv){
 
     // traj_out.close();
 
-    // printf("BYEBYE\n");
+    printf("Exiting\n");
 
     return 0;
 }

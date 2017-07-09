@@ -20,6 +20,8 @@ message("OpenCV include dirs: ${OPENCV_INCLUDE_DIRS}")
 
 find_package(cvsba REQUIRED )
 
+find_package( Eigen3 REQUIRED ) # for rot matrix to quaternion conversion
+include_directories( ${EIGEN3_INCLUDE_DIR} )
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 

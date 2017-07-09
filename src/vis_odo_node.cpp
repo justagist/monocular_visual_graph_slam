@@ -33,8 +33,8 @@ int main(int argc, char** argv){
     }
     
     ros::init(argc, argv, "odometry_publisher");
-    ros::NodeHandle n;
-    // ros::Publisher pose_pub = n.advertise<geometry_msgs::PoseStamped>("vis_odom", 1000);
+    ros::NodeHandle rosNode;
+    // ros::Publisher pose_pub = rosNode.advertise<geometry_msgs::PoseStamped>("vis_odom", 1000);
     tf::TransformBroadcaster odom_broadcaster;
     
     ros::Time current_time, last_time;
@@ -55,7 +55,7 @@ int main(int argc, char** argv){
     vOdom.init(video_source.readNextFrame(next_frame_format[SCENE-1]));
 
     visual_odometry::Frame::Ptr current_frame;
-    while( !(frame = video_source.readNextFrame(next_frame_format[SCENE-1])).empty() && n.ok()){
+    while( !(frame = video_source.readNextFrame(next_frame_format[SCENE-1])).empty() && rosNode.ok()){
         ros::spinOnce();               // check for incoming messages
         current_time = ros::Time::now();
         current_frame = vOdom.process(frame,visualize_flag);
