@@ -4,6 +4,7 @@
 #include <fstream>
 #include <ros/ros.h>
 #include <tf/transform_broadcaster.h>
+#include "gslam/typedefs.h"
 
 namespace vo = visual_odometry;
 bool visualize_flag;
@@ -60,6 +61,7 @@ int main(int argc, char** argv){
         current_time = ros::Time::now();
         current_frame = vOdom.process(frame,visualize_flag);
 
+        gSlam::ProjectionCorrespondences kps = vOdom.getKeypointsInFrame(i);
 
         // if( SCENE > 1 && i%300 == 0 )
         //     STAM.optimise();
@@ -71,38 +73,7 @@ int main(int argc, char** argv){
         for (int j = 0; j < 3; j++)
             traj_out << pM.at<double>(j, 0) << "," << pM.at<double>(j, 1) << "," << pM.at<double>(j, 2) << "," << pM.at<double>(j, 3) << std::endl;
 
-        // TESTING ODOM PUBLISHING
-        // float x = 1.2; 
-        // float y = 3.2;
-        // float z = 34.2;
-        // float th = 53;
-
-        // geometry_msgs::PoseStamped cam_pose;
-        // cam_pose.header.stamp = current_time;
-        // cam_pose.header.frame_id = "world_frame";
-        // cam_pose.header.seq = i;
-        // cam_pose.pose.position.x = current_frame->pose.at<double>(0,3);
-        // cam_pose.pose.position.y = current_frame->pose.at<double>(1,3);
-        // cam_pose.pose.position.z = current_frame->pose.at<double>(2,3);
-
-        // double q1,q2,q3,q4;
-        // current_frame->getQuaternion(q1,q2,q3,q4);
-        // cam_pose.pose.orientation.x = q1;
-        // cam_pose.pose.orientation.y = q2;
-        // cam_pose.pose.orientation.z = q3;
-        // cam_pose.pose.orientation.w = q4;
-
-        // pose_pub.publish(cam_pose);
-        // odom.header.stamp = current_time;
-        // odom.header.frame_id = "odom";
-
-        // odom.pose.pose.position.x = x;
-        // odom.pose.pose.position.y = y;
-        // odom.pose.pose.position.z = z;
-        // odom.pose.pose.orientation = odom_quat;
-
-        // odom_pub.publish(odom);
-        int scale_ = (SCENE == 1)?1000:100;
+        int scale_ = (SCENE == 1)?1000:1000;
 
         // TESTING ODOMETRY TRANSFORM BROADCASTING
 
@@ -128,7 +99,7 @@ int main(int argc, char** argv){
 
         last_time = current_time;
         r.sleep();
-        // break;
+        break;
     }
 
     vOdom.optimise();

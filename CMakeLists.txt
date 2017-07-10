@@ -25,7 +25,7 @@ include_directories( ${EIGEN3_INCLUDE_DIR} )
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
-
+SET(GSLAM_INC ${PROJECT_SOURCE_DIR}/include)
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
 ## See http://ros.org/doc/api/catkin/html/user_guide/setup_dot_py.html
@@ -125,7 +125,9 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
+    ${GSLAM_INC}
   /home/saif/msc_workspace/STAM/include
+
 # ${catkin_INCLUDE_DIRS}
 )
 
@@ -144,6 +146,7 @@ include_directories(
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(vis_odo_node src/vis_odo_node.cpp)
 add_executable(test_node src/test.cpp)
+add_executable(main_slam_node src/main.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -163,6 +166,10 @@ target_link_libraries(vis_odo_node
 target_link_libraries(test_node
    ${catkin_LIBRARIES}
 	${STAM_LIBRARY}	${OpenCV_LIBS} ${cvsba_LIBS}
+)
+target_link_libraries(main_slam_node
+   ${catkin_LIBRARIES}
+    ${STAM_LIBRARY} ${OpenCV_LIBS} ${cvsba_LIBS}
 )
 
 
