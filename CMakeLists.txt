@@ -20,12 +20,20 @@ message("OpenCV include dirs: ${OPENCV_INCLUDE_DIRS}")
 
 find_package(cvsba REQUIRED )
 
-find_package( Eigen3 REQUIRED ) # for rot matrix to quaternion conversion
-include_directories( ${EIGEN3_INCLUDE_DIR} )
+# find_package( Eigen3 REQUIRED ) # for rot matrix to quaternion conversion
+# include_directories( ${EIGEN3_INCLUDE_DIR} )
+
+# PCL ########################## PCL (apparently) links the required BOOST libraries and Eigen3 
+find_package(PCL REQUIRED)
+include_directories(${PCL_INCLUDE_DIRS})
+link_directories(${PCL_LIBRARY_DIRS})
+add_definitions(${PCL_DEFINITIONS})
+################################
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
 SET(GSLAM_INC ${PROJECT_SOURCE_DIR}/include)
+
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
 ## See http://ros.org/doc/api/catkin/html/user_guide/setup_dot_py.html
@@ -135,7 +143,10 @@ include_directories(
 # add_library(${PROJECT_NAME}
 #   src/${PROJECT_NAME}/visual_odom.cpp
 # )
+SET(GSLAM_LINK_LIBS ${PCL_LIBRARIES}) 
 
+
+SET(STAM_LINK_LIBS ${OpenCV_LIBS} ${cvsba_LIBS}) 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
@@ -169,7 +180,7 @@ target_link_libraries(test_node
 )
 target_link_libraries(main_slam_node
    ${catkin_LIBRARIES}
-    ${STAM_LIBRARY} ${OpenCV_LIBS} ${cvsba_LIBS}
+    ${STAM_LIBRARY} ${STAM_LINK_LIBS} ${GSLAM_LINK_LIBS}
 )
 
 

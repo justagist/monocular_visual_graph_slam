@@ -5,6 +5,9 @@
 #include <ros/ros.h>
 #include <tf/transform_broadcaster.h>
 #include "gslam/typedefs.h"
+// #include <Eigen/Geometry>
+// #include <Eigen/Dense>
+// #include <opencv2/core/eigen.hpp>
 
 namespace vo = visual_odometry;
 bool visualize_flag;
@@ -56,12 +59,18 @@ int main(int argc, char** argv){
     vOdom.init(video_source.readNextFrame(next_frame_format[SCENE-1]));
 
     visual_odometry::Frame::Ptr current_frame;
-    while( !(frame = video_source.readNextFrame(next_frame_format[SCENE-1])).empty() && rosNode.ok()){
+
+
+    while( !(frame = video_source.readNextFrame(next_frame_format[SCENE-1])).empty() && rosNode.ok())
+
+    {
+
         ros::spinOnce();               // check for incoming messages
         current_time = ros::Time::now();
         current_frame = vOdom.process(frame,visualize_flag);
 
-        gSlam::ProjectionCorrespondences kps = vOdom.getKeypointsInFrame(i);
+        // get correspondence keypoints (3d and 2d) from STAM 
+        gSlam::customtype::ProjectionCorrespondences kps = vOdom.getKeypointsInFrame(i);
 
         // if( SCENE > 1 && i%300 == 0 )
         //     STAM.optimise();
@@ -69,17 +78,30 @@ int main(int argc, char** argv){
         i++;
         cv::Mat p;
 
-        cv::Mat pM = vOdom.intrinsics_*current_frame->projMatrix;//.mul(1.0/274759.971);
-        for (int j = 0; j < 3; j++)
-            traj_out << pM.at<double>(j, 0) << "," << pM.at<double>(j, 1) << "," << pM.at<double>(j, 2) << "," << pM.at<double>(j, 3) << std::endl;
+        // cv::Mat pM = vOdom.intrinsics_*current_frame->projMatrix;//.mul(1.0/274759.971);
+        // for (int j = 0; j < 3; j++)
+        //     traj_out << pM.at<double>(j, 0) << "," << pM.at<double>(j, 1) << "," << pM.at<double>(j, 2) << "," << pM.at<double>(j, 3) << std::endl;
 
+        // for visualization in rviz
         int scale_ = (SCENE == 1)?1000:1000;
 
-        // TESTING ODOMETRY TRANSFORM BROADCASTING
+        // get current camera pose from STAM
+        gSlam::customtype::TransformSE3 posemat; 
+        cv::cv2eigen(current_frame->getCurrentPose(),posemat.matrix());
+        
+        // get quaternions from the pose matrix
+        double q1,q2,q3,q4,q5;
+        Eigen::Matrix3d rotmat = posemat.matrix().topLeftCorner(3,3);
+        Eigen::Quaterniond Q(rotmat);
+        Q.normalize();
+        q1 = Q.coeffs()[0]; q2 = Q.coeffs()[1]; q3 = Q.coeffs()[2]; q4 = Q.coeffs()[3];
+        
+         /*//Alternatively get quaternion from STAM (requires same calculation in STAM)
 
-        double q1,q2,q3,q4;
-        current_frame->getQuaternion(q1,q2,q3,q4);
-        // std::cout << q1 << " " << q2 << " " << q3 << " " << q4 << std::endl;
+        current_frame->getQuaternion(q1,q5,q3,q4);
+
+        */
+        // std::cout << q1 << " " << q5 << " " << q3<< " " << q4 << std::endl;        
 
         geometry_msgs::TransformStamped odom_trans;
         odom_trans.header.stamp = current_time;
@@ -100,10 +122,11 @@ int main(int argc, char** argv){
         last_time = current_time;
         r.sleep();
         break;
-    }
 
-    vOdom.optimise();
-    vOdom.dump();
+    } // while
+
+    // vOdom.optimise();
+    // vOdom.dump();
 
 
     traj_out.close();
