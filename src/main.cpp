@@ -68,12 +68,20 @@ int main(int argc, char** argv){
         ros::spinOnce();               // check for incoming messages
         current_time = ros::Time::now();
         current_frame = vOdom.process(frame,visualize_flag);
+        // cv::KeyPoint pt = current_frame->keypoints.at(0);
+        // std::cout << current_frame->keypoints.at(0).pt << std::endl;
+
+        gSlam::customtype::p2d_vec img_pts = current_frame->keypoints;
+        // std::cout << "size of 2d vector " << img_pts.size() << std::endl;
+        // std::cout << "descriptor matr dim " << current_frame->descriptors.rows << std::endl;
 
         // get correspondence keypoints (3d and 2d) from STAM 
-        gSlam::customtype::ProjectionCorrespondences kps = vOdom.getKeypointsInFrame(i);
 
         // if( SCENE > 1 && i%300 == 0 )
         //     STAM.optimise();
+        gSlam::customtype::ProjectionCorrespondences kps = vOdom.getKeypointsInFrame(i);
+
+        std::cout<< "size of new vector " << vOdom.getCurrent3dPoints().size()  << std::endl;
 
         i++;
         cv::Mat p;
@@ -121,7 +129,7 @@ int main(int argc, char** argv){
 
         last_time = current_time;
         r.sleep();
-        break;
+        // break;
 
     } // while
 
