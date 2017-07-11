@@ -2,6 +2,7 @@
 #include "VideoSource.h"
 #include <fstream>
 #include "gslam/ros_utils.h"
+#include "gslam/graphslam.h"
 
 // #include <Eigen/Geometry>
 // #include <Eigen/Dense>
@@ -34,9 +35,11 @@ int main(int argc, char** argv){
 
     }
     
+    // ROS Stuff ====================================================================================================
+
     ros::init(argc, argv, "odometry_publisher");
     ros::NodeHandle rosNode;
-    // ros::Publisher pose_pub = rosNode.advertise<geometry_msgs::PoseStamped>("vis_odom", 1000);
+    // ros::Publisher pose_pub = rosNode.advertise<geometry_msgs::PoseStamped>("vis_odom", 1000); // for publishing camera pose as posestamped msg
     tf::TransformBroadcaster odom_broadcaster;
     // tf::TransformBroadcaster frame_corrector; // coordinate frame orientation correction for ISMAR dataset
     ros::Publisher world_point_pub = rosNode.advertise<visualization_msgs::Marker>("worldpoints", 10);
@@ -46,26 +49,35 @@ int main(int argc, char** argv){
     last_time = ros::Time::now();
     ros::Rate r(1000);
 
+    visualization_msgs::Marker world_visualizer;
+    world_visualizer.header.frame_id = "ismar_frame";
+    world_visualizer.type = visualization_msgs::Marker::POINTS;
+
+    // ==============================================================================================================
+
+
+    // Initialising Visual Odometry using STAM ======================================================================
+
     VideoSource video_source;
     cv::Mat frame;
     vo::STAM vOdom;
+
+    /* FOR TRAJECTORY OUTPUT
+    **
     // std::stringstream traj_name;
     // traj_name << "trajectory_scene" << argv[1] << ".txt";
     // std::ofstream traj_out(traj_name.str());
+    */
 
     std::string path_prefix[] = { "S01_INPUT" , "S02_INPUT", "S03_INPUT"};
     std::string next_frame_format[] = { "S01_INPUT/S01L03_VGA/S01L03_VGA_%04d.png", "S02_INPUT/S02L03_VGA/S02L03_VGA_%04d.png", "S03_INPUT/S03L03_VGA/S03L03_VGA_%04d.png"};
     int i = 0;
     vOdom.init(video_source.readNextFrame(next_frame_format[SCENE-1]));
-
     visual_odometry::Frame::Ptr current_odom_frame;
 
-    // gSlam::customtype::PointCloudPtr cloud_msg (new gSlam::customtype::PointCloud);
-    // cloud_msg->header.frame_id = "ismar_frame";
-    // cloud_msg->height = cloud_msg->width = 1;
-    visualization_msgs::Marker world_visualizer;
-    world_visualizer.header.frame_id = "ismar_frame";
-    world_visualizer.type = visualization_msgs::Marker::POINTS;
+    // ==============================================================================================================
+
+    gSlam::GrSLAM::Ptr slam(new gSlam::GrSLAM());
 
     while( !(frame = video_source.readNextFrame(next_frame_format[SCENE-1])).empty() && rosNode.ok())
 
@@ -78,20 +90,26 @@ int main(int argc, char** argv){
         current_odom_frame = vOdom.process(frame,visualize_flag);
 
         // cv::KeyPoint pt = current_odom_frame->keypoints.at(0);
-        // std::cout << current_odom_frame->keypoints.at(0).pt << std::endl;
 
-        gSlam::customtype::p2d_vec img_pts = current_odom_frame->keypoints;
 
-        // get correspondence keypoints (3d and 2d) from STAM 
-        // gSlam::customtype::ProjectionCorrespondences kps = vOdom.getKeypointsInFrame(i);
+        // Available methods from STAM: ------------------------------------------------------------------------------
 
-        // if( SCENE > 1 && i%300 == 0 )
-        //     STAM.optimise();
+        // gSlam::customtype::p2d_vec kpts = current_odom_frame->keypoints; // list of 2d keypoints in each frame
+        // cv::Mat descriptors = current_odom_frame->descriptors; // list of descripts, one to each keypoint in the list of keypoints
+        // gSlam::customtype::ProjectionCorrespondences kps = vOdom.getKeypointsInFrame(i); // get correspondence keypoints (3d and 2d) from STAM 
 
+        // -----------------------------------------------------------------------------------------------------------
+
+        // get 3D worldpoints for visualization in ROS
         std::vector<cv::Point3d> world_points = vOdom.getCurrent3dPoints();
         if (world_points.size()>0)
             gSlam::ros_utils::createPointMsg(world_visualizer, world_points);
 
+        /* STAM Bundle Adjustment 
+        **
+        // if( SCENE > 1 && i%300 == 0 )
+        //     STAM.optimise();
+        */
 
         i++;
         cv::Mat p;
@@ -105,17 +123,17 @@ int main(int argc, char** argv){
 
         // get current camera pose from STAM
         gSlam::customtype::TransformSE3 posemat; 
-        cv::cv2eigen(current_odom_frame->getCurrentPose(),posemat.matrix());
+        cv::cv2eigen(current_odom_frame->getCurrentPose(),posemat.matrix()); // conversion of cv::Mat to Eigen for quaternion calculation and further slam process
         
         geometry_msgs::TransformStamped odom_trans = gSlam::ros_utils::createOdomMsg(posemat);
+
         // geometry_msgs::TransformStamped coordinate_correction = gSlam::ros_utils::setFrameCorrection(); // coordinate frame orientation correction for ISMAR dataset
 
-        //publish the transform
+        //publish the transform and world points
         odom_broadcaster.sendTransform(odom_trans);
         world_point_pub.publish(world_visualizer);
 
-        // pointPub.publish (cloud_msg);
-        // frame_corrector.sendTransform(coordinate_correction);
+        // frame_corrector.sendTransform(coordinate_correction); // coordinate frame orientation correction for ISMAR dataset
 
         last_time = current_time;
         r.sleep();
@@ -129,7 +147,7 @@ int main(int argc, char** argv){
 
     // traj_out.close();
 
-    printf("BYEBYE\n");
+    printf("EXITING\n");
 
     return 0;
 }

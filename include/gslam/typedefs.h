@@ -3,6 +3,7 @@
 
 #include <pcl/point_cloud.h>  
 #include <pcl/point_types.h>  
+// #include <boost/shared_ptr.hpp>
 #include "STAM.h"
 
 namespace gSlam
