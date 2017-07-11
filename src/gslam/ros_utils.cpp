@@ -1,9 +1,14 @@
 #include "gslam/ros_utils.h"
 
+
 namespace gSlam
 {
+
+
     namespace ros_utils
     {
+
+        const int visualization_scale_ = 1000;
 
         geometry_msgs::TransformStamped createOdomMsg(customtype::TransformSE3 posemat)
         {
@@ -27,9 +32,9 @@ namespace gSlam
             odom_trans.header.frame_id = "ismar_frame";
             odom_trans.child_frame_id = "cam_frame";
 
-            odom_trans.transform.translation.x = -posemat.translation()[2]/1000;
-            odom_trans.transform.translation.y = posemat.translation()[0]/1000;
-            odom_trans.transform.translation.z = -posemat.translation()[1]/1000;
+            odom_trans.transform.translation.x = -posemat.translation()[2]/visualization_scale_;
+            odom_trans.transform.translation.y = posemat.translation()[0]/visualization_scale_;
+            odom_trans.transform.translation.z = -posemat.translation()[1]/visualization_scale_;
             // std::cout << "trans " << << std::endl;
             // std::cout << "trans " << posemat.translation()[1]<< std::endl;
             // std::cout << "trans " << posemat.translation()[2]<< std::endl;
@@ -57,6 +62,25 @@ namespace gSlam
             transf.transform.rotation.z = 0;
             transf.transform.rotation.w = 0;
             return transf;
+        }
+
+        void createPointMsg(visualization_msgs::Marker& world_visualizer, std::vector<cv::Point3d> world_points)
+        {
+            // visualization_msgs::Marker world_visualizer;
+            world_visualizer.header.stamp = ros::Time::now();
+            world_visualizer.action = visualization_msgs::Marker::ADD;
+            world_visualizer.ns = "3D Keypoints";
+            world_visualizer.scale.x = 0.005;
+            world_visualizer.scale.y = 0.005;
+            world_visualizer.color.g = 1.0f;
+            world_visualizer.color.a = 1.0;
+            for(auto it = world_points.begin(); it != world_points.end(); it++)
+                {
+                    cv::Point3d point = *it;
+                    geometry_msgs::Point gm_p;
+                    gm_p.x = -point.z/visualization_scale_; gm_p.y = point.x/visualization_scale_; gm_p.z = -point.y/visualization_scale_;
+                    world_visualizer.points.push_back (gm_p);
+                }
         }
 
     } // ros_utils

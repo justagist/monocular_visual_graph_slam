@@ -39,7 +39,7 @@ int main(int argc, char** argv){
     // ros::Publisher pose_pub = rosNode.advertise<geometry_msgs::PoseStamped>("vis_odom", 1000);
     tf::TransformBroadcaster odom_broadcaster;
     // tf::TransformBroadcaster frame_corrector; // coordinate frame orientation correction for ISMAR dataset
-    ros::Publisher pointPub = rosNode.advertise<gSlam::customtype::PointCloud> ("world_points", 1);
+    ros::Publisher world_point_pub = rosNode.advertise<visualization_msgs::Marker>("worldpoints", 10);
     
     ros::Time current_time, last_time;
     current_time = ros::Time::now();
@@ -60,9 +60,12 @@ int main(int argc, char** argv){
 
     visual_odometry::Frame::Ptr current_odom_frame;
 
-    gSlam::customtype::PointCloudPtr cloud_msg (new gSlam::customtype::PointCloud);
-    cloud_msg->header.frame_id = "ismar_frame";
-    cloud_msg->height = cloud_msg->width = 1;
+    // gSlam::customtype::PointCloudPtr cloud_msg (new gSlam::customtype::PointCloud);
+    // cloud_msg->header.frame_id = "ismar_frame";
+    // cloud_msg->height = cloud_msg->width = 1;
+    visualization_msgs::Marker world_visualizer;
+    world_visualizer.header.frame_id = "ismar_frame";
+    world_visualizer.type = visualization_msgs::Marker::POINTS;
 
     while( !(frame = video_source.readNextFrame(next_frame_format[SCENE-1])).empty() && rosNode.ok())
 
@@ -79,40 +82,26 @@ int main(int argc, char** argv){
 
         gSlam::customtype::p2d_vec img_pts = current_odom_frame->keypoints;
 
-        // std::cout << "size of 2d vector " << img_pts.size() << std::endl;
-        // std::cout << "descriptor matr dim " << current_odom_frame->descriptors.rows << std::endl;
-
         // get correspondence keypoints (3d and 2d) from STAM 
+        // gSlam::customtype::ProjectionCorrespondences kps = vOdom.getKeypointsInFrame(i);
 
         // if( SCENE > 1 && i%300 == 0 )
         //     STAM.optimise();
 
-        // gSlam::customtype::ProjectionCorrespondences kps = vOdom.getKeypointsInFrame(i);
-
         std::vector<cv::Point3d> world_points = vOdom.getCurrent3dPoints();
-        // std::cout << world_points[0].x << " this " << world_points[0] << std::endl;
         if (world_points.size()>0)
-        {
-            for(auto it = world_points.begin(); it != world_points.end(); it++)
-            {
-                // cloud_msg->points.push_back (pcl::PointXYZ(-world_points[, 2.0, 3.0));
-                std::cout << *it << std::endl;
-
-            }
-        }
-
-        // if world_points.size() > 0:
+            gSlam::ros_utils::createPointMsg(world_visualizer, world_points);
 
 
         i++;
         cv::Mat p;
 
+         /*writing trajectory to file
+        **
         // cv::Mat pM = vOdom.intrinsics_*current_odom_frame->projMatrix;//.mul(1.0/274759.971);
         // for (int j = 0; j < 3; j++)
         //     traj_out << pM.at<double>(j, 0) << "," << pM.at<double>(j, 1) << "," << pM.at<double>(j, 2) << "," << pM.at<double>(j, 3) << std::endl;
-
-        // for visualization in rviz
-        int scale_ = (SCENE == 1)?1000:1000;
+        */
 
         // get current camera pose from STAM
         gSlam::customtype::TransformSE3 posemat; 
@@ -123,6 +112,9 @@ int main(int argc, char** argv){
 
         //publish the transform
         odom_broadcaster.sendTransform(odom_trans);
+        world_point_pub.publish(world_visualizer);
+
+        // pointPub.publish (cloud_msg);
         // frame_corrector.sendTransform(coordinate_correction);
 
         last_time = current_time;
