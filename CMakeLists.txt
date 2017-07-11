@@ -33,6 +33,7 @@ add_definitions(${PCL_DEFINITIONS})
 # find_package(Boost REQUIRED COMPONENTS system)
 
 SET(GSLAM_INC ${PROJECT_SOURCE_DIR}/include)
+SET(GSLAM_SRC_DIR ${PROJECT_SOURCE_DIR}/src)
 
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
@@ -143,6 +144,8 @@ include_directories(
 # add_library(${PROJECT_NAME}
 #   src/${PROJECT_NAME}/visual_odom.cpp
 # )
+SET(GSLAM_SOURCES ${GSLAM_SRC_DIR}/gslam/ros_utils.cpp)
+
 SET(GSLAM_LINK_LIBS ${PCL_LIBRARIES}) 
 
 
@@ -151,7 +154,7 @@ SET(STAM_LINK_LIBS ${OpenCV_LIBS} ${cvsba_LIBS})
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
 # add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-
+add_library(gslam_libs ${GSLAM_SOURCES})
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
@@ -179,7 +182,7 @@ target_link_libraries(test_node
 	${STAM_LIBRARY}	${OpenCV_LIBS} ${cvsba_LIBS}
 )
 target_link_libraries(main_slam_node
-   ${catkin_LIBRARIES}
+   ${catkin_LIBRARIES} gslam_libs
     ${STAM_LIBRARY} ${STAM_LINK_LIBS} ${GSLAM_LINK_LIBS}
 )
 
