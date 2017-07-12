@@ -54,10 +54,10 @@ int main(int argc, char** argv){
 
     // std::string path_prefix[] = { "S01_INPUT" , "S02_INPUT", "S03_INPUT"};
     // std::string next_frame_format[] = { "S01_INPUT/S01L03_VGA/S01L03_VGA_%04d.png", "S02_INPUT/S02L03_VGA/S02L03_VGA_%04d.png", "S03_INPUT/S03L03_VGA/S03L03_VGA_%04d.png"};
-    std::string next_frame_format = "/home/saif/msc_workspace/slam_test_bag_dataset/datasets/front/data/front_image_%04d.png";
-    std::string intrinsics_file = "/home/saif/msc_workspace/slam_test_bag_dataset/datasets/front/intrinsics.xml";
-    std::string points3d_init_file = "/home/saif/msc_workspace/slam_test_bag_dataset/datasets/front/3dpoints.csv";
-    std::string template_file_fmt = "/home/saif/msc_workspace/slam_test_bag_dataset/datasets/front/patch/patches/patch_%04d.png";
+    std::string next_frame_format = "/home/saif/msc_workspace/slam_test_bag_dataset/datasets_12_07_17/frontb1/data/image_%04d.png";
+    std::string intrinsics_file = "/home/saif/msc_workspace/slam_test_bag_dataset/datasets_12_07_17/frontb1/intrinsics.xml";
+    std::string points3d_init_file = "/home/saif/msc_workspace/slam_test_bag_dataset/datasets_12_07_17/frontb1/3dpoints.csv";
+    std::string template_file_fmt = "/home/saif/msc_workspace/slam_test_bag_dataset/datasets_12_07_17/frontb1/patches/ptch_%04d.png";
     // cv::Mat testimg = cv::imread("/home/saif/msc_workspace/slam_test_bag_dataset/datasets/bottom/patch/patches/patch_0000.png");
     // cv::imshow("testimg",testimg);
     // cv::waitKey(0);
@@ -89,8 +89,8 @@ int main(int argc, char** argv){
         for (int j = 0; j < 3; j++)
             traj_out << pM.at<double>(j, 0) << "," << pM.at<double>(j, 1) << "," << pM.at<double>(j, 2) << "," << pM.at<double>(j, 3) << std::endl;
 
-        int scale_ = (SCENE == 1)?1000:100;
-
+        // int scale_ = (SCENE == 1)?1000:100;
+        int scale_ = 1000;
         // TESTING ODOMETRY TRANSFORM BROADCASTING
 
         double q1,q2,q3,q4;
@@ -100,7 +100,7 @@ int main(int argc, char** argv){
 
         geometry_msgs::TransformStamped odom_trans;
         odom_trans.header.stamp = current_time;
-        odom_trans.header.frame_id = "world_frame";
+        odom_trans.header.frame_id = "ismar_frame";
         odom_trans.child_frame_id = "cam_frame";
 
         odom_trans.transform.translation.x = (current_frame->pose.at<double>(2,3))/scale_;

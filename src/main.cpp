@@ -138,7 +138,7 @@ int main(int argc, char** argv){
 
         last_time = current_time;
         r.sleep();
-        break;
+        // break;
 
     } // while
 

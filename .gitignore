@@ -1,3 +1,4 @@
 S0*
 *.txt
 !CMakeLists.txt
+trajectory_scene*
