@@ -4,6 +4,10 @@
 #include <pcl/point_cloud.h>  
 #include <pcl/point_types.h>  
 // #include <boost/shared_ptr.hpp>
+#include <thread>
+#include <chrono>
+#include <mutex>
+#include <condition_variable>
 #include "STAM.h"
 
 namespace gSlam
@@ -21,6 +25,10 @@ namespace customtype
     typedef pcl::PointXYZ CloudPoint; // A point structure denoting Euclidean xyz coordinates
     typedef pcl::PointCloud<CloudPoint> PointCloud;
     typedef pcl::PointCloud<CloudPoint>::Ptr PointCloudPtr;
+
+    typedef std::mutex Mutex;
+    typedef std::unique_lock<Mutex> Lock; // unique_lock enables choosing std::try_to_lock_t, std::adopt_lock_t or std::defer_lock_t
+    typedef std::condition_variable CondVar;
 } // namespace customtype
 
 } // namespace gSlam

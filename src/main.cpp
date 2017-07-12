@@ -74,6 +74,7 @@ int main(int argc, char** argv){
     int i = 0;
     vOdom.init(video_source.readNextFrame(next_frame_format[SCENE-1]));
     visual_odometry::Frame::Ptr current_odom_frame;
+    gSlam::CameraParameters cam_params(vOdom.intrinsics_);
 
     // ==============================================================================================================
 
@@ -137,7 +138,7 @@ int main(int argc, char** argv){
 
         last_time = current_time;
         r.sleep();
-        // break;
+        break;
 
     } // while
 
