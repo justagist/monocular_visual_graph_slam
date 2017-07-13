@@ -9,34 +9,33 @@
 // #include <opencv2/core/eigen.hpp>
 
 namespace vo = visual_odometry;
-bool visualize_flag;
-bool ros_flag;
+bool visualize_flag = false;
+bool ros_flag = false;
 int main(int argc, char** argv){
 
     if( argc < 2 ){
-        printf(" usage: ./stam <scene_number>\n where <scene_number> = 1|2|3\n\n");
+        printf(" usage: rosrun visual_odom <node_name> <scene_number> [visualize? (1 = true | 0 = false(default))] [ros? (1 = true | 0 = false(default))]\n where <scene_number> = 1|2|3\n\n");
         exit(1);
     }
     else{
         SCENE = atoi(argv[1]);
         if( SCENE > 3 || SCENE < 1 )
         {
-             printf(" usage: ./stam <scene_number>\n where <scene_number> = 1|2|3\n\n");
+             printf(" usage: rosrun visual_odom <node_name> <scene_number> [visualize? (1 = true | 0 = false(default))] [ros? (1 = true | 0 = false(default))]\n where <scene_number> = 1|2|3\n\n");
              exit(1);
         }
 
-        if ( argc == 3 )
+        if ( argc > 2 )
         {
             int flag = atoi(argv[2]);
             visualize_flag = (flag == 1); 
+            std::cout << " visualizing " << std::endl;
         }
-        else visualize_flag = false;
-        if (argc == 4)
+        if (argc > 3)
         {
             int tmp = atoi(argv[3]);
             ros_flag = (tmp == 1);
         }
-        else ros_flag = false;
 
     }
     
@@ -96,6 +95,7 @@ int main(int argc, char** argv){
 
         // perform visual odometry on current frame
         current_odom_frame = vOdom.process(frame,visualize_flag);
+        // std::cout << vOdom.key_frames_.size() << " size of keyframes " << std::endl;
 
         // cv::KeyPoint pt = current_odom_frame->keypoints.at(0);
 
@@ -122,7 +122,6 @@ int main(int argc, char** argv){
         // std::cout << cam_params.intrinsicsMat_*projectionMatrix << std::endl;
 
         slam->processData(posemat, cam_params, frame, projectionMatrix);
-
         /* STAM Bundle Adjustment 
         **
         // if( SCENE > 1 && i%300 == 0 )
@@ -155,7 +154,7 @@ int main(int argc, char** argv){
 
         last_time = current_time;
         r.sleep();
-        break;
+        // break;
 
     } // while
 

@@ -15,7 +15,7 @@ public:
 
     enum { OdomConstraint, LoopClosureConstraint, Unspecified };
 
-    DataLink();
+    DataLink(){};
     DataLink(customtype::Identifier from_id, customtype::Identifier to_id,const TransformType& transform,const InfMatrixType& inf_matrix);
 
     customtype::Identifier from_id_;
@@ -99,34 +99,45 @@ public:
     void setId(customtype::Identifier id) { id_ = id; }
     customtype::TransformSE3 getPose() const { return pose_; }
 
-    void addLink(customtype::Identifier to_id, customtype::TransformSE3 rel_transf, customtype::InformationMatrix3D inf_matrix = customtype::InformationMatrix3D::Identity()) {
+    void addLink(customtype::Identifier to_id, customtype::TransformSE3 rel_transf, customtype::InformationMatrix3D inf_matrix = customtype::InformationMatrix3D::Identity()) 
+    {
         links_.insert(std::make_pair(id_, DataLink3D::DataLinkPtr(new DataLink3D(id_, to_id, rel_transf, inf_matrix))));
     }
 
-    void addLink(const DataLink3D::DataLinkPtr& link) {
+    void addLink(const DataLink3D::DataLinkPtr& link) 
+    {
         links_.insert(std::make_pair(id_, link));
     }
 
-    void setPose(const customtype::TransformSE3& pose){
+    void setPose(const customtype::TransformSE3& pose)
+    {
         pose_ = pose;
     }
 
-    DataLink3D::Links& getLinks(){
+    DataLink3D::Links& getLinks()
+    {
         return links_;
     }
 
-    std::vector<cv::KeyPoint>& getKeyPoints(){
+    std::vector<cv::KeyPoint>& getKeyPoints()
+    {
         return keypoints_;
     }
 
-    cv::Mat& getImageColor(){
+    cv::Mat& getImageColor()
+    {
         return image_color_;
     }
 
-    CameraParameters getCamParams() {
+    CameraParameters getCamParams() 
+    {
         return camParams_;
     }
 
+    customtype::ProjMatType getProjMat()
+    {
+        return projectionMat_;
+    }
     // const TimeStamp& getTimeStamp() {
     //     return stamp_;
     // }

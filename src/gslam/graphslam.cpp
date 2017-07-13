@@ -22,7 +22,7 @@ void GrSLAM::processData(const customtype::TransformSE3& odom_pose,
     mutex_graph_.unlock();
     std::cout << "here!" << std::endl;  
 
-    DataSpot3D::DataSpot3DPtr data_spot_new( new DataSpot3D(corrected_pose, cam_params, image_color, projectionMatrix));// stamp));
+    DataSpot3D::DataSpot3DPtr data_spot_new( new DataSpot3D(corrected_pose, cam_params, image_color, projectionMatrix));// tstamp));
 
     bool need_optimization = false;
     bool optimize_near = false;

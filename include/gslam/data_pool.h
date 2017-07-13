@@ -3,6 +3,7 @@
 
 #include "gslam/data_spot.h"
 #include "gslam/fabmap.h"
+#include "gslam/transform_estimator.h"
 
 namespace gSlam
 {
@@ -41,7 +42,7 @@ public:
 private:
     DataSpot3D::DataSpot3DPtr last_spot_;
     DataSpot3D::DataSpotMap data_spots_;
-    // TransformEstimator transform_est_;
+    TransformEstimator transform_est_;
 
     FabMap fabmap_;
 

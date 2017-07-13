@@ -19,9 +19,24 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
     int new_id, loop_id;
     fabmap_.compareAndAdd(data_spot_ptr, new_id, loop_id);
 
-    std::cout << " LoopID: " << loop_id << std::endl;
+    std::cout << " LoopID: " << loop_id << " new_id: " << new_id << std::endl;
 
-    // if( loop_id >= 0 && new_id > 0 ){}  // TODO: loop closure constraint
+    if( loop_id >= 0 && new_id > 0 ) // TODO: loop closure constraint
+    {
+        double variance, prop_matches;
+        int correspondences;
+        bool status_good = false;
+        DataLink3D::DataLinkPtr link( new DataLink3D() );
+
+        DataSpot3D::DataSpot3DPtr spot_src = data_spots_.find(loop_id)->second;
+
+        link->from_id_ = spot_src->getId();
+        link->to_id_ = data_spot_ptr->getId();
+        std::cout << " Estimating Loop Closure Transform " <<std::endl;
+
+        
+        
+    }  
 
     std::cout << " Adding odometry " << std::endl;
     // Odometry constraint
