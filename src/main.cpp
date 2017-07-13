@@ -106,6 +106,12 @@ int main(int argc, char** argv){
         if (world_points.size()>0)
             gSlam::ros_utils::createPointMsg(world_visualizer, world_points);
 
+        // get current camera pose from STAM
+        gSlam::customtype::TransformSE3 posemat; 
+        cv::cv2eigen(current_odom_frame->getCurrentPose(),posemat.matrix()); // conversion of cv::Mat to Eigen for quaternion calculation and further slam process
+
+        slam->processData(posemat, cam_params, frame);
+
         /* STAM Bundle Adjustment 
         **
         // if( SCENE > 1 && i%300 == 0 )
@@ -122,9 +128,6 @@ int main(int argc, char** argv){
         //     traj_out << pM.at<double>(j, 0) << "," << pM.at<double>(j, 1) << "," << pM.at<double>(j, 2) << "," << pM.at<double>(j, 3) << std::endl;
         */
 
-        // get current camera pose from STAM
-        gSlam::customtype::TransformSE3 posemat; 
-        cv::cv2eigen(current_odom_frame->getCurrentPose(),posemat.matrix()); // conversion of cv::Mat to Eigen for quaternion calculation and further slam process
         
         geometry_msgs::TransformStamped odom_trans = gSlam::ros_utils::createOdomMsg(posemat);
 

@@ -3,6 +3,7 @@
 
 #include "gslam/typedefs.h"
 #include "gslam/data_spot.h"
+#include "gslam/data_pool.h"
 
 namespace gSlam
 {
@@ -32,6 +33,7 @@ private:
     customtype::Mutex mutex_graph_;
     customtype::CondVar cond_var_;
 
+    DataPool data_pool_;
 
 
 

@@ -9,6 +9,7 @@
 #include <mutex>
 #include <condition_variable>
 #include "STAM.h"
+// #include <iostream>
 
 namespace gSlam
 {
@@ -21,6 +22,7 @@ namespace customtype
 
     typedef std::vector<cv::KeyPoint> p2d_vec; // vector of 2d image points in a frame
 
+    typedef unsigned int Identifier;
 
     typedef pcl::PointXYZ CloudPoint; // A point structure denoting Euclidean xyz coordinates
     typedef pcl::PointCloud<CloudPoint> PointCloud;
@@ -29,6 +31,8 @@ namespace customtype
     typedef std::mutex Mutex;
     typedef std::unique_lock<Mutex> Lock; // unique_lock enables choosing std::try_to_lock_t, std::adopt_lock_t or std::defer_lock_t
     typedef std::condition_variable CondVar;
+
+    typedef Eigen::Matrix<double,6,6> InformationMatrix3D;
 } // namespace customtype
 
 } // namespace gSlam

@@ -145,7 +145,10 @@ include_directories(
 #   src/${PROJECT_NAME}/visual_odom.cpp
 # )
 SET(GSLAM_SOURCES ${GSLAM_SRC_DIR}/gslam/ros_utils.cpp
-                  ${GSLAM_SRC_DIR}/gslam/graphslam.cpp)
+                  ${GSLAM_SRC_DIR}/gslam/graphslam.cpp
+                  ${GSLAM_SRC_DIR}/gslam/data_spot.cpp
+                  ${GSLAM_SRC_DIR}/gslam/data_pool.cpp
+                  ${GSLAM_SRC_DIR}/gslam/fabmap.cpp)
 
 SET(GSLAM_LINK_LIBS ${PCL_LIBRARIES}) 
 
