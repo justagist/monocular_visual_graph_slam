@@ -33,6 +33,8 @@ namespace customtype
     typedef std::condition_variable CondVar;
 
     typedef Eigen::Matrix<double,6,6> InformationMatrix3D;
+
+    typedef Eigen::Matrix<double,3,4> ProjMatType; // projection matrix
 } // namespace customtype
 
 } // namespace gSlam

@@ -12,8 +12,9 @@ GrSLAM::~GrSLAM(){}
 // TODO: DEFINE DESTRUCTOR
 
 void GrSLAM::processData(const customtype::TransformSE3& odom_pose,
-                    const CameraParameters& cam_params,
-                    const cv::Mat& image_color) // TIMESTAMP?!
+                         const CameraParameters& cam_params,
+                         const cv::Mat& image_color,
+                         const customtype::ProjMatType& projectionMatrix) // TIMESTAMP?!
 {
 
     mutex_graph_.lock();
@@ -21,7 +22,7 @@ void GrSLAM::processData(const customtype::TransformSE3& odom_pose,
     mutex_graph_.unlock();
     std::cout << "here!" << std::endl;  
 
-    DataSpot3D::DataSpot3DPtr data_spot_new( new DataSpot3D(corrected_pose, cam_params, image_color));// stamp));
+    DataSpot3D::DataSpot3DPtr data_spot_new( new DataSpot3D(corrected_pose, cam_params, image_color, projectionMatrix));// stamp));
 
     bool need_optimization = false;
     bool optimize_near = false;

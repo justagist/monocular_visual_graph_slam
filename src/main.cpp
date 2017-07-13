@@ -10,7 +10,7 @@
 
 namespace vo = visual_odometry;
 bool visualize_flag;
-
+bool ros_flag;
 int main(int argc, char** argv){
 
     if( argc < 2 ){
@@ -31,7 +31,12 @@ int main(int argc, char** argv){
             visualize_flag = (flag == 1); 
         }
         else visualize_flag = false;
-
+        if (argc == 4)
+        {
+            int tmp = atoi(argv[3]);
+            ros_flag = (tmp == 1);
+        }
+        else ros_flag = false;
 
     }
     
@@ -75,6 +80,8 @@ int main(int argc, char** argv){
     vOdom.init(video_source.readNextFrame(next_frame_format[SCENE-1]));
     visual_odometry::Frame::Ptr current_odom_frame;
     gSlam::CameraParameters cam_params(vOdom.intrinsics_);
+    // std::cout << vOdom.intrinsics_ << std::endl;
+    // std::cout << cam_params.intrinsicsMat_.matrix() << std::endl;
 
     // ==============================================================================================================
 
@@ -110,7 +117,11 @@ int main(int argc, char** argv){
         gSlam::customtype::TransformSE3 posemat; 
         cv::cv2eigen(current_odom_frame->getCurrentPose(),posemat.matrix()); // conversion of cv::Mat to Eigen for quaternion calculation and further slam process
 
-        slam->processData(posemat, cam_params, frame);
+        gSlam::customtype::ProjMatType projectionMatrix;
+        cv::cv2eigen(current_odom_frame->projMatrix,projectionMatrix);
+        // std::cout << cam_params.intrinsicsMat_*projectionMatrix << std::endl;
+
+        slam->processData(posemat, cam_params, frame, projectionMatrix);
 
         /* STAM Bundle Adjustment 
         **
@@ -119,29 +130,32 @@ int main(int argc, char** argv){
         */
 
         i++;
-        cv::Mat p;
-
-         /*writing trajectory to file
-        **
+        // cv::Mat p;
+        // std::cout << "eigen: " << cam_params.intrinsicsMat_*prj << std::endl;
+         // writing trajectory to file
+        /**/
         // cv::Mat pM = vOdom.intrinsics_*current_odom_frame->projMatrix;//.mul(1.0/274759.971);
+        // std::cout << " cv: " << pM << std::endl;
         // for (int j = 0; j < 3; j++)
         //     traj_out << pM.at<double>(j, 0) << "," << pM.at<double>(j, 1) << "," << pM.at<double>(j, 2) << "," << pM.at<double>(j, 3) << std::endl;
-        */
+        
 
         
         geometry_msgs::TransformStamped odom_trans = gSlam::ros_utils::createOdomMsg(posemat);
 
         // geometry_msgs::TransformStamped coordinate_correction = gSlam::ros_utils::setFrameCorrection(); // coordinate frame orientation correction for ISMAR dataset
-
+        if (ros_flag)
+        {
         //publish the transform and world points
         odom_broadcaster.sendTransform(odom_trans);
         world_point_pub.publish(world_visualizer);
-
         // frame_corrector.sendTransform(coordinate_correction); // coordinate frame orientation correction for ISMAR dataset
+        }
+
 
         last_time = current_time;
         r.sleep();
-        // break;
+        break;
 
     } // while
 

@@ -44,6 +44,10 @@ public:
 
     };
 
+    // cv::Mat intrinsicsMat_;
+    Eigen::Matrix3d intrinsicsMat_;
+
+    // cv::Mat getIntrinsics(){return intrinsicsMat_;}
 
     CameraParameters(float fx, float fy, float cx, float cy) {
 
@@ -60,6 +64,8 @@ public:
         fy_ = intrinsics_.at<double>(1,1);
         cx_ = intrinsics_.at<double>(0,2);
         cy_ = intrinsics_.at<double>(1,2);
+        cv::cv2eigen(intrinsics_,intrinsicsMat_);
+        // intrinsicsMat_ = intrinsics_;
     }
 
     CameraParameters(const CameraParameters& other) {
@@ -72,7 +78,6 @@ public:
     CameraParameters() {
         fx_ = fy_ = cx_ = cy_ = 0;
     }
-
 
 
 }; // class CameraParameters
@@ -88,7 +93,7 @@ public:
 
     DataSpot3D();
 
-    DataSpot3D(const customtype::TransformSE3& pose, const CameraParameters& camParams, const cv::Mat& image_color); // Timestamp?
+    DataSpot3D(const customtype::TransformSE3& pose, const CameraParameters& camParams, const cv::Mat& image_color, const customtype::ProjMatType& projectionMatrix); // Timestamp?
 
     customtype::Identifier getId() const { return id_; }
     void setId(customtype::Identifier id) { id_ = id; }
@@ -145,6 +150,8 @@ private:
     std::multimap<customtype::Identifier, customtype::CloudPoint> keypoints3D_;
     cv::Mat descriptors_;
     cv::Mat image_color_;
+
+    customtype::ProjMatType projectionMat_;
 
 }; // class DataSpot3D
 
