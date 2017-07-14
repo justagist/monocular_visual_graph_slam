@@ -6,7 +6,7 @@ namespace gSlam
 namespace slam_utils
 {
     // gives transformation of image 2 to image 1 (tgt_prj to src_prj)
-    customtype::TransformSE3 estimateRelativeTransformBtwnImages(customtype::ProjMatType src_prj, customtype::ProjMatType tgt_prj)
+    customtype::TransformSE3 estimateRelativeTransformBtwnProjections(customtype::ProjMatType src_prj, customtype::ProjMatType tgt_prj)
     {
         Eigen::Matrix3d R_src = src_prj.block(0,0,3,3);
         Eigen::Matrix3d R_tgt = tgt_prj.block(0,0,3,3);

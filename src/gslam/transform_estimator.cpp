@@ -5,34 +5,117 @@ namespace gSlam
     customtype::TransformSE3 TransformEstimator::estimateTransform(DataSpot3D::DataSpot3DPtr data_spot_src, DataSpot3D::DataSpot3DPtr data_spot_target,
                                                    double& variance, int& correspondences, double& prop_matches, bool& status_good) 
     {
-        CameraParameters src_cam = data_spot_src->getCamParams();
-        CameraParameters tgt_cam = data_spot_target->getCamParams();
+        // CameraParameters src_cam = data_spot_src->getCamParams();
+        // CameraParameters tgt_cam = data_spot_target->getCamParams();
 
-        std::vector<cv::DMatch> matches; // sequence of matches;
-        findMatches(data_spot_src, data_spot_target, matches);
+        // std::vector<cv::DMatch> matches; // sequence of matches;
+        // findMatches(data_spot_src, data_spot_target, matches);
         
-        correspondences = matches.size();
-        size_t tmp = std::max(data_spot_src->getKeyPoints().size(), data_spot_target->getKeyPoints().size());
+        // correspondences = matches.size();
+        // size_t tmp = std::max(data_spot_src->getKeyPoints().size(), data_spot_target->getKeyPoints().size());
         
-        double max_points = (double)std::max(tmp,(size_t)1);
-        prop_matches = double(correspondences)/max_points;
+        // double max_points = (double)std::max(tmp,(size_t)1);
+        // prop_matches = double(correspondences)/max_points;
         
-        if( correspondences < 8 )
-        {
-            status_good = false;
-            return customtype::TransformSE3();
-        }
+        // if( correspondences < 8 )
+        // {
+        //     status_good = false;
+        //     return customtype::TransformSE3();
+        // }
 
 
         customtype::ProjMatType src_proj = data_spot_src->getProjMat();
         customtype::ProjMatType tgt_proj = data_spot_target->getProjMat();        
-        customtype::TransformSE3 out_transform = slam_utils::estimateRelativeTransformBtwnImages(src_proj,tgt_proj);
+        customtype::TransformSE3 out_transform = slam_utils::estimateRelativeTransformBtwnProjections(src_proj,tgt_proj);
         status_good = true; // TEMPORARY
         variance = 1; // TEMPORARY
-        return out_transform;
+
+
+        // customtype::KeyPoints src_kpts = data_spot_src->getKeyPoints();
+        // customtype::KeyPoints tgt_kpts = data_spot_target->getKeyPoints();
+
+        customtype::WorldPtsType src_wrldpts;
+        customtype::WorldPtsType tgt_wrldpts;
+        // customtype::
+
+        findMatchingWorldpoints(data_spot_src->getImageColor(), data_spot_target->getImageColor(), data_spot_src->getKeyPoints(), data_spot_target->getKeyPoints(),src_wrldpts, tgt_wrldpts);//, data_spot_src->getWorldPoints(), data_spot_target->getWorldPoints())
+
+
+
+        // customtype::ImgPtsType 
+        // return out_transform;
 
 
     }
+
+    void TransformEstimator::findMatchingWorldpoints(cv::Mat& image1, cv::Mat& image2, 
+                                                     customtype::KeyPoints keypoints1,
+                                                     customtype::KeyPoints keypoints2, 
+                                                     customtype::WorldPtsType& out_1,
+                                                     customtype::WorldPtsType& out_2)
+    {
+
+        cv::Mat descriptors1, descriptors2;
+        extractor_->compute(image1,keypoints1,descriptors1);
+        extractor_->compute(image2,keypoints2,descriptors2);
+        // 2. Match the two image descriptors
+        // Construction of the matcher
+
+        if(descriptors1.type()!=CV_32F) 
+        {
+            descriptors1.convertTo(descriptors1, CV_32F);
+        }
+
+        if(descriptors2.type()!=CV_32F) 
+        {
+            descriptors2.convertTo(descriptors2, CV_32F);
+        }
+
+         cv::Ptr<cv::DescriptorMatcher> matcher = cv::DescriptorMatcher::create("FlannBased"); // alternative: "BruteForce" FlannBased
+
+        // from image 1 to image 2
+        // based on k nearest neighbours (with k=2)
+        std::vector< std::vector<cv::DMatch> > matches1;
+        matcher->knnMatch(descriptors1,descriptors2,
+                         matches1, // vector of matches (up to 2 per entry)
+                         2);
+        // return 2 nearest neighbours
+        // from image 2 to image 1
+        // based on k nearest neighbours (with k=2)
+        std::vector< std::vector<cv::DMatch> > matches2;
+        matcher->knnMatch(descriptors2,descriptors1,
+                         matches2, // vector of matches (up to 2 per entry)
+                         2);
+        // return 2 nearest neighbours
+        // 3. Remove matches for which NN ratio is
+        // > than threshold
+        // clean image 1 -> image 2 matches
+        int removed= ratioTest(matches1);
+        // clean image 2 -> image 1 matches
+        removed= ratioTest(matches2);
+        // 4. Remove non-symmetrical matches
+        std::vector<cv::DMatch> symMatches;
+        symmetryTest(matches1,matches2,symMatches);
+
+        std::vector<cv::DMatch> matches;
+        // 5. Validate matches using RANSAC
+        cv::Mat fundemental = ransacTest(symMatches,
+                        keypoints1, keypoints2, matches);
+
+
+
+        // for (std::vector<cv::DMatch>::
+        //          const_iterator it= matches.begin();
+        //          it!= matches.end(); ++it) 
+        // {
+
+        // }
+        // return 0;
+
+
+    }
+    
+
 
     void TransformEstimator::findMatches(DataSpot3D::DataSpot3DPtr spot_src, DataSpot3D::DataSpot3DPtr spot_target, std::vector<cv::DMatch>& matches)
     {
@@ -266,4 +349,8 @@ namespace gSlam
         }
         return fundemental;
     }
-    }
+
+} // namespace gSlam
+
+
+    

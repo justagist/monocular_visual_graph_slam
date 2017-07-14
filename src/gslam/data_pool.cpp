@@ -23,6 +23,7 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
 
     if( loop_id >= 0 && new_id > 0 ) 
     {
+        std::cout << "Possible loop closure : " << new_id << "->" << loop_id << std::endl;
         double variance, prop_matches;
         int correspondences;
         bool status_good = false;

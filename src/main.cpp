@@ -109,7 +109,15 @@ int main(int argc, char** argv){
         // -----------------------------------------------------------------------------------------------------------
 
         // get 3D worldpoints for visualization in ROS
-        std::vector<cv::Point3f> world_points = vOdom.getCurrent3dPoints();
+        gSlam::customtype::WorldPtsType world_points = vOdom.getCurrent3dPoints();
+        gSlam::customtype::KeyPoints key_points;
+        cv::KeyPoint::convert(vOdom.getCurrent2dKeyPoints(), key_points);
+        // for (int i = 0; i < key_points.size(); ++i)
+        // {
+        //     std::cout << key_points.at(i).pt.x << "  " << key_points.at(i).pt.y << std::endl;
+        // }
+        // std::cout << key_points.size() << " " << world_points.size() << std::endl;
+        // std::cout << key_points << std::endl << world_points << std::endl;
         if (world_points.size()>0)
             gSlam::ros_utils::createPointMsg(world_visualizer, world_points);
 
@@ -124,7 +132,7 @@ int main(int argc, char** argv){
         // std::cout << projectionMatrix << std::endl;
         // std::cout << projectionMatrix.block(0,0,3,3).inverse() << std::endl;
 
-        slam->processData(posemat, cam_params, frame, projectionMatrix);
+        slam->processData(posemat, cam_params, frame, projectionMatrix, world_points, key_points);
         /* STAM Bundle Adjustment 
         **
         // if( SCENE > 1 && i%300 == 0 )

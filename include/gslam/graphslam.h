@@ -21,7 +21,9 @@ public:
     void processData(const customtype::TransformSE3& odom_pose,
                      const CameraParameters& cam_params,
                      const cv::Mat& image_color,
-                     const customtype::ProjMatType& projectionMatrix);
+                     const customtype::ProjMatType& projectionMatrix,
+                     const customtype::WorldPtsType& world_pts,
+                     const customtype::KeyPoints& img_pts);
                      // const cv::Mat& image_depth,
                      // const PointCloudPtr& cloud2d, const TimeStamp& stamp)
 

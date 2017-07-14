@@ -14,7 +14,9 @@ GrSLAM::~GrSLAM(){}
 void GrSLAM::processData(const customtype::TransformSE3& odom_pose,
                          const CameraParameters& cam_params,
                          const cv::Mat& image_color,
-                         const customtype::ProjMatType& projectionMatrix) // TIMESTAMP?!
+                         const customtype::ProjMatType& projectionMatrix,
+                         const customtype::WorldPtsType& world_pts,
+                         const customtype::KeyPoints& img_pts) // TIMESTAMP?!
 {
 
     mutex_graph_.lock();
@@ -22,7 +24,7 @@ void GrSLAM::processData(const customtype::TransformSE3& odom_pose,
     mutex_graph_.unlock();
     std::cout << "here!" << std::endl;  
 
-    DataSpot3D::DataSpot3DPtr data_spot_new( new DataSpot3D(corrected_pose, cam_params, image_color, projectionMatrix));// tstamp));
+    DataSpot3D::DataSpot3DPtr data_spot_new( new DataSpot3D(corrected_pose, cam_params, image_color, projectionMatrix, world_pts, img_pts));// tstamp));
 
     bool need_optimization = false;
     bool optimize_near = false;

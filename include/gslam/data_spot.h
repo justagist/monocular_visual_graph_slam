@@ -93,7 +93,7 @@ public:
 
     DataSpot3D();
 
-    DataSpot3D(const customtype::TransformSE3& pose, const CameraParameters& camParams, const cv::Mat& image_color, const customtype::ProjMatType& projectionMatrix); // Timestamp?
+    DataSpot3D(const customtype::TransformSE3& pose, const CameraParameters& camParams, const cv::Mat& image_color, const customtype::ProjMatType& projectionMatrix, const customtype::WorldPtsType& world_pts, const customtype::KeyPoints& img_pts); // Timestamp?
 
     customtype::Identifier getId() const { return id_; }
     void setId(customtype::Identifier id) { id_ = id; }
@@ -119,9 +119,14 @@ public:
         return links_;
     }
 
-    std::vector<cv::KeyPoint>& getKeyPoints()
+    customtype::KeyPoints& getKeyPoints()
     {
         return keypoints_;
+    }
+
+    customtype::WorldPtsType& getWorldPoints()
+    {
+        return world_pts_;
     }
 
     cv::Mat& getImageColor()
@@ -157,10 +162,13 @@ private:
     DataLink3D::Links links_;
 
     CameraParameters camParams_;
-    std::vector<cv::KeyPoint> keypoints_;
+    customtype::KeyPoints keypoints_;
     std::multimap<customtype::Identifier, customtype::CloudPoint> keypoints3D_;
     cv::Mat descriptors_;
     cv::Mat image_color_;
+
+    // customtype::ImgPtsType img_pts_;
+    customtype::WorldPtsType world_pts_;
 
     customtype::ProjMatType projectionMat_;
 

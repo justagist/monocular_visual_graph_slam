@@ -10,7 +10,7 @@ namespace gSlam
 namespace slam_utils
 {
     
-    customtype::TransformSE3 estimateRelativeTransformBtwnImages(customtype::ProjMatType src_prj, customtype::ProjMatType tgt_prj);
+    customtype::TransformSE3 estimateRelativeTransformBtwnProjections(customtype::ProjMatType src_prj, customtype::ProjMatType tgt_prj);
 
 } // namespace slam_utils
 
