@@ -20,11 +20,16 @@ namespace gSlam
         if( correspondences < 8 )
         {
             status_good = false;
-            return TransformSE3();
+            return customtype::TransformSE3();
         }
 
-        
 
+        customtype::ProjMatType src_proj = data_spot_src->getProjMat();
+        customtype::ProjMatType tgt_proj = data_spot_target->getProjMat();        
+        customtype::TransformSE3 out_transform = slam_utils::estimateRelativeTransformBtwnImages(src_proj,tgt_proj);
+        status_good = true; // TEMPORARY
+        variance = 1; // TEMPORARY
+        return out_transform;
 
 
     }

@@ -32,8 +32,9 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
 
         link->from_id_ = spot_src->getId();
         link->to_id_ = data_spot_ptr->getId();
+        
         std::cout << " Estimating Loop Closure Transform " <<std::endl;
-
+        link->transform_ = transform_est_.estimateTransform(spot_src, data_spot_ptr, variance, correspondences, prop_matches, status_good);
         
         
     }  

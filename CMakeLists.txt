@@ -148,7 +148,9 @@ SET(GSLAM_SOURCES ${GSLAM_SRC_DIR}/gslam/ros_utils.cpp
                   ${GSLAM_SRC_DIR}/gslam/graphslam.cpp
                   ${GSLAM_SRC_DIR}/gslam/data_spot.cpp
                   ${GSLAM_SRC_DIR}/gslam/data_pool.cpp
-                  ${GSLAM_SRC_DIR}/gslam/fabmap.cpp)
+                  ${GSLAM_SRC_DIR}/gslam/fabmap.cpp
+                  ${GSLAM_SRC_DIR}/gslam/transform_estimator.cpp
+                  ${GSLAM_SRC_DIR}/gslam/slam_utils.cpp)
 
 SET(GSLAM_LINK_LIBS ${PCL_LIBRARIES}) 
 

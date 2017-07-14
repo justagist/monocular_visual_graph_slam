@@ -121,6 +121,9 @@ int main(int argc, char** argv){
         cv::cv2eigen(current_odom_frame->projMatrix,projectionMatrix);
         // std::cout << cam_params.intrinsicsMat_*projectionMatrix << std::endl;
 
+        // std::cout << projectionMatrix << std::endl;
+        // std::cout << projectionMatrix.block(0,0,3,3).inverse() << std::endl;
+
         slam->processData(posemat, cam_params, frame, projectionMatrix);
         /* STAM Bundle Adjustment 
         **
@@ -154,7 +157,7 @@ int main(int argc, char** argv){
 
         last_time = current_time;
         r.sleep();
-        // break;
+        break;
 
     } // while
 

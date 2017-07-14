@@ -1,6 +1,10 @@
 #ifndef __TRANSFORM_ESTIMATOR__
 #define __TRANSFORM_ESTIMATOR__
 
+// #include "typedefs.h"
+#include "gslam/data_spot.h"
+#include "gslam/slam_utils.h"
+
 namespace gSlam 
 {
 
@@ -34,7 +38,7 @@ public:
         cv::StarFeatureDetector(32, 10, 18, 18, 20);
     }
 
-    custom_type::TransformSE3 estimateTransform(DataSpot3D::DataSpot3DPtr data_spot_src, DataSpot3D::DataSpot3DPtr data_spot_target, double& variance, int& correspondences, double & prop_match, bool & status_good);
+    customtype::TransformSE3 estimateTransform(DataSpot3D::DataSpot3DPtr data_spot_src, DataSpot3D::DataSpot3DPtr data_spot_target, double& variance, int& correspondences, double & prop_match, bool & status_good);
 
     // Set the feature detector
     void setFeatureDetector(
@@ -50,7 +54,7 @@ public:
 
 
 
-    void match(DataSpot3D::DataSpot3DPtr spot_src, DataSpot3D::DataSpot3DPtr spot_target, std::vector<cv::DMatch>& matches);
+    void findMatches(DataSpot3D::DataSpot3DPtr spot_src, DataSpot3D::DataSpot3DPtr spot_target, std::vector<cv::DMatch>& matches);
 
 private:
 
