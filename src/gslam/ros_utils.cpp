@@ -64,7 +64,7 @@ namespace gSlam
             return transf;
         }
 
-        void createPointMsg(visualization_msgs::Marker& world_visualizer, std::vector<cv::Point3d> world_points)
+        void createPointMsg(visualization_msgs::Marker& world_visualizer, std::vector<cv::Point3f> world_points)
         {
             // visualization_msgs::Marker world_visualizer;
             world_visualizer.header.stamp = ros::Time::now();

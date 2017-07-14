@@ -109,7 +109,7 @@ int main(int argc, char** argv){
         // -----------------------------------------------------------------------------------------------------------
 
         // get 3D worldpoints for visualization in ROS
-        std::vector<cv::Point3d> world_points = vOdom.getCurrent3dPoints();
+        std::vector<cv::Point3f> world_points = vOdom.getCurrent3dPoints();
         if (world_points.size()>0)
             gSlam::ros_utils::createPointMsg(world_visualizer, world_points);
 

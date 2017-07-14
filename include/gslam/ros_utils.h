@@ -16,7 +16,7 @@ namespace gSlam
 
         geometry_msgs::TransformStamped setFrameCorrection();
 
-        void createPointMsg(visualization_msgs::Marker& world_visualizer, std::vector<cv::Point3d> world_points);
+        void createPointMsg(visualization_msgs::Marker& world_visualizer, std::vector<cv::Point3f> world_points);
 
     } // ros_utils
 }// gSlam
