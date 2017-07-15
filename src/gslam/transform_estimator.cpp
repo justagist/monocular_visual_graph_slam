@@ -42,6 +42,7 @@ namespace gSlam
 
         src_cloud = slam_utils::convert3dPointsToCloud(src_wrldpts);
         tgt_cloud = slam_utils::convert3dPointsToCloud(tgt_wrldpts);
+        std::cout << tgt_cloud << std::endl;
 
 
 

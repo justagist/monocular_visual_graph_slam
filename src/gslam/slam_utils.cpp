@@ -27,95 +27,95 @@ namespace slam_utils
     }
 
     // return transform from source to target (All points must be finite!!!)
-    Eigen::Matrix4d icp2D(const customtype::PointCloudPtr & cloud_source,
-                          const customtype::PointCloudPtr & cloud_target, //TODO: Should be ConstPtr
-                          double maxCorrespondenceDistance,
-                          int maximumIterations,
-                          bool * hasConvergedOut,
-                          double * variance,
-                          int * correspondencesOut)
-    {
-        pcl::IterativeClosestPoint<customtype::CloudPoint, customtype::CloudPoint, double> icp;
-        // Set the input source and target
-        icp.setInputTarget (cloud_target);
-        icp.setInputSource (cloud_source);
+    // Eigen::Matrix4d icp2D(const customtype::PointCloudPtr & cloud_source,
+    //                       const customtype::PointCloudPtr & cloud_target, //TODO: Should be ConstPtr
+    //                       double maxCorrespondenceDistance,
+    //                       int maximumIterations,
+    //                       bool * hasConvergedOut,
+    //                       double * variance,
+    //                       int * correspondencesOut)
+    // {
+    //     pcl::IterativeClosestPoint<customtype::CloudPoint, customtype::CloudPoint, double> icp;
+    //     // Set the input source and target
+    //     icp.setInputTarget (cloud_target);
+    //     icp.setInputSource (cloud_source);
 
-        pcl::registration::TransformationEstimation2D<customtype::CloudPoint, customtype::CloudPoint, double>::Ptr est;
-        est.reset(new pcl::registration::TransformationEstimation2D<customtype::CloudPoint, customtype::CloudPoint, double>);
-        icp.setTransformationEstimation(est);
+    //     pcl::registration::TransformationEstimation2D<customtype::CloudPoint, customtype::CloudPoint, double>::Ptr est;
+    //     est.reset(new pcl::registration::TransformationEstimation2D<customtype::CloudPoint, customtype::CloudPoint, double>);
+    //     icp.setTransformationEstimation(est);
 
-        // Set the max correspondence distance to 5cm (e.g., correspondences with higher distances will be ignored)
-        icp.setMaxCorrespondenceDistance (maxCorrespondenceDistance);
-        // Set the maximum number of iterations (criterion 1)
-        icp.setMaximumIterations (maximumIterations);
-        // Set the transformation epsilon (criterion 2)
-        //icp.setTransformationEpsilon (transformationEpsilon);
-        // Set the euclidean distance difference epsilon (criterion 3)
-        //icp.setEuclideanFitnessEpsilon (1);
-        //icp.setRANSACOutlierRejectionThreshold(maxCorrespondenceDistance);
+    //     // Set the max correspondence distance to 5cm (e.g., correspondences with higher distances will be ignored)
+    //     icp.setMaxCorrespondenceDistance (maxCorrespondenceDistance);
+    //     // Set the maximum number of iterations (criterion 1)
+    //     icp.setMaximumIterations (maximumIterations);
+    //     // Set the transformation epsilon (criterion 2)
+    //     //icp.setTransformationEpsilon (transformationEpsilon);
+    //     // Set the euclidean distance difference epsilon (criterion 3)
+    //     //icp.setEuclideanFitnessEpsilon (1);
+    //     //icp.setRANSACOutlierRejectionThreshold(maxCorrespondenceDistance);
 
-        // Perform the alignment
-        customtype::PointCloudPtr cloud_source_registered(new customtype::PointCloud());
-        icp.align (*cloud_source_registered);
-        bool hasConverged = icp.hasConverged();
+    //     // Perform the alignment
+    //     customtype::PointCloudPtr cloud_source_registered(new customtype::PointCloud());
+    //     icp.align (*cloud_source_registered);
+    //     bool hasConverged = icp.hasConverged();
 
-        // compute variance
-        if((correspondencesOut || variance) && hasConverged)
-        {
-            pcl::registration::CorrespondenceEstimation<customtype::CloudPoint, customtype::CloudPoint, double>::Ptr est;
-            est.reset(new pcl::registration::CorrespondenceEstimation<customtype::CloudPoint, customtype::CloudPoint, double>);
-            est->setInputTarget(cloud_target);
-            est->setInputSource(cloud_source_registered);
-            pcl::Correspondences correspondences;
-            est->determineCorrespondences(correspondences, maxCorrespondenceDistance);
-            if(variance)
-            {
-                if(correspondences.size()>=3)
-                {
-                    std::vector<double> distances(correspondences.size());
-                    for(unsigned int i=0; i<correspondences.size(); ++i)
-                    {
-                        distances[i] = correspondences[i].distance;
-                    }
+    //     // compute variance
+    //     if((correspondencesOut || variance) && hasConverged)
+    //     {
+    //         pcl::registration::CorrespondenceEstimation<customtype::CloudPoint, customtype::CloudPoint, double>::Ptr est;
+    //         est.reset(new pcl::registration::CorrespondenceEstimation<customtype::CloudPoint, customtype::CloudPoint, double>);
+    //         est->setInputTarget(cloud_target);
+    //         est->setInputSource(cloud_source_registered);
+    //         pcl::Correspondences correspondences;
+    //         est->determineCorrespondences(correspondences, maxCorrespondenceDistance);
+    //         if(variance)
+    //         {
+    //             if(correspondences.size()>=3)
+    //             {
+    //                 std::vector<double> distances(correspondences.size());
+    //                 for(unsigned int i=0; i<correspondences.size(); ++i)
+    //                 {
+    //                     distances[i] = correspondences[i].distance;
+    //                 }
 
-                    //variance
-                    std::sort(distances.begin (), distances.end ());
-                    double median_error_sqr = distances[distances.size () >> 1];
-                    *variance = (2.1981 * median_error_sqr);
-                }
-                else
-                {
-                    hasConverged = false;
-                    *variance = -1.0;
-                }
-            }
+    //                 //variance
+    //                 std::sort(distances.begin (), distances.end ());
+    //                 double median_error_sqr = distances[distances.size () >> 1];
+    //                 *variance = (2.1981 * median_error_sqr);
+    //             }
+    //             else
+    //             {
+    //                 hasConverged = false;
+    //                 *variance = -1.0;
+    //             }
+    //         }
 
-            if(correspondencesOut)
-            {
-                *correspondencesOut = (int)correspondences.size();
-            }
-        }
-        else
-        {
-            if(correspondencesOut)
-            {
-                *correspondencesOut = 0;
-            }
-            if(variance)
-            {
-                *variance = -1;
-            }
-        }
+    //         if(correspondencesOut)
+    //         {
+    //             *correspondencesOut = (int)correspondences.size();
+    //         }
+    //     }
+    //     else
+    //     {
+    //         if(correspondencesOut)
+    //         {
+    //             *correspondencesOut = 0;
+    //         }
+    //         if(variance)
+    //         {
+    //             *variance = -1;
+    //         }
+    //     }
 
-        if(hasConvergedOut)
-        {
-            *hasConvergedOut = hasConverged;
-        }
+    //     if(hasConvergedOut)
+    //     {
+    //         *hasConvergedOut = hasConverged;
+    //     }
 
-        Eigen::Matrix4d m = icp.getFinalTransformation();
-        //slam_x::TransformSE3 rel_transform = icp.getFinalTransformation().matrix();
-        return m;
-    }
+    //     Eigen::Matrix4d m = icp.getFinalTransformation();
+    //     //slam_x::TransformSE3 rel_transform = icp.getFinalTransformation().matrix();
+    //     return m;
+    // }
 
     customtype::PointCloudPtr convert3dPointsToCloud(customtype::WorldPtsType wrldpts)
     {

@@ -2,10 +2,10 @@
 #define __SLAM_UTILS__
 
 #include "gslam/typedefs.h"
-#include <pcl/registration/icp.h>
-#include <pcl/registration/transformation_estimation_2D.h>
-#include <pcl/sample_consensus/sac_model_registration.h>
-#include <pcl/sample_consensus/ransac.h>
+// #include <pcl/registration/icp.h>
+// #include <pcl/registration/transformation_estimation_2D.h>
+// #include <pcl/sample_consensus/sac_model_registration.h>
+// #include <pcl/sample_consensus/ransac.h>
 #include "gslam/data_spot.h"
 
 
@@ -17,13 +17,13 @@ namespace slam_utils
     
     customtype::TransformSE3 estimateRelativeTransformBtwnProjections(customtype::ProjMatType src_prj, customtype::ProjMatType tgt_prj);
 
-    Eigen::Matrix4d icp2D(const customtype::PointCloudPtr & cloud_source,
-                          const customtype::PointCloudPtr & cloud_target, //TODO: Should be ConstPtr
-                          double maxCorrespondenceDistance,
-                          int maximumIterations,
-                          bool * hasConvergedOut,
-                          double * variance,
-                          int * correspondencesOut);
+    // Eigen::Matrix4d icp2D(const customtype::PointCloudPtr & cloud_source,
+    //                       const customtype::PointCloudPtr & cloud_target, //TODO: Should be ConstPtr
+    //                       double maxCorrespondenceDistance,
+    //                       int maximumIterations,
+    //                       bool * hasConvergedOut,
+    //                       double * variance,
+    //                       int * correspondencesOut);
 
     customtype::PointCloudPtr convert3dPointsToCloud(customtype::WorldPtsType wrldpts);
 

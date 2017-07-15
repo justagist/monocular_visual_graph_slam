@@ -24,7 +24,7 @@ find_package(cvsba REQUIRED )
 # include_directories( ${EIGEN3_INCLUDE_DIR} )
 
 # PCL ########################## PCL (apparently) links the required BOOST libraries and Eigen3 
-find_package(PCL REQUIRED)
+find_package(PCL 1.8 REQUIRED)
 include_directories(${PCL_INCLUDE_DIRS})
 link_directories(${PCL_LIBRARY_DIRS})
 add_definitions(${PCL_DEFINITIONS})
