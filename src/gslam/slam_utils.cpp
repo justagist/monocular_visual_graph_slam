@@ -26,7 +26,188 @@ namespace slam_utils
         return out_transform;
     }
 
-    // return transform from source to target (All points must be finite!!!)
+    // Get transform from cloud2 to cloud1
+    Eigen::Matrix4d transformFromXYZCorrespondences(
+            const customtype::PointCloudPtr & cloud1,
+            const customtype::PointCloudPtr & cloud2,
+            double inlierThreshold,
+            int iterations,
+            bool refineModel,
+            double refineModelSigma,
+            int refineModelIterations,
+            std::vector<int> * inliersOut,
+            double * varianceOut)
+    {
+        //NOTE: this method is a mix of two methods:
+        //  - getRemainingCorrespondences() in pcl/registration/impl/correspondence_rejection_sample_consensus.hpp
+        //  - refineModel() in pcl/sample_consensus/sac.h
+
+        if(varianceOut)
+        {
+            *varianceOut = 1.0;
+        }
+        Eigen::Matrix4d transform;
+        if(cloud1->size() >=3 && cloud1->size() == cloud2->size())
+        {
+            // RANSAC
+            printf("DEBUG: iterations=%d inlierThreshold=%f\n", iterations, inlierThreshold);
+            std::vector<int> source_indices (cloud2->size());
+            std::vector<int> target_indices (cloud1->size());
+
+            // Copy the query-match indices
+            for (int i = 0; i < (int)cloud1->size(); ++i)
+            {
+                source_indices[i] = i;
+                target_indices[i] = i;
+            }
+
+            // From the set of correspondences found, attempt to remove outliers
+            // Create the registration model
+            pcl::SampleConsensusModelRegistration<customtype::CloudPoint>::Ptr model;
+            model.reset(new pcl::SampleConsensusModelRegistration<customtype::CloudPoint>(cloud2, source_indices));
+            // Pass the target_indices
+            model->setInputTarget (cloud1, target_indices);
+            // Create a RANSAC model
+            pcl::RandomSampleConsensus<customtype::CloudPoint> sac (model, inlierThreshold);
+            sac.setMaxIterations(iterations);
+
+            // Compute the set of inliers
+            if(sac.computeModel())
+            {
+                std::vector<int> inliers;
+                Eigen::VectorXf model_coefficients;
+
+                sac.getInliers(inliers);
+                sac.getModelCoefficients (model_coefficients);
+
+                if (refineModel)
+                {
+                    double inlier_distance_threshold_sqr = inlierThreshold * inlierThreshold;
+                    double error_threshold = inlierThreshold;
+                    double sigma_sqr = refineModelSigma * refineModelSigma;
+                    int refine_iterations = 0;
+                    bool inlier_changed = false, oscillating = false;
+                    std::vector<int> new_inliers, prev_inliers = inliers;
+                    std::vector<size_t> inliers_sizes;
+                    Eigen::VectorXf new_model_coefficients = model_coefficients;
+                    do
+                    {
+                        // Optimize the model coefficients
+                        model->optimizeModelCoefficients (prev_inliers, new_model_coefficients, new_model_coefficients);
+                        inliers_sizes.push_back (prev_inliers.size ());
+
+                        // Select the new inliers based on the optimized coefficients and new threshold
+                        model->selectWithinDistance (new_model_coefficients, error_threshold, new_inliers);
+                        printf("DEBUG: RANSAC refineModel: Number of inliers found (before/after): %d/%d, with an error threshold of %f.\n",
+                               (int)prev_inliers.size (), (int)new_inliers.size (), error_threshold);
+
+                        if (new_inliers.empty ())
+                        {
+                            ++refine_iterations;
+                            if (refine_iterations >= refineModelIterations)
+                            {
+                                break;
+                            }
+                            continue;
+                        }
+
+                        // Estimate the variance and the new threshold
+                        double variance = model->computeVariance ();
+                        error_threshold = sqrt (std::min (inlier_distance_threshold_sqr, sigma_sqr * variance));
+
+                        printf ("DEBUG: RANSAC refineModel: New estimated error threshold: %f (variance=%f) on iteration %d out of %d.\n",
+                                error_threshold, variance, refine_iterations, refineModelIterations);
+                        inlier_changed = false;
+                        std::swap (prev_inliers, new_inliers);
+
+                        // If the number of inliers changed, then we are still optimizing
+                        if (new_inliers.size () != prev_inliers.size ())
+                        {
+                            // Check if the number of inliers is oscillating in between two values
+                            if (inliers_sizes.size () >= 4)
+                            {
+                                if (inliers_sizes[inliers_sizes.size () - 1] == inliers_sizes[inliers_sizes.size () - 3] &&
+                                        inliers_sizes[inliers_sizes.size () - 2] == inliers_sizes[inliers_sizes.size () - 4])
+                                {
+                                    oscillating = true;
+                                    break;
+                                }
+                            }
+                            inlier_changed = true;
+                            continue;
+                        }
+
+                        // Check the values of the inlier set
+                        for (size_t i = 0; i < prev_inliers.size (); ++i)
+                        {
+                            // If the value of the inliers changed, then we are still optimizing
+                            if (prev_inliers[i] != new_inliers[i])
+                            {
+                                inlier_changed = true;
+                                break;
+                            }
+                        }
+                    }
+                    while (inlier_changed && ++refine_iterations < refineModelIterations);
+
+                    // If the new set of inliers is empty, we didn't do a good job refining
+                    if (new_inliers.empty ())
+                    {
+                        printf ("WARN: RANSAC refineModel: Refinement failed: got an empty set of inliers!\n");
+                    }
+
+                    if (oscillating)
+                    {
+                        printf("DEBUG: RANSAC refineModel: Detected oscillations in the model refinement.\n");
+                    }
+
+                    std::swap (inliers, new_inliers);
+                    model_coefficients = new_model_coefficients;
+                }
+
+                if (inliers.size() >= 3)
+                {
+                    if(inliersOut)
+                    {
+                        *inliersOut = inliers;
+                    }
+                    if(varianceOut)
+                    {
+                        *varianceOut = model->computeVariance();
+                    }
+
+                    // get best transformation
+                    Eigen::Matrix4f bestTransformation;
+                    bestTransformation.row (0) = model_coefficients.segment<4>(0);
+                    bestTransformation.row (1) = model_coefficients.segment<4>(4);
+                    bestTransformation.row (2) = model_coefficients.segment<4>(8);
+                    bestTransformation.row (3) = model_coefficients.segment<4>(12);
+
+                    transform = bestTransformation.cast<double>();
+                    std::ostringstream ss;
+                    ss << transform;
+                    printf("DEBUG: RANSAC inliers=%d/%d tf=%s", (int)inliers.size(), (int)cloud1->size(),ss.str().c_str());
+
+                    return transform.inverse(); // inverse to get actual pose transform (not correspondences transform)
+                }
+                else
+                {
+                    printf("DEBUG: RANSAC: Model with inliers < 3\n");
+                }
+            }
+            else
+            {
+                printf("DEBUG: RANSAC: Failed to find model\n");
+            }
+        }
+        else
+        {
+            printf("DEBUG: Not enough points to compute the transform\n");
+        }
+        return Eigen::Matrix4d();
+    }
+
+    // // return transform from source to target (All points must be finite!!!)
     // Eigen::Matrix4d icp2D(const customtype::PointCloudPtr & cloud_source,
     //                       const customtype::PointCloudPtr & cloud_target, //TODO: Should be ConstPtr
     //                       double maxCorrespondenceDistance,
@@ -368,11 +549,12 @@ namespace slam_utils
                 return cv::Mat();
             }
 
+
             std::cout << " Re-computing F " << std::endl;
             // Compute 8-point F from all accepted matches
-            fundemental= cv::findFundamentalMat(
-                        cv::Mat(points1),cv::Mat(points2), // matches
+            fundemental= cv::findFundamentalMat(cv::Mat(points1),cv::Mat(points2), // matches
                         CV_FM_8POINT); // 8-point method
+            // std::cout << points2.size() << ' ' << points1.size() << std::endl;
         }
         return fundemental;
     }
@@ -389,6 +571,10 @@ namespace slam_utils
         cv::Mat descriptors1, descriptors2;
         extractor_->compute(image1,keypoints1,descriptors1);
         extractor_->compute(image2,keypoints2,descriptors2);
+        std::cout << " size " << keypoints2.size() << std::endl;
+        std::cout << " size " << keypoints1.size()<< std::endl;
+        std::cout  << "size " << wrldpts1.size() << std::endl;
+        std::cout << " size " << wrldpts2.size() << std::endl;
         // 2. Match the two image descriptors
         // Construction of the matcher
 
@@ -433,12 +619,12 @@ namespace slam_utils
         cv::Mat fundemental = ransacTest(symMatches,
                         keypoints1, keypoints2, matches);
 
-
-
+        std::cout << "this here" << std::endl;
         for (std::vector<cv::DMatch>::
                  const_iterator it= matches.begin();
                  it!= matches.end(); ++it) 
         {
+            // std::cout << it->queryIdx << " " << it->trainIdx << std::endl;
             out_1.push_back(wrldpts1.at(it->queryIdx));
             out_2.push_back(wrldpts2.at(it->trainIdx));
         }

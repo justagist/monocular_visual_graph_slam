@@ -2,10 +2,10 @@
 #define __SLAM_UTILS__
 
 #include "gslam/typedefs.h"
-// #include <pcl/registration/icp.h>
-// #include <pcl/registration/transformation_estimation_2D.h>
-// #include <pcl/sample_consensus/sac_model_registration.h>
-// #include <pcl/sample_consensus/ransac.h>
+#include <pcl/registration/icp.h>
+#include <pcl/registration/transformation_estimation_2D.h>
+#include <pcl/sample_consensus/sac_model_registration.h>
+#include <pcl/sample_consensus/ransac.h>
 #include "gslam/data_spot.h"
 
 
@@ -23,7 +23,17 @@ namespace slam_utils
     //                       int maximumIterations,
     //                       bool * hasConvergedOut,
     //                       double * variance,
-    //                       int * correspondencesOut);
+    //                       int * correspondencesOut){};
+
+    Eigen::Matrix4d transformFromXYZCorrespondences(const customtype::PointCloudPtr & cloud1,
+                                                    const customtype::PointCloudPtr & cloud2,
+                                                    double inlierThreshold,
+                                                    int iterations,
+                                                    bool refineModel,
+                                                    double refineModelSigma,
+                                                    int refineModelIterations,
+                                                    std::vector<int> * inliersOut,
+                                                    double * varianceOut);
 
     customtype::PointCloudPtr convert3dPointsToCloud(customtype::WorldPtsType wrldpts);
 
