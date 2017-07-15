@@ -162,13 +162,13 @@ private:
     DataLink3D::Links links_;
 
     CameraParameters camParams_;
-    customtype::KeyPoints keypoints_;
     std::multimap<customtype::Identifier, customtype::CloudPoint> keypoints3D_;
     cv::Mat descriptors_;
     cv::Mat image_color_;
 
     // customtype::ImgPtsType img_pts_;
     customtype::WorldPtsType world_pts_;
+    customtype::KeyPoints keypoints_;
 
     customtype::ProjMatType projectionMat_;
 

@@ -110,6 +110,11 @@ int main(int argc, char** argv){
 
         // get 3D worldpoints for visualization in ROS
         gSlam::customtype::WorldPtsType world_points = vOdom.getCurrent3dPoints();
+        // for (int i = 0; i<world_points.size(); ++i)
+        // {
+        //     std::cout << world_points.at(i).x << " " << world_points.at(i).y << std::endl;
+        // }
+
         gSlam::customtype::KeyPoints key_points;
         cv::KeyPoint::convert(vOdom.getCurrent2dKeyPoints(), key_points);
         // for (int i = 0; i < key_points.size(); ++i)

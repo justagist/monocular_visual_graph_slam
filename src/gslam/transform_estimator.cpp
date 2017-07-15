@@ -38,9 +38,16 @@ namespace gSlam
         customtype::WorldPtsType tgt_wrldpts;
         // customtype::
 
-        findMatchingWorldpoints(data_spot_src->getImageColor(), data_spot_target->getImageColor(), data_spot_src->getKeyPoints(), data_spot_target->getKeyPoints(),src_wrldpts, tgt_wrldpts);//, data_spot_src->getWorldPoints(), data_spot_target->getWorldPoints())
+        findMatchingWorldpoints(data_spot_src->getImageColor(), data_spot_target->getImageColor(), data_spot_src->getKeyPoints(), data_spot_target->getKeyPoints(), data_spot_src->getWorldPoints(), data_spot_target->getWorldPoints(), src_wrldpts, tgt_wrldpts);//, data_spot_src->getWorldPoints(), data_spot_target->getWorldPoints())
 
+        customtype::PointCloudPtr src_cloud(new customtype::PointCloud());
+        customtype::PointCloudPtr tgt_cloud(new customtype::PointCloud());
 
+        src_cloud = convert3dPointsToCloud(src_wrldpts);
+        tgt_cloud = convert3dPointsToCloud(tgt_wrldpts);
+        
+
+        // src_cloud
 
         // customtype::ImgPtsType 
         // return out_transform;
@@ -48,9 +55,36 @@ namespace gSlam
 
     }
 
+    customtype::PointCloudPtr TransformEstimator::convert3dPointsToCloud(customtype::WorldPtsType wrldpts)
+    {
+
+        customtype::PointCloudPtr cloud(new customtype::PointCloud());
+        cloud->height = 1;
+        cloud->width  = wrldpts.size();
+        cloud->is_dense = false;
+
+        cloud->resize(cloud->height * cloud->width);
+
+        for (int i = 0; i < world_points.size();)
+        {
+
+            customtype::CloudPoint & point = cloud->at(i);
+            point.x = world_points.at(i).x;
+            point.y = world_points.at(i).y;
+            point.z = world_points.at(i).z;
+            std::cout << i << std::endl;
+            ++i;
+
+        }
+
+        return cloud;
+    }
+
     void TransformEstimator::findMatchingWorldpoints(cv::Mat& image1, cv::Mat& image2, 
                                                      customtype::KeyPoints keypoints1,
                                                      customtype::KeyPoints keypoints2, 
+                                                     customtype::WorldPtsType wrldpts1,
+                                                     customtype::WorldPtsType wrldpts2,
                                                      customtype::WorldPtsType& out_1,
                                                      customtype::WorldPtsType& out_2)
     {
@@ -104,12 +138,13 @@ namespace gSlam
 
 
 
-        // for (std::vector<cv::DMatch>::
-        //          const_iterator it= matches.begin();
-        //          it!= matches.end(); ++it) 
-        // {
-
-        // }
+        for (std::vector<cv::DMatch>::
+                 const_iterator it= matches.begin();
+                 it!= matches.end(); ++it) 
+        {
+            out_1.push_back(wrldpts1.at(it->queryIdx));
+            out_2.push_back(wrldpts2.at(it->trainIdx));
+        }
         // return 0;
 
 

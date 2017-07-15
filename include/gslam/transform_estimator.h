@@ -89,7 +89,10 @@ private:
             const std::vector<cv::KeyPoint>& keypoints2,
             std::vector<cv::DMatch>& outMatches);
 
-    void findMatchingWorldpoints(cv::Mat& img1, cv::Mat& img2, customtype::KeyPoints kp1, customtype::KeyPoints kp2, customtype::WorldPtsType& out_1, customtype::WorldPtsType& out_2);
+    void findMatchingWorldpoints(cv::Mat& img1, cv::Mat& img2, customtype::KeyPoints kp1, customtype::KeyPoints kp2,customtype::WorldPtsType wrldpts1,
+                                                     customtype::WorldPtsType wrldpts2, customtype::WorldPtsType& out_1, customtype::WorldPtsType& out_2);
+
+    customtype::PointCloudPtr convert3dPointsToCloud(customtype::WorldPtsType wrldpts);
 
     // pointer to the feature point detector object
     cv::Ptr<cv::FeatureDetector> detector_;
