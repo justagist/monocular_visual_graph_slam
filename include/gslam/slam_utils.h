@@ -80,13 +80,13 @@ namespace slam_utils
         }
 
 
-        void findMatchingWorldpoints(cv::Mat& image1, cv::Mat& image2, 
-                                                         customtype::KeyPoints keypoints1,
-                                                         customtype::KeyPoints keypoints2, 
-                                                         customtype::WorldPtsType wrldpts1,
-                                                         customtype::WorldPtsType wrldpts2,
-                                                         customtype::WorldPtsType& out_1,
-                                                         customtype::WorldPtsType& out_2);
+        void findMatchingWorldpoints(cv::Mat image1, cv::Mat image2, 
+                                     customtype::KeyPoints imgpts1,
+                                     customtype::KeyPoints imgpts2, 
+                                     customtype::WorldPtsType wrldpts1,
+                                     customtype::WorldPtsType wrldpts2,
+                                     customtype::WorldPtsType& out_1,
+                                     customtype::WorldPtsType& out_2);
 
         void findMatches(DataSpot3D::DataSpot3DPtr spot_src, DataSpot3D::DataSpot3DPtr spot_target, std::vector<cv::DMatch>& matches);
 

@@ -305,6 +305,8 @@ namespace slam_utils
         cloud->height = 1;
         cloud->width  = wrldpts.size();
         cloud->is_dense = false;
+        // for(int i = 0 ; i < wrldpts.size(); ++i)
+        // std::cout << " wrldpts " << wrldpts.at(i).x << " " << wrldpts.at(i).y <<" " << wrldpts.at(i).z << std::endl;
 
         cloud->resize(cloud->height * cloud->width);
 
@@ -315,7 +317,7 @@ namespace slam_utils
             point.x = wrldpts.at(i).x;
             point.y = wrldpts.at(i).y;
             point.z = wrldpts.at(i).z;
-            std::cout << i << std::endl;
+            // std::cout << i << std::endl;
             ++i;
 
         }
@@ -560,34 +562,45 @@ namespace slam_utils
         return fundemental;
     }
 
-    void DataSpotMatcher::findMatchingWorldpoints(cv::Mat& image1, cv::Mat& image2, 
-                                                     customtype::KeyPoints imgpts1,
-                                                     customtype::KeyPoints imgpts2, 
-                                                     customtype::WorldPtsType wrldpts1,
-                                                     customtype::WorldPtsType wrldpts2,
-                                                     customtype::WorldPtsType& out_1,
-                                                     customtype::WorldPtsType& out_2)
+    void DataSpotMatcher::findMatchingWorldpoints(cv::Mat image1, cv::Mat image2, 
+                                                 customtype::KeyPoints imgpts1,
+                                                 customtype::KeyPoints imgpts2, 
+                                                 customtype::WorldPtsType wrldpts1,
+                                                 customtype::WorldPtsType wrldpts2,
+                                                 customtype::WorldPtsType& out_1,
+                                                 customtype::WorldPtsType& out_2)
     {
+
+        cv::cvtColor(image1, image1, CV_BGR2GRAY);
+        cv::cvtColor(image2, image2, CV_BGR2GRAY);
 
         cv::Mat descriptors1, descriptors2;
         extractor_->compute(image1,imgpts1,descriptors1);
         extractor_->compute(image2,imgpts2,descriptors2);
-        std::cout << " size " << imgpts2.size() << std::endl;
-        std::cout << " size " << imgpts1.size()<< std::endl;
-        std::cout  << "size " << wrldpts1.size() << std::endl;
-        std::cout << " size " << wrldpts2.size() << std::endl;
+        cv::Mat out_img;
+        // cv::drawKeypoints(image1, imgpts1, out_img);
+        // cv::imshow("window", out_img);
+        // cv::waitKey(0);
+        // cv::Mat out_img2;
+        // cv::drawKeypoints(image2, imgpts2, out_img2);
+        // cv::imshow("window2", out_img);
+        // cv::waitKey(0);
+        // std::cout << " size " << imgpts2.size() << std::endl;
+        // std::cout << " size " << imgpts1.size()<< std::endl;
+        // std::cout  << "size " << wrldpts1.size() << std::endl;
+        // std::cout << " size " << wrldpts2.size() << std::endl;
         // 2. Match the two image descriptors
         // Construction of the matcher
 
-        if(descriptors1.type()!=CV_32F) 
-        {
-            descriptors1.convertTo(descriptors1, CV_32F);
-        }
+        // if(descriptors1.type()!=CV_32F) 
+        // {
+        //     descriptors1.convertTo(descriptors1, CV_32F);
+        // }
 
-        if(descriptors2.type()!=CV_32F) 
-        {
-            descriptors2.convertTo(descriptors2, CV_32F);
-        }
+        // if(descriptors2.type()!=CV_32F) 
+        // {
+        //     descriptors2.convertTo(descriptors2, CV_32F);
+        // }
 
          cv::Ptr<cv::DescriptorMatcher> matcher = cv::DescriptorMatcher::create("FlannBased"); // alternative: "BruteForce" FlannBased
 
@@ -614,20 +627,38 @@ namespace slam_utils
         // 4. Remove non-symmetrical matches
         std::vector<cv::DMatch> symMatches;
         symmetryTest(matches1,matches2,symMatches);
+        // std::cout << symMatches.size() << "symsize" << std::endl;
 
         std::vector<cv::DMatch> matches;
         // 5. Validate matches using RANSAC
         cv::Mat fundemental = ransacTest(symMatches,
                         imgpts1, imgpts2, matches);
 
-        std::cout << "this here" << std::endl;
+        // for (int i = 0; i<imgpts2.size(); ++i)
+        //     {
+        //     }
+        // std::cout << "imgpts1 size " << imgpts1.size() << std::endl;
+        // std::cout << "imgpts2 size " << imgpts2.size() << std::endl;
+
+        std::cout << matches.size() << " matches" << std::endl;
+
+        cv::Mat out_match;
+        cv::drawMatches(image1,imgpts1, image2, imgpts2, symMatches, out_match);
+        cv::imshow("window3",out_match);
+        cv::waitKey(0);
+
+        // std::cout << "this here" << std::endl;
         for (std::vector<cv::DMatch>::
                  const_iterator it= matches.begin();
                  it!= matches.end(); ++it) 
         {
             // std::cout << it->queryIdx << " " << it->trainIdx << std::endl;
-            out_1.push_back(wrldpts1.at(it->queryIdx));
-            out_2.push_back(wrldpts2.at(it->trainIdx));
+            out_1.push_back(wrldpts1[it->queryIdx]);
+            std::cout << wrldpts1[it->queryIdx].x << " "  << wrldpts1[it->queryIdx].y << " " << wrldpts1[it->queryIdx].z << " " <<std::endl;
+                std::cout << "imgpts1 " << imgpts1.at(it->queryIdx).pt.x << " " << imgpts1.at(it->queryIdx).pt.y << std::endl;
+            out_2.push_back(wrldpts2[it->trainIdx]);
+            std::cout << wrldpts2[it->trainIdx].x << " "  << wrldpts2[it->trainIdx].y << " " << wrldpts2[it->trainIdx].z << " " <<std::endl;
+                std::cout << "imgpts2 " << imgpts2.at(it->trainIdx).pt.x << " " << imgpts2.at(it->trainIdx).pt.y << std::endl;
         }
         // return 0;
 

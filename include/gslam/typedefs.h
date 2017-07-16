@@ -9,6 +9,7 @@
 #include <mutex>
 #include <condition_variable>
 #include "STAM.h"
+#include <assert.h>
 // #include <iostream>
 
 namespace gSlam

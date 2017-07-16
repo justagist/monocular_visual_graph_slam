@@ -118,6 +118,12 @@ int main(int argc, char** argv){
 
         gSlam::customtype::KeyPoints key_points;
         cv::KeyPoint::convert(vOdom.getCurrent2dKeyPoints(), key_points);
+
+        // for (int i = 0; i < key_points.size(); ++i)
+        // {
+        //     std::cout << world_points[i].x << " " << world_points[i].y << " "<< world_points[i].z << std::endl;
+        //     std::cout << key_points[i].pt.x << " " << key_points[i].pt.y << std::endl;
+        // }
         // std::cout << "here size " << key_points.size() << std::endl;
         // for (int i = 0; i < key_points.size(); ++i)
         // {
@@ -172,6 +178,7 @@ int main(int argc, char** argv){
 
         last_time = current_time;
         r.sleep();
+        if (i==2)
         break;
 
     } // while

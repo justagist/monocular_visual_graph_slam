@@ -20,6 +20,7 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
     fabmap_.compareAndAdd(data_spot_ptr, new_id, loop_id);
     // std::cout << data_spot_ptr->getImagePoints().size() << "check " << std::endl;
     // std::cout << data_spot_ptr->getWorldPoints().size() << " check" << std::endl;
+    assert(data_spot_ptr->getImagePoints().size() == data_spot_ptr->getWorldPoints().size());
 
     std::cout << " LoopID: " << loop_id << " new_id: " << new_id << std::endl;
 
