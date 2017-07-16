@@ -97,6 +97,7 @@ int main(int argc, char** argv){
         current_odom_frame = vOdom.process(frame,visualize_flag);
         // std::cout << vOdom.key_frames_.size() << " size of keyframes " << std::endl;
 
+
         // cv::KeyPoint pt = current_odom_frame->keypoints.at(0);
         // std::cout <<"kpts" << current_odom_frame->keypoints.size() << std::endl;
         // std::cout <<"desc" << current_odom_frame->descriptors.size() << std::endl;
@@ -146,6 +147,7 @@ int main(int argc, char** argv){
 
         // std::cout << projectionMatrix << std::endl;
         // std::cout << projectionMatrix.block(0,0,3,3).inverse() << std::endl;
+        slam->init();
 
         slam->processData(posemat, cam_params, frame, projectionMatrix, world_points, key_points);
         
@@ -191,7 +193,7 @@ int main(int argc, char** argv){
 
 
     // traj_out.close();
-    slam->saveTrajectory("trajectory.txt");
+    slam->saveTrajectory("trajectory1.txt");
     printf("EXITING\n");
 
     return 0;

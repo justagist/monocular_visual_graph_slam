@@ -65,6 +65,7 @@ void GrSLAM::processData(const customtype::TransformSE3& odom_pose,
         std::cout << " ADDED DATA SPOT " << std::endl;
 
         optimize_near = data_pool_.getNewLoopsCountNear() >= 2;
+        // std::cout << "optimize near " << optimize_near << std::endl;
         optimize_far = data_pool_.getNewLoopsCountFar() >= 10; // before was 5
         need_optimization = optimize_near && optimize_far;
         need_optimization = optimize_near;
@@ -73,7 +74,7 @@ void GrSLAM::processData(const customtype::TransformSE3& odom_pose,
 
     if( need_optimization )
     {
-        optimizeGraph(optimize_near, optimize_far );
+        GrSLAM::optimizeGraph(optimize_near, optimize_far );
     }
 
 
@@ -83,7 +84,7 @@ void GrSLAM::optimizeGraph(bool optimize_near, bool optimize_far){
 
     {
         customtype::Lock lk(mutex_graph_);
-
+        std::cout << "reaching here " << std::endl;
         optimize_now_ = true;
         optimize_near_ = optimize_near;
         optimize_far_ = optimize_far;
