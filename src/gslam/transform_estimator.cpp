@@ -35,7 +35,7 @@ namespace gSlam
         customtype::WorldPtsType tgt_wrldpts;
         // customtype::
 
-        spot_matcher_.findMatchingWorldpoints(data_spot_src->getImageColor(), data_spot_target->getImageColor(), data_spot_src->getKeyPoints(), data_spot_target->getKeyPoints(), data_spot_src->getWorldPoints(), data_spot_target->getWorldPoints(), src_wrldpts, tgt_wrldpts);//, data_spot_src->getWorldPoints(), data_spot_target->getWorldPoints())
+        spot_matcher_.findMatchingWorldpoints(data_spot_src->getImageColor(), data_spot_target->getImageColor(), data_spot_src->getImagePoints(), data_spot_target->getImagePoints(), data_spot_src->getWorldPoints(), data_spot_target->getWorldPoints(), src_wrldpts, tgt_wrldpts);//, data_spot_src->getWorldPoints(), data_spot_target->getWorldPoints())
         std::cout << "here !!" << std::endl;
         customtype::PointCloudPtr src_cloud(new customtype::PointCloud());
         customtype::PointCloudPtr tgt_cloud(new customtype::PointCloud());

@@ -126,11 +126,13 @@ FabMap::~FabMap()
     }
 }
 
-void FabMap::compareAndAdd(DataSpot3D::DataSpot3DPtr data_spot_ptr, int& out_newID, int& out_loopID){
+void FabMap::compareAndAdd(DataSpot3D::DataSpot3DPtr data_spot_ptr, int& out_newID, int& out_loopID)
+{
 
     compareAndAdd(data_spot_ptr->getImageColor(), out_newID, out_loopID, data_spot_ptr->getKeyPoints());
 
-    if( out_newID >= 0 ){
+    if( out_newID >= 0 )
+    {
         data_spot_ptr->setId(out_newID);
     }
 

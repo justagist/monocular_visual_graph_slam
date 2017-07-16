@@ -343,6 +343,7 @@ namespace slam_utils
 
     {
         // 1a. Detection of the SURF features
+        // std::cout << "reaching here!!!" << std::endl;
         if( !keypoints1.size() ) detector_->detect(image1,keypoints1);
         if( !keypoints2.size() ) detector_->detect(image2,keypoints2);
 
@@ -560,8 +561,8 @@ namespace slam_utils
     }
 
     void DataSpotMatcher::findMatchingWorldpoints(cv::Mat& image1, cv::Mat& image2, 
-                                                     customtype::KeyPoints keypoints1,
-                                                     customtype::KeyPoints keypoints2, 
+                                                     customtype::KeyPoints imgpts1,
+                                                     customtype::KeyPoints imgpts2, 
                                                      customtype::WorldPtsType wrldpts1,
                                                      customtype::WorldPtsType wrldpts2,
                                                      customtype::WorldPtsType& out_1,
@@ -569,10 +570,10 @@ namespace slam_utils
     {
 
         cv::Mat descriptors1, descriptors2;
-        extractor_->compute(image1,keypoints1,descriptors1);
-        extractor_->compute(image2,keypoints2,descriptors2);
-        std::cout << " size " << keypoints2.size() << std::endl;
-        std::cout << " size " << keypoints1.size()<< std::endl;
+        extractor_->compute(image1,imgpts1,descriptors1);
+        extractor_->compute(image2,imgpts2,descriptors2);
+        std::cout << " size " << imgpts2.size() << std::endl;
+        std::cout << " size " << imgpts1.size()<< std::endl;
         std::cout  << "size " << wrldpts1.size() << std::endl;
         std::cout << " size " << wrldpts2.size() << std::endl;
         // 2. Match the two image descriptors
@@ -617,7 +618,7 @@ namespace slam_utils
         std::vector<cv::DMatch> matches;
         // 5. Validate matches using RANSAC
         cv::Mat fundemental = ransacTest(symMatches,
-                        keypoints1, keypoints2, matches);
+                        imgpts1, imgpts2, matches);
 
         std::cout << "this here" << std::endl;
         for (std::vector<cv::DMatch>::

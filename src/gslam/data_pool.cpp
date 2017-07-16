@@ -18,6 +18,8 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
     //Loop closure constraints
     int new_id, loop_id;
     fabmap_.compareAndAdd(data_spot_ptr, new_id, loop_id);
+    // std::cout << data_spot_ptr->getImagePoints().size() << "check " << std::endl;
+    // std::cout << data_spot_ptr->getWorldPoints().size() << " check" << std::endl;
 
     std::cout << " LoopID: " << loop_id << " new_id: " << new_id << std::endl;
 

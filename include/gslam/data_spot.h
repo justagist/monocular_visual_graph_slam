@@ -129,6 +129,11 @@ public:
         return world_pts_;
     }
 
+    customtype::KeyPoints& getImagePoints()
+    {
+        return image_pts_;
+    }
+
     cv::Mat& getImageColor()
     {
         return image_color_;
@@ -167,8 +172,10 @@ private:
     cv::Mat image_color_;
 
     // customtype::ImgPtsType img_pts_;
-    customtype::WorldPtsType world_pts_;
-    customtype::KeyPoints keypoints_;
+    customtype::WorldPtsType world_pts_; // 3d world points tracked by STAM in each frame
+    customtype::KeyPoints image_pts_; // corresponding 2d points from STAM
+
+    customtype::KeyPoints keypoints_; // keypoints for fabmap
 
     customtype::ProjMatType projectionMat_;
 
