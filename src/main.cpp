@@ -98,7 +98,8 @@ int main(int argc, char** argv){
         // std::cout << vOdom.key_frames_.size() << " size of keyframes " << std::endl;
 
         // cv::KeyPoint pt = current_odom_frame->keypoints.at(0);
-
+        // std::cout <<"kpts" << current_odom_frame->keypoints.size() << std::endl;
+        // std::cout <<"desc" << current_odom_frame->descriptors.size() << std::endl;
 
         // Available methods from STAM: ------------------------------------------------------------------------------
 
@@ -110,6 +111,7 @@ int main(int argc, char** argv){
 
         // get 3D worldpoints for visualization in ROS
         gSlam::customtype::WorldPtsType world_points = vOdom.getCurrent3dPoints();
+        // std::cout <<"wpts" << world_points.size() << std::endl;
         // std::cout << "here size " << world_points.size() << std::endl;
         // for (int i = 0; i<world_points.size(); ++i)
         // {
@@ -146,6 +148,7 @@ int main(int argc, char** argv){
         // std::cout << projectionMatrix.block(0,0,3,3).inverse() << std::endl;
 
         slam->processData(posemat, cam_params, frame, projectionMatrix, world_points, key_points);
+        
         /* STAM Bundle Adjustment 
         **
         // if( SCENE > 1 && i%300 == 0 )
@@ -178,8 +181,8 @@ int main(int argc, char** argv){
 
         last_time = current_time;
         r.sleep();
-        if (i==2)
-        break;
+        // if (i==2)
+        // break;
 
     } // while
 
@@ -188,7 +191,7 @@ int main(int argc, char** argv){
 
 
     // traj_out.close();
-
+    slam->saveTrajectory("trajectory.txt");
     printf("EXITING\n");
 
     return 0;

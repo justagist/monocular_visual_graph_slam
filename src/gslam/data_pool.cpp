@@ -40,6 +40,8 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
         std::cout << " Estimating Loop Closure Transform " <<std::endl;
         link->transform_ = transform_est_.estimateTransform(spot_src, data_spot_ptr, variance, correspondences, prop_matches, status_good);
 
+        if (variance == 0)
+            variance = 1.0;
         double info = 1.0/(variance); // before 1.0/(variance*100);
 
         // info before was 100
@@ -71,7 +73,7 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
             if( dist > 0.20 ) // If near loop is close in time but too far to be near, then it's not a valid transform
             { 
                 valid = false;
-                std::cout << " too far to be a near loop: dist: " <<dist << std::endl;
+                // std::cout << " too far to be a near loop: dist: " <<dist << std::endl;
             }
 
             if( valid ) 

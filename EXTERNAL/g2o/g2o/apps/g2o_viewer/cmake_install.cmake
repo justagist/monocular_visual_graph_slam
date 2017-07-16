@@ -58,7 +58,7 @@ ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unsp
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/usr/local/include/g2o/apps/g2o_viewer/run_g2o_viewer.h;/usr/local/include/g2o/apps/g2o_viewer/stream_redirect.h;/usr/local/include/g2o/apps/g2o_viewer/gui_hyper_graph_action.h;/usr/local/include/g2o/apps/g2o_viewer/properties_widget.h;/usr/local/include/g2o/apps/g2o_viewer/g2o_viewer_api.h;/usr/local/include/g2o/apps/g2o_viewer/main_window.h;/usr/local/include/g2o/apps/g2o_viewer/g2o_qglviewer.h;/usr/local/include/g2o/apps/g2o_viewer/viewer_properties_widget.h")
+   "/usr/local/include/g2o/apps/g2o_viewer/ui_base_main_window.h;/usr/local/include/g2o/apps/g2o_viewer/run_g2o_viewer.h;/usr/local/include/g2o/apps/g2o_viewer/stream_redirect.h;/usr/local/include/g2o/apps/g2o_viewer/gui_hyper_graph_action.h;/usr/local/include/g2o/apps/g2o_viewer/ui_base_properties_widget.h;/usr/local/include/g2o/apps/g2o_viewer/properties_widget.h;/usr/local/include/g2o/apps/g2o_viewer/g2o_viewer_api.h;/usr/local/include/g2o/apps/g2o_viewer/main_window.h;/usr/local/include/g2o/apps/g2o_viewer/g2o_qglviewer.h;/usr/local/include/g2o/apps/g2o_viewer/viewer_properties_widget.h")
   IF (CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
@@ -66,9 +66,11 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
 FILE(INSTALL DESTINATION "/usr/local/include/g2o/apps/g2o_viewer" TYPE FILE FILES
+    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/apps/g2o_viewer/ui_base_main_window.h"
     "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/apps/g2o_viewer/run_g2o_viewer.h"
     "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/apps/g2o_viewer/stream_redirect.h"
     "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/apps/g2o_viewer/gui_hyper_graph_action.h"
+    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/apps/g2o_viewer/ui_base_properties_widget.h"
     "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/apps/g2o_viewer/properties_widget.h"
     "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/apps/g2o_viewer/g2o_viewer_api.h"
     "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/apps/g2o_viewer/main_window.h"

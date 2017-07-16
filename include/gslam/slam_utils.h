@@ -37,6 +37,15 @@ namespace slam_utils
 
     customtype::PointCloudPtr convert3dPointsToCloud(customtype::WorldPtsType wrldpts);
 
+    Eigen::Matrix4d icp(const customtype::PointCloudPtr & cloud_source, //TODO: Should be ConstPtr
+                        const customtype::PointCloudPtr & cloud_target,
+                        double maxCorrespondenceDistance,
+                        int maximumIterations,
+                        bool * hasConvergedOut,
+                        double * variance,
+                        int * correspondencesOut);
+
+
 
     // DATASPOT MATCHER CLASS
 

@@ -32,6 +32,39 @@ add_definitions(${PCL_DEFINITIONS})
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
+
+############ G2O #################
+SET( G2O_INCLUDE ${PROJECT_SOURCE_DIR}/EXTERNAL/g2o CACHE PATH "Directory of G2O")
+INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR} ${G2O_INCLUDE})
+
+# Add g2o lib dir
+LINK_DIRECTORIES( ${LINK_DIRECTORIES} "${G2O_INCLUDE}/lib" )
+
+#Generate config.h
+configure_file(EXTERNAL/g2o/config.h.in ${PROJECT_BINARY_DIR}/EXTERNAL/g2o/config.h)
+include_directories(${PROJECT_BINARY_DIR} ${PROJECT_BINARY_DIR}/EXTERNAL)
+INSTALL(FILES ${PROJECT_BINARY_DIR}/EXTERNAL/g2o/config.h DESTINATION ${CMAKE_INSTALL_PREFIX}/include/g2o)
+
+# Include the subdirectories
+ADD_SUBDIRECTORY(EXTERNAL/g2o)
+
+INCLUDE_DIRECTORIES(${CSPARSE_INCLUDE_DIR}) #You can use CPARSE or CHOLMOD
+#INCLUDE_DIRECTORIES(${CHOLMOD_INCLUDE_DIR})
+
+set(G2O_DIR ${PROJECT_SOURCE_DIR}/EXTERNAL/g2o)
+include_directories(${G2O_DIR})
+link_directories(${G2O_DIR}/lib)
+
+include_directories(external/
+                    /usr/include/suitesparse/
+                    ${CSPARSE_INCLUDE_DIR}
+                    ${G2O_INCLUDE_DIR}
+                    ${EIGEN3_INCLUDE_DIR})
+
+########################################################
+
+
+
 SET(GSLAM_INC ${PROJECT_SOURCE_DIR}/include)
 SET(GSLAM_SRC_DIR ${PROJECT_SOURCE_DIR}/src)
 
@@ -150,7 +183,8 @@ SET(GSLAM_SOURCES ${GSLAM_SRC_DIR}/gslam/ros_utils.cpp
                   ${GSLAM_SRC_DIR}/gslam/data_pool.cpp
                   ${GSLAM_SRC_DIR}/gslam/fabmap.cpp
                   ${GSLAM_SRC_DIR}/gslam/transform_estimator.cpp
-                  ${GSLAM_SRC_DIR}/gslam/slam_utils.cpp)
+                  ${GSLAM_SRC_DIR}/gslam/slam_utils.cpp
+                  ${GSLAM_SRC_DIR}/gslam/graph.cpp)
 
 SET(GSLAM_LINK_LIBS ${PCL_LIBRARIES}) 
 
@@ -187,9 +221,13 @@ target_link_libraries(test_node
    ${catkin_LIBRARIES}
 	${STAM_LIBRARY}	${OpenCV_LIBS} ${cvsba_LIBS}
 )
+target_link_libraries(gslam_libs ${STAM_LIBRARY} ${STAM_LINK_LIBS} ${GSLAM_LINK_LIBS} core types_slam3d
+                                   solver_csparse)
+
 target_link_libraries(main_slam_node
    ${catkin_LIBRARIES} gslam_libs
-    ${STAM_LIBRARY} ${STAM_LINK_LIBS} ${GSLAM_LINK_LIBS}
+    ${STAM_LIBRARY} ${STAM_LINK_LIBS} ${GSLAM_LINK_LIBS} core types_slam3d
+                                   solver_csparse
 )
 
 

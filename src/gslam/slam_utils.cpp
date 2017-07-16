@@ -325,6 +325,100 @@ namespace slam_utils
         return cloud;
     }
 
+    // return transform from source to target (All points must be finite!!!)
+    Eigen::Matrix4d icp(const customtype::PointCloudPtr & cloud_source, //TODO: Should be ConstPtr
+                        const customtype::PointCloudPtr & cloud_target,
+                        double maxCorrespondenceDistance,
+                        int maximumIterations,
+                        bool * hasConvergedOut,
+                        double * variance,
+                        int * correspondencesOut)
+    {
+        pcl::IterativeClosestPoint<customtype::CloudPoint, customtype::CloudPoint, double> icp;
+        // Set the input source and target
+        icp.setInputTarget (cloud_target);
+        icp.setInputSource (cloud_source);
+
+        // Set the max correspondence distance to 5cm (e.g., correspondences with higher distances will be ignored)
+        icp.setMaxCorrespondenceDistance (maxCorrespondenceDistance);
+        // Set the maximum number of iterations (criterion 1)
+        icp.setMaximumIterations (maximumIterations);
+        // Set the transformation epsilon (criterion 2)
+        //icp.setTransformationEpsilon (transformationEpsilon);
+        // Set the euclidean distance difference epsilon (criterion 3)
+        //icp.setEuclideanFitnessEpsilon (1);
+        //icp.setRANSACOutlierRejectionThreshold(maxCorrespondenceDistance);
+
+        // Perform the alignment
+        customtype::PointCloudPtr cloud_source_registered(new customtype::PointCloud());
+        icp.align (*cloud_source_registered);
+        bool hasConverged = icp.hasConverged();
+        *variance = 1;
+
+        // compute variance
+        if((correspondencesOut || variance) && hasConverged)
+        {
+            pcl::registration::CorrespondenceEstimation<customtype::CloudPoint, customtype::CloudPoint, double>::Ptr est;
+            est.reset(new pcl::registration::CorrespondenceEstimation<customtype::CloudPoint, customtype::CloudPoint, double>);
+            est->setInputTarget(cloud_target);
+            est->setInputSource(cloud_source_registered);
+            pcl::Correspondences correspondences;
+            est->determineCorrespondences(correspondences, maxCorrespondenceDistance);
+            if(variance)
+            {
+                if(correspondences.size()>=3)
+                {
+                    std::vector<double> distances(correspondences.size());
+                    for(unsigned int i=0; i<correspondences.size(); ++i)
+                    {
+                        distances[i] = correspondences[i].distance;
+                        // std::cout << " distance " << correspondences[i].distance << std::endl;
+                    }
+
+                    //variance
+                    std::sort(distances.begin (), distances.end ());
+                    // std::cout << correspondences.size() << std::endl;
+                    double median_error_sqr = distances[distances.size () >> 1];
+                    *variance = (2.1981 * median_error_sqr);
+                    // std::cout << "REACHING HERE!!! " << median_error_sqr << " " << *variance << std::endl;
+                }
+                else
+                {
+                    hasConverged = false;
+                    *variance = -1.0;
+                }
+            }
+
+            if(correspondencesOut)
+            {
+                *correspondencesOut = (int)correspondences.size();
+            }
+        }
+        else
+        {
+            if(correspondencesOut)
+            {
+                *correspondencesOut = 0;
+            }
+            if(variance)
+            {
+                *variance = -1;
+            }
+        }
+
+        if(hasConvergedOut)
+        {
+            *hasConvergedOut = hasConverged;
+        }
+
+        Eigen::Matrix4d m = icp.getFinalTransformation();
+        //slam_x::TransformSE3 rel_transform = icp.getFinalTransformation().matrix();
+        return m;
+    }
+
+
+
+
     // CLASS DATASPOTMATCHER -----------
 
     void DataSpotMatcher::findMatches(DataSpot3D::DataSpot3DPtr spot_src, DataSpot3D::DataSpot3DPtr spot_target, std::vector<cv::DMatch>& matches)
@@ -574,6 +668,9 @@ namespace slam_utils
         cv::cvtColor(image1, image1, CV_BGR2GRAY);
         cv::cvtColor(image2, image2, CV_BGR2GRAY);
 
+        // detector_->detect(image1,imgpts1);
+        // detector_->detect(image2,imgpts2);
+
         cv::Mat descriptors1, descriptors2;
         extractor_->compute(image1,imgpts1,descriptors1);
         extractor_->compute(image2,imgpts2,descriptors2);
@@ -609,14 +706,14 @@ namespace slam_utils
         std::vector< std::vector<cv::DMatch> > matches1;
         matcher->knnMatch(descriptors1,descriptors2,
                          matches1, // vector of matches (up to 2 per entry)
-                         2);
+                         5);
         // return 2 nearest neighbours
         // from image 2 to image 1
         // based on k nearest neighbours (with k=2)
         std::vector< std::vector<cv::DMatch> > matches2;
         matcher->knnMatch(descriptors2,descriptors1,
                          matches2, // vector of matches (up to 2 per entry)
-                         2);
+                         5);
         // return 2 nearest neighbours
         // 3. Remove matches for which NN ratio is
         // > than threshold
@@ -643,9 +740,9 @@ namespace slam_utils
         std::cout << matches.size() << " matches" << std::endl;
 
         cv::Mat out_match;
-        cv::drawMatches(image1,imgpts1, image2, imgpts2, symMatches, out_match);
-        cv::imshow("window3",out_match);
-        cv::waitKey(0);
+        // cv::drawMatches(image1,imgpts1, image2, imgpts2, symMatches, out_match);
+        // cv::imshow("window3",out_match);
+        // cv::waitKey(0);
 
         // std::cout << "this here" << std::endl;
         for (std::vector<cv::DMatch>::
@@ -654,11 +751,11 @@ namespace slam_utils
         {
             // std::cout << it->queryIdx << " " << it->trainIdx << std::endl;
             out_1.push_back(wrldpts1[it->queryIdx]);
-            std::cout << wrldpts1[it->queryIdx].x << " "  << wrldpts1[it->queryIdx].y << " " << wrldpts1[it->queryIdx].z << " " <<std::endl;
-                std::cout << "imgpts1 " << imgpts1.at(it->queryIdx).pt.x << " " << imgpts1.at(it->queryIdx).pt.y << std::endl;
+            // std::cout << wrldpts1[it->queryIdx].x << " "  << wrldpts1[it->queryIdx].y << " " << wrldpts1[it->queryIdx].z << " " <<std::endl;
+                // std::cout << "imgpts1 " << imgpts1.at(it->queryIdx).pt.x << " " << imgpts1.at(it->queryIdx).pt.y << std::endl;
             out_2.push_back(wrldpts2[it->trainIdx]);
-            std::cout << wrldpts2[it->trainIdx].x << " "  << wrldpts2[it->trainIdx].y << " " << wrldpts2[it->trainIdx].z << " " <<std::endl;
-                std::cout << "imgpts2 " << imgpts2.at(it->trainIdx).pt.x << " " << imgpts2.at(it->trainIdx).pt.y << std::endl;
+            // std::cout << wrldpts2[it->trainIdx].x << " "  << wrldpts2[it->trainIdx].y << " " << wrldpts2[it->trainIdx].z << " " <<std::endl;
+                // std::cout << "imgpts2 " << imgpts2.at(it->trainIdx).pt.x << " " << imgpts2.at(it->trainIdx).pt.y << std::endl;
         }
         // return 0;
 
