@@ -55,7 +55,7 @@ namespace gSlam
         // bool converge_status;
 
         customtype::TransformSE3 relative_transformation;
-        relative_transformation = slam_utils::icp(src_cloud, tgt_cloud, 0.1, 30, &converge_status, &variance, &correspondences);
+        relative_transformation = slam_utils::icp(src_cloud, tgt_cloud, 0.1, 50, &converge_status, &variance, &correspondences);
         // std::cout << relative_transformation.matrix() << std::endl;
         prop_matches = double(correspondences)/max_points;
         std::cout << "converge_status: " << converge_status << " variance: " << variance << " correspondences: " << correspondences << " prop_matches: " << prop_matches << std::endl;
