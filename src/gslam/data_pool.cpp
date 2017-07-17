@@ -40,6 +40,11 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
         std::cout << " Estimating Loop Closure Transform " <<std::endl;
         link->transform_ = transform_est_.estimateTransform(spot_src, data_spot_ptr, variance, correspondences, prop_matches, status_good);
 
+        // --- Enforce 2D ---
+        // float x,y,z,r,p,yaw;
+        // slam_x_utils::getTranslationAndEulerAngles(link->transform_, x, y, z, r, p , yaw);
+        // link->transform_ = slam_utils::getTransformation(x, y, 0, 0, 0, yaw);
+
         if (variance == 0)
             variance = 1.0;
         double info = 1.0/(variance); // before 1.0/(variance*100);

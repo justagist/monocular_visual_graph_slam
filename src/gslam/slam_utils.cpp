@@ -26,6 +26,38 @@ namespace slam_utils
         return out_transform;
     }
 
+    void getTranslationAndEulerAngles (const customtype::TransformSE3& t,
+                                   float& x, float& y, float& z,
+                                   float& roll, float& pitch, float& yaw)
+    {
+        x = t(0,3);
+        y = t(1,3);
+        z = t(2,3);
+        roll  = atan2f(t(2,1), t(2,2));
+        pitch = asinf(-t(2,0));
+        yaw   = atan2f(t(1,0), t(0,0));
+    }
+
+    customtype::TransformSE3 getTransformation (double x, double y, double z, double roll, double pitch, double yaw)
+    {
+        customtype::TransformSE3 t;
+        getTransformation (x, y, z, roll, pitch, yaw, t);
+        return (t);
+    }
+
+
+    customtype::TransformSE3 getTransformation (double x, double y, double z, double qx, double qy, double qz, double qw) {
+
+        Eigen::Quaternion<double> q;
+        q.x() = qx; q.y() = qy; q.z() = qz ; q.w() = qw;
+        Eigen::Vector3d t(x, y, z);
+        Eigen::Translation<double, 3> trans(t);
+        customtype::TransformSE3 transform = trans*q;
+
+        return transform;
+
+    }
+
     // Get transform from cloud2 to cloud1
     Eigen::Matrix4d transformFromXYZCorrespondences(
             const customtype::PointCloudPtr & cloud1,

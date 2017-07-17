@@ -25,6 +25,26 @@ namespace slam_utils
     //                       double * variance,
     //                       int * correspondencesOut){};
 
+    void getTranslationAndEulerAngles (const customtype::TransformSE3& t,
+                                   float& x, float& y, float& z,
+                                   float& roll, float& pitch, float& yaw);
+
+    template <typename Scalar>
+    void getTransformation (Scalar x, Scalar y, Scalar z, Scalar roll, Scalar pitch, Scalar yaw, Eigen::Transform<Scalar, 3, Eigen::Affine> &t)
+    {
+        Scalar A = cos (yaw),  B = sin (yaw),  C  = cos (pitch), D  = sin (pitch),
+                E = cos (roll), F = sin (roll), DE = D*E,         DF = D*F;
+
+        t (0, 0) = A*C;  t (0, 1) = A*DF - B*E;  t (0, 2) = B*F + A*DE;  t (0, 3) = x;
+        t (1, 0) = B*C;  t (1, 1) = A*E + B*DF;  t (1, 2) = B*DE - A*F;  t (1, 3) = y;
+        t (2, 0) = -D;   t (2, 1) = C*F;         t (2, 2) = C*E;         t (2, 3) = z;
+        t (3, 0) = 0;    t (3, 1) = 0;           t (3, 2) = 0;           t (3, 3) = 1;
+    }
+
+    customtype::TransformSE3 getTransformation (double x, double y, double z, double roll, double pitch, double yaw);
+
+    customtype::TransformSE3 getTransformation (double x, double y, double z, double qx, double qy, double qz, double qw);
+
     Eigen::Matrix4d transformFromXYZCorrespondences(const customtype::PointCloudPtr & cloud1,
                                                     const customtype::PointCloudPtr & cloud2,
                                                     double inlierThreshold,

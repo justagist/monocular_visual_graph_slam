@@ -32,9 +32,17 @@ namespace gSlam
             odom_trans.header.frame_id = "ismar_frame";
             odom_trans.child_frame_id = "cam_frame";
 
-            odom_trans.transform.translation.x = -posemat.translation()[2]/visualization_scale_;
-            odom_trans.transform.translation.y = posemat.translation()[0]/visualization_scale_;
-            odom_trans.transform.translation.z = -posemat.translation()[1]/visualization_scale_;
+
+            // ismar coordinates ---------
+            // odom_trans.transform.translation.x = -posemat.translation()[2]/visualization_scale_;
+            // odom_trans.transform.translation.y = posemat.translation()[0]/visualization_scale_;
+            // odom_trans.transform.translation.z = -posemat.translation()[1]/visualization_scale_;
+            // --------------
+
+
+            odom_trans.transform.translation.x = posemat.translation()[0]/visualization_scale_;
+            odom_trans.transform.translation.y = posemat.translation()[1]/visualization_scale_;
+            odom_trans.transform.translation.z = posemat.translation()[2]/visualization_scale_;
             // std::cout << "trans " << << std::endl;
             // std::cout << "trans " << posemat.translation()[1]<< std::endl;
             // std::cout << "trans " << posemat.translation()[2]<< std::endl;
