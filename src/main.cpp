@@ -90,7 +90,7 @@ int main(int argc, char** argv){
     // ==============================================================================================================
 
     gSlam::GrSLAM::Ptr slam(new gSlam::GrSLAM());
-    slam->init();
+    // slam->init();
 
     while( !(frame = video_source.readNextFrame(next_frame_format[SCENE-1])).empty() && rosNode.ok())
 
@@ -117,7 +117,7 @@ int main(int argc, char** argv){
         // -----------------------------------------------------------------------------------------------------------
 
         // get 3D worldpoints for visualization in ROS
-        gSlam::customtype::WorldPtsType world_points = vOdom.getCurrent3dPoints();
+        gSlam::customtype::WorldPtsType world_points = vOdom.getCurrent3dPoints2();
         // std::cout <<"wpts" << world_points.size() << std::endl;
         // std::cout << "here size " << world_points.size() << std::endl;
         // for (int i = 0; i<world_points.size(); ++i)
@@ -157,11 +157,11 @@ int main(int argc, char** argv){
         
         //  STAM Bundle Adjustment 
         // **
-        if( SCENE > 1 && i%100 == 0 )
-            vOdom.optimise();
+        // if( SCENE > 1 && i%100 == 0 )
+        //     vOdom.optimise();
         
 
-        slam->processData(posemat, cam_params, frame, projectionMatrix, world_points, key_points);
+        // slam->processData(posemat, cam_params, frame, projectionMatrix, world_points, key_points);
         i++;
         // cv::Mat p;
         // std::cout << "eigen: " << cam_params.intrinsicsMat_*prj << std::endl;
