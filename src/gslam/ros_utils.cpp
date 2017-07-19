@@ -34,15 +34,18 @@ namespace gSlam
 
 
             // ismar coordinates ---------
-            odom_trans.transform.translation.x = -posemat.translation()[2]/visualization_scale_;
-            odom_trans.transform.translation.y = posemat.translation()[0]/visualization_scale_;
-            odom_trans.transform.translation.z = -posemat.translation()[1]/visualization_scale_;
+            // odom_trans.transform.translation.x = -posemat.translation()[2]/visualization_scale_;
+            // odom_trans.transform.translation.y = posemat.translation()[0]/visualization_scale_;
+            // odom_trans.transform.translation.z = -posemat.translation()[1]/visualization_scale_;
             // --------------
 
+            // actual coordinates ----------
+            odom_trans.transform.translation.x = posemat.translation()[0]/visualization_scale_;
+            odom_trans.transform.translation.y = posemat.translation()[1]/visualization_scale_;
+            odom_trans.transform.translation.z = posemat.translation()[2]/visualization_scale_;
 
-            // odom_trans.transform.translation.x = posemat.translation()[0]/visualization_scale_;
-            // odom_trans.transform.translation.y = posemat.translation()[1]/visualization_scale_;
-            // odom_trans.transform.translation.z = posemat.translation()[2]/visualization_scale_;
+            // --------------------------
+
             // std::cout << "trans " << << std::endl;
             // std::cout << "trans " << posemat.translation()[1]<< std::endl;
             // std::cout << "trans " << posemat.translation()[2]<< std::endl;
@@ -86,7 +89,13 @@ namespace gSlam
                 {
                     cv::Point3d point = *it;
                     geometry_msgs::Point gm_p;
+                    // ismar --------------
+                    // gm_p.x = -point.z/visualization_scale_; gm_p.y = point.x/visualization_scale_; gm_p.z = -point.y/visualization_scale_;
+                    // --------------------
+
+                    // actual -------------
                     gm_p.x = -point.z/visualization_scale_; gm_p.y = point.x/visualization_scale_; gm_p.z = -point.y/visualization_scale_;
+                    // --------------------
                     world_visualizer.points.push_back (gm_p);
                 }
         }
