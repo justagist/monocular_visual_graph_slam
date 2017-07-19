@@ -94,7 +94,7 @@ namespace gSlam
                     // --------------------
 
                     // actual -------------
-                    gm_p.x = -point.z/visualization_scale_; gm_p.y = point.x/visualization_scale_; gm_p.z = -point.y/visualization_scale_;
+                    gm_p.x = point.x/visualization_scale_; gm_p.y = point.y/visualization_scale_; gm_p.z = point.z/visualization_scale_;
                     // --------------------
                     world_visualizer.points.push_back (gm_p);
                 }

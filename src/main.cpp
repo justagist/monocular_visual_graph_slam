@@ -12,7 +12,7 @@ namespace vo = visual_odometry;
 bool visualize_flag = false;
 bool ros_flag = false;
 int vis_odo_baseline = 100;
-int ismar_baselines[] = {175, 50, 80};
+int ismar_baselines[] = {175, 50, 80, 100, 100, 100, 100, 100};
 int main(int argc, char** argv){
 
     if( argc < 2 ){
@@ -128,6 +128,7 @@ int main(int argc, char** argv){
 
         // get 3D worldpoints for visualization in ROS
         gSlam::customtype::WorldPtsType world_points = vOdom.getCurrent3dPoints2();
+        gSlam::customtype::WorldPtsType points3d = vOdom.getCurrent3dPoints();
         // std::cout <<"wpts" << world_points.size() << std::endl;
         // std::cout << "here size " << world_points.size() << std::endl;
         // for (int i = 0; i<world_points.size(); ++i)
@@ -171,7 +172,7 @@ int main(int argc, char** argv){
         //     vOdom.optimise();
         
 
-        // slam->processData(posemat, cam_params, frame, projectionMatrix, world_points, key_points);
+        slam->processData(posemat, cam_params, frame, projectionMatrix, points3d, key_points);
         i++;
         // cv::Mat p;
         // std::cout << "eigen: " << cam_params.intrinsicsMat_*prj << std::endl;
@@ -208,7 +209,8 @@ int main(int argc, char** argv){
 
     std::stringstream traj_name;
     traj_name << "trajectory" << SCENE << ".txt";
-    slam->saveTrajectory(traj_name.str());
+    if (slam->getDataPool().getDataSpots().size() > 1)
+        slam->saveTrajectory(traj_name.str());
     printf("EXITING\n");
 
     return 0;
