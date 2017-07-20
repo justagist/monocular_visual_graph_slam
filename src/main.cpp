@@ -14,17 +14,18 @@ bool ros_flag = false;
 int vis_odo_baseline = 100;
 int ismar_baselines[] = {175, 50, 80, 100, 100, 100, 75, 75};
 bool write_file = false;
+bool optimise_graph = false;
 int main(int argc, char** argv){
 
     if( argc < 2 ){
-        printf(" usage: rosrun visual_odom <node_name> <scene_number> [visualize? (1 = true | 0 = false(default))] [ros? (1 = true | 0 = false(default))]\n where <scene_number> = 1 - 8\n\n");
+        printf(" usage: rosrun visual_odom <node_name> <scene_number> [visualize? (0/1)] [publish rostopics? (0/1)] [save trajectory to txt file? (0/1)] [run graph optimisation thread? (0/1)] [baseline for visual odometry]\n where <scene_number> = 1 - 8\n\n");
         exit(1);
     }
     else{
         SCENE = atoi(argv[1]);
         if( SCENE > 8 || SCENE < 1 )
         {
-             printf(" usage: rosrun visual_odom <node_name> <scene_number> [visualize? (1 = true | 0 = false(default))] [ros? (1 = true | 0 = false(default))]\n where <scene_number> = 1 - 8\n\n");
+             printf(" usage: rosrun visual_odom <node_name> <scene_number> [visualize? (0/1)] [publish rostopics? (0/1)] [save trajectory to txt file? (0/1)] [baseline for visual odometry]\n where <scene_number> = 1 - 8\n\n");
              exit(1);
         }
         // if (SCENE > 0 && SCENE < 9)
@@ -46,13 +47,19 @@ int main(int argc, char** argv){
         }
         if (argc > 4)
         {
-            vis_odo_baseline = atoi(argv[4]);
+            write_file = (atoi(argv[4])==1);
         }
         if (argc > 5)
         {
-            write_file = (atoi(argv[4])==1);
+            optimise_graph = (atoi(argv[5]) == 1);
+            // vis_odo_baseline = atoi(argv[5]);
+        }
+        if (argc > 6)
+        {
+            vis_odo_baseline = atoi(argv[6]);
         }
         std::cout << "Writing Trajectory: " << std::boolalpha << write_file << std::noboolalpha << std::endl;
+        std::cout << "Running g2o graph optimisation: " << std::boolalpha << optimise_graph << std::noboolalpha << std::endl;
 
     }
 
@@ -107,7 +114,8 @@ int main(int argc, char** argv){
     // ==============================================================================================================
 
     gSlam::GrSLAM::Ptr slam(new gSlam::GrSLAM());
-    // slam->init();
+    if (optimise_graph)
+        slam->init();
 
     while( !(frame = video_source.readNextFrame(next_frame_format[SCENE-1])).empty() && rosNode.ok())
 
@@ -214,12 +222,18 @@ int main(int argc, char** argv){
     // vOdom.optimise();
     // vOdom.dump();
 
-    std::stringstream traj_name;
-    traj_name << "trajectory" << SCENE << ".txt";
     if (write_file)
     {
+        std::stringstream traj_name;
+        if (optimise_graph)
+            traj_name << "optimised_trajectory" << SCENE << ".txt";
+        else traj_name << "trajectory" << SCENE << ".txt";
+
         if (slam->getDataPool().getDataSpots().size() > 1)
+        {
             slam->saveTrajectory(traj_name.str());
+            std::cout << "Wrote trajectory to file: " << traj_name.str() << std::endl;
+        }
         else std::cout << "No poses were found! Trajectory file not written." << std::endl;
     }
     printf("EXITING\n");

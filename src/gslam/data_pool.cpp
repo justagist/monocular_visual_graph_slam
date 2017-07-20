@@ -24,7 +24,7 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
 
     std::cout << " LoopID: " << loop_id << " new_id: " << new_id << std::endl;
 
-    if( loop_id >= 0 && new_id > 0 ) 
+    if( loop_id >= 0 && new_id > 0 && (new_id - loop_id) > 50) 
     {
         std::cout << "Possible loop closure : " << new_id << "->" << loop_id << std::endl;
         double variance, prop_matches;
