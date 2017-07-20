@@ -34,6 +34,6 @@ def main(argv):
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        sys.exit("USAGE: rosrun graph_slam trajectory plotter <trajectory_file.txt>")
+        sys.exit("USAGE: rosrun graph_slam trajectory_plotter.py <trajectory_file.txt>")
     main(sys.argv[1:])
 

@@ -7,7 +7,7 @@ from mpl_toolkits.mplot3d import Axes3D
 
 def main(arguments):
     fig = plt.figure()
-    fig.suptitle('A tale of 2 subplots')
+    fig.suptitle('Compare Plots')
     ax = fig.add_subplot(1,1,1, projection='3d')
     with open(str(arguments[0])) as f:
         lines = f.readlines()
@@ -44,6 +44,6 @@ def main(arguments):
 
 if __name__ == "__main__":
     if len(sys.argv) < 3:
-        sys.exit("USAGE: rosrun graph_slam trajectory plotter <trajectory_file_1.txt> <trajectory_file_2.txt>")
+        sys.exit("USAGE: rosrun graph_slam compare_plots.py <trajectory_file_1.txt> <trajectory_file_2.txt>")
     main(sys.argv[1:])
 

@@ -13,6 +13,7 @@ bool visualize_flag = false;
 bool ros_flag = false;
 int vis_odo_baseline = 100;
 int ismar_baselines[] = {175, 50, 80, 100, 100, 100, 75, 75};
+bool write_file = false;
 int main(int argc, char** argv){
 
     if( argc < 2 ){
@@ -26,26 +27,32 @@ int main(int argc, char** argv){
              printf(" usage: rosrun visual_odom <node_name> <scene_number> [visualize? (1 = true | 0 = false(default))] [ros? (1 = true | 0 = false(default))]\n where <scene_number> = 1 - 8\n\n");
              exit(1);
         }
-        if (SCENE > 0 && SCENE < 4)
-        {
+        // if (SCENE > 0 && SCENE < 9)
+        // {
+        if (ismar_baselines[SCENE-1])
             vis_odo_baseline = ismar_baselines[SCENE-1];
-        }
+        // }
 
         if ( argc > 2 )
         {
-            int flag = atoi(argv[2]);
-            visualize_flag = (flag == 1); 
+            // int flag = atoi(argv[2]);
+            visualize_flag = (atoi(argv[2]) == 1); 
             std::cout << " visualizing " << std::endl;
         }
         if (argc > 3)
         {
-            int tmp = atoi(argv[3]);
-            ros_flag = (tmp == 1);
+            // int tmp = atoi(argv[3]);
+            ros_flag = (atoi(argv[3]) == 1);
         }
         if (argc > 4)
         {
             vis_odo_baseline = atoi(argv[4]);
         }
+        if (argc > 5)
+        {
+            write_file = (atoi(argv[4])==1);
+        }
+        std::cout << "Writing Trajectory: " << std::boolalpha << write_file << std::noboolalpha << std::endl;
 
     }
 
@@ -209,8 +216,12 @@ int main(int argc, char** argv){
 
     std::stringstream traj_name;
     traj_name << "trajectory" << SCENE << ".txt";
-    if (slam->getDataPool().getDataSpots().size() > 1)
-        slam->saveTrajectory(traj_name.str());
+    if (write_file)
+    {
+        if (slam->getDataPool().getDataSpots().size() > 1)
+            slam->saveTrajectory(traj_name.str());
+        else std::cout << "No poses were found! Trajectory file not written." << std::endl;
+    }
     printf("EXITING\n");
 
     return 0;
