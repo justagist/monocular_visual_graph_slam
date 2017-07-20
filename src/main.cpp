@@ -12,7 +12,7 @@ namespace vo = visual_odometry;
 bool visualize_flag = false;
 bool ros_flag = false;
 int vis_odo_baseline = 100;
-int ismar_baselines[] = {175, 50, 80, 100, 100, 100, 75, 100};
+int ismar_baselines[] = {175, 50, 80, 100, 100, 100, 75, 75};
 int main(int argc, char** argv){
 
     if( argc < 2 ){

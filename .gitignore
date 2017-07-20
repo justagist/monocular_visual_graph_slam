@@ -3,3 +3,4 @@ S0*
 !CMakeLists.txt
 trajectory_scene*
 **/CMakeFiles/
+!ground_truths/*
