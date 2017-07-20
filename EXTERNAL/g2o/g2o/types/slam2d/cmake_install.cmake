@@ -1,4 +1,4 @@
-# Install script for directory: /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/slam2d
+# Install script for directory: /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam2d
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -41,7 +41,7 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
   IF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
-FILE(INSTALL DESTINATION "/usr/local/lib" TYPE SHARED_LIBRARY FILES "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/slam2d/CMakeFiles/CMakeRelink.dir/libg2o_types_slam2d.so")
+FILE(INSTALL DESTINATION "/usr/local/lib" TYPE SHARED_LIBRARY FILES "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam2d/CMakeFiles/CMakeRelink.dir/libg2o_types_slam2d.so")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
@@ -54,23 +54,23 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
 FILE(INSTALL DESTINATION "/usr/local/include/g2o/types/slam2d" TYPE FILE FILES
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/slam2d/vertex_se2.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/slam2d/edge_se2_prior.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/slam2d/types_slam2d.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/slam2d/parameter_se2_offset.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/slam2d/se2.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/slam2d/edge_se2_pointxy_calib.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/slam2d/edge_se2_twopointsxy.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/slam2d/edge_se2.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/slam2d/g2o_types_slam2d_api.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/slam2d/edge_se2_pointxy_offset.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/slam2d/edge_se2_offset.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/slam2d/vertex_point_xy.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/slam2d/edge_pointxy.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/slam2d/edge_se2_lotsofxy.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/slam2d/edge_se2_pointxy.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/slam2d/edge_se2_pointxy_bearing.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/slam2d/edge_se2_xyprior.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam2d/vertex_se2.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam2d/edge_se2_prior.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam2d/types_slam2d.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam2d/parameter_se2_offset.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam2d/se2.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam2d/edge_se2_pointxy_calib.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam2d/edge_se2_twopointsxy.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam2d/edge_se2.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam2d/g2o_types_slam2d_api.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam2d/edge_se2_pointxy_offset.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam2d/edge_se2_offset.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam2d/vertex_point_xy.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam2d/edge_pointxy.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam2d/edge_se2_lotsofxy.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam2d/edge_se2_pointxy.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam2d/edge_se2_pointxy_bearing.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam2d/edge_se2_xyprior.h"
     )
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 

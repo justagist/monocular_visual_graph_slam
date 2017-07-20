@@ -42,10 +42,10 @@ EQUALS = =
 CMAKE_EDIT_COMMAND = /usr/bin/cmake-gui
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o
+CMAKE_SOURCE_DIR = /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o
+CMAKE_BINARY_DIR = /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -103,9 +103,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/CMakeFiles /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/CMakeFiles /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/CMakeFiles 0
 .PHONY : all
 
 # The main clean target

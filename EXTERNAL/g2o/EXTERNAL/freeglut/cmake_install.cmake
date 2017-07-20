@@ -1,4 +1,4 @@
-# Install script for directory: /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/EXTERNAL/freeglut
+# Install script for directory: /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/EXTERNAL/freeglut
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -41,7 +41,7 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
   IF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
-FILE(INSTALL DESTINATION "/usr/local/lib" TYPE SHARED_LIBRARY FILES "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/EXTERNAL/freeglut/CMakeFiles/CMakeRelink.dir/libg2o_ext_freeglut_minimal.so")
+FILE(INSTALL DESTINATION "/usr/local/lib" TYPE SHARED_LIBRARY FILES "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/EXTERNAL/freeglut/CMakeFiles/CMakeRelink.dir/libg2o_ext_freeglut_minimal.so")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
@@ -53,6 +53,6 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
   IF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
-FILE(INSTALL DESTINATION "/usr/local/include/g2o/freeglut" TYPE FILE FILES "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/EXTERNAL/freeglut/freeglut_minimal.h")
+FILE(INSTALL DESTINATION "/usr/local/include/g2o/freeglut" TYPE FILE FILES "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/EXTERNAL/freeglut/freeglut_minimal.h")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 

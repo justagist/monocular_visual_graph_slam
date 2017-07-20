@@ -42,10 +42,10 @@ EQUALS = =
 CMAKE_EDIT_COMMAND = /usr/bin/cmake-gui
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o
+CMAKE_SOURCE_DIR = /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o
+CMAKE_BINARY_DIR = /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -103,14 +103,14 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(CMAKE_COMMAND) -E cmake_progress_start /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/CMakeFiles /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/solvers/dense/CMakeFiles/progress.marks
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/solvers/dense/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/CMakeFiles 0
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(CMAKE_COMMAND) -E cmake_progress_start /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/CMakeFiles /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/solvers/dense/CMakeFiles/progress.marks
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/solvers/dense/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/solvers/dense/clean
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/solvers/dense/clean
 .PHONY : clean
 
 # The main clean target
@@ -119,22 +119,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/solvers/dense/preinstall
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/solvers/dense/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/solvers/dense/preinstall
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/solvers/dense/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 g2o/solvers/dense/CMakeFiles/solver_dense.dir/rule:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/solvers/dense/CMakeFiles/solver_dense.dir/rule
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/solvers/dense/CMakeFiles/solver_dense.dir/rule
 .PHONY : g2o/solvers/dense/CMakeFiles/solver_dense.dir/rule
 
 # Convenience name for target.
@@ -143,12 +143,12 @@ solver_dense: g2o/solvers/dense/CMakeFiles/solver_dense.dir/rule
 
 # fast build rule for target.
 solver_dense/fast:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f g2o/solvers/dense/CMakeFiles/solver_dense.dir/build.make g2o/solvers/dense/CMakeFiles/solver_dense.dir/build
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/solvers/dense/CMakeFiles/solver_dense.dir/build.make g2o/solvers/dense/CMakeFiles/solver_dense.dir/build
 .PHONY : solver_dense/fast
 
 # Manual pre-install relink rule for target.
 solver_dense/preinstall:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/solvers/dense/CMakeFiles/solver_dense.dir/preinstall
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/solvers/dense/CMakeFiles/solver_dense.dir/preinstall
 .PHONY : solver_dense/preinstall
 
 solver_dense.o: solver_dense.cpp.o
@@ -156,7 +156,7 @@ solver_dense.o: solver_dense.cpp.o
 
 # target to build an object file
 solver_dense.cpp.o:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f g2o/solvers/dense/CMakeFiles/solver_dense.dir/build.make g2o/solvers/dense/CMakeFiles/solver_dense.dir/solver_dense.cpp.o
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/solvers/dense/CMakeFiles/solver_dense.dir/build.make g2o/solvers/dense/CMakeFiles/solver_dense.dir/solver_dense.cpp.o
 .PHONY : solver_dense.cpp.o
 
 solver_dense.i: solver_dense.cpp.i
@@ -164,7 +164,7 @@ solver_dense.i: solver_dense.cpp.i
 
 # target to preprocess a source file
 solver_dense.cpp.i:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f g2o/solvers/dense/CMakeFiles/solver_dense.dir/build.make g2o/solvers/dense/CMakeFiles/solver_dense.dir/solver_dense.cpp.i
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/solvers/dense/CMakeFiles/solver_dense.dir/build.make g2o/solvers/dense/CMakeFiles/solver_dense.dir/solver_dense.cpp.i
 .PHONY : solver_dense.cpp.i
 
 solver_dense.s: solver_dense.cpp.s
@@ -172,7 +172,7 @@ solver_dense.s: solver_dense.cpp.s
 
 # target to generate assembly for a file
 solver_dense.cpp.s:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f g2o/solvers/dense/CMakeFiles/solver_dense.dir/build.make g2o/solvers/dense/CMakeFiles/solver_dense.dir/solver_dense.cpp.s
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/solvers/dense/CMakeFiles/solver_dense.dir/build.make g2o/solvers/dense/CMakeFiles/solver_dense.dir/solver_dense.cpp.s
 .PHONY : solver_dense.cpp.s
 
 # Help Target
@@ -201,6 +201,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

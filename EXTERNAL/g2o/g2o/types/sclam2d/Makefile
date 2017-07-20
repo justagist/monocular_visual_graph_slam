@@ -42,10 +42,10 @@ EQUALS = =
 CMAKE_EDIT_COMMAND = /usr/bin/cmake-gui
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o
+CMAKE_SOURCE_DIR = /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o
+CMAKE_BINARY_DIR = /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -103,14 +103,14 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(CMAKE_COMMAND) -E cmake_progress_start /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/CMakeFiles /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/sclam2d/CMakeFiles/progress.marks
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/types/sclam2d/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/CMakeFiles 0
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(CMAKE_COMMAND) -E cmake_progress_start /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/CMakeFiles /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/sclam2d/CMakeFiles/progress.marks
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/types/sclam2d/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/types/sclam2d/clean
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/types/sclam2d/clean
 .PHONY : clean
 
 # The main clean target
@@ -119,22 +119,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/types/sclam2d/preinstall
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/types/sclam2d/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/types/sclam2d/preinstall
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/types/sclam2d/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/rule:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/rule
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/rule
 .PHONY : g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/rule
 
 # Convenience name for target.
@@ -143,12 +143,12 @@ types_sclam2d: g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/rule
 
 # fast build rule for target.
 types_sclam2d/fast:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/build.make g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/build
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/build.make g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/build
 .PHONY : types_sclam2d/fast
 
 # Manual pre-install relink rule for target.
 types_sclam2d/preinstall:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/preinstall
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/preinstall
 .PHONY : types_sclam2d/preinstall
 
 edge_se2_odom_differential_calib.o: edge_se2_odom_differential_calib.cpp.o
@@ -156,7 +156,7 @@ edge_se2_odom_differential_calib.o: edge_se2_odom_differential_calib.cpp.o
 
 # target to build an object file
 edge_se2_odom_differential_calib.cpp.o:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/build.make g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/edge_se2_odom_differential_calib.cpp.o
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/build.make g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/edge_se2_odom_differential_calib.cpp.o
 .PHONY : edge_se2_odom_differential_calib.cpp.o
 
 edge_se2_odom_differential_calib.i: edge_se2_odom_differential_calib.cpp.i
@@ -164,7 +164,7 @@ edge_se2_odom_differential_calib.i: edge_se2_odom_differential_calib.cpp.i
 
 # target to preprocess a source file
 edge_se2_odom_differential_calib.cpp.i:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/build.make g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/edge_se2_odom_differential_calib.cpp.i
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/build.make g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/edge_se2_odom_differential_calib.cpp.i
 .PHONY : edge_se2_odom_differential_calib.cpp.i
 
 edge_se2_odom_differential_calib.s: edge_se2_odom_differential_calib.cpp.s
@@ -172,7 +172,7 @@ edge_se2_odom_differential_calib.s: edge_se2_odom_differential_calib.cpp.s
 
 # target to generate assembly for a file
 edge_se2_odom_differential_calib.cpp.s:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/build.make g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/edge_se2_odom_differential_calib.cpp.s
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/build.make g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/edge_se2_odom_differential_calib.cpp.s
 .PHONY : edge_se2_odom_differential_calib.cpp.s
 
 edge_se2_sensor_calib.o: edge_se2_sensor_calib.cpp.o
@@ -180,7 +180,7 @@ edge_se2_sensor_calib.o: edge_se2_sensor_calib.cpp.o
 
 # target to build an object file
 edge_se2_sensor_calib.cpp.o:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/build.make g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/edge_se2_sensor_calib.cpp.o
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/build.make g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/edge_se2_sensor_calib.cpp.o
 .PHONY : edge_se2_sensor_calib.cpp.o
 
 edge_se2_sensor_calib.i: edge_se2_sensor_calib.cpp.i
@@ -188,7 +188,7 @@ edge_se2_sensor_calib.i: edge_se2_sensor_calib.cpp.i
 
 # target to preprocess a source file
 edge_se2_sensor_calib.cpp.i:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/build.make g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/edge_se2_sensor_calib.cpp.i
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/build.make g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/edge_se2_sensor_calib.cpp.i
 .PHONY : edge_se2_sensor_calib.cpp.i
 
 edge_se2_sensor_calib.s: edge_se2_sensor_calib.cpp.s
@@ -196,7 +196,7 @@ edge_se2_sensor_calib.s: edge_se2_sensor_calib.cpp.s
 
 # target to generate assembly for a file
 edge_se2_sensor_calib.cpp.s:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/build.make g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/edge_se2_sensor_calib.cpp.s
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/build.make g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/edge_se2_sensor_calib.cpp.s
 .PHONY : edge_se2_sensor_calib.cpp.s
 
 odometry_measurement.o: odometry_measurement.cpp.o
@@ -204,7 +204,7 @@ odometry_measurement.o: odometry_measurement.cpp.o
 
 # target to build an object file
 odometry_measurement.cpp.o:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/build.make g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/odometry_measurement.cpp.o
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/build.make g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/odometry_measurement.cpp.o
 .PHONY : odometry_measurement.cpp.o
 
 odometry_measurement.i: odometry_measurement.cpp.i
@@ -212,7 +212,7 @@ odometry_measurement.i: odometry_measurement.cpp.i
 
 # target to preprocess a source file
 odometry_measurement.cpp.i:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/build.make g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/odometry_measurement.cpp.i
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/build.make g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/odometry_measurement.cpp.i
 .PHONY : odometry_measurement.cpp.i
 
 odometry_measurement.s: odometry_measurement.cpp.s
@@ -220,7 +220,7 @@ odometry_measurement.s: odometry_measurement.cpp.s
 
 # target to generate assembly for a file
 odometry_measurement.cpp.s:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/build.make g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/odometry_measurement.cpp.s
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/build.make g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/odometry_measurement.cpp.s
 .PHONY : odometry_measurement.cpp.s
 
 types_sclam2d.o: types_sclam2d.cpp.o
@@ -228,7 +228,7 @@ types_sclam2d.o: types_sclam2d.cpp.o
 
 # target to build an object file
 types_sclam2d.cpp.o:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/build.make g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/types_sclam2d.cpp.o
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/build.make g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/types_sclam2d.cpp.o
 .PHONY : types_sclam2d.cpp.o
 
 types_sclam2d.i: types_sclam2d.cpp.i
@@ -236,7 +236,7 @@ types_sclam2d.i: types_sclam2d.cpp.i
 
 # target to preprocess a source file
 types_sclam2d.cpp.i:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/build.make g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/types_sclam2d.cpp.i
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/build.make g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/types_sclam2d.cpp.i
 .PHONY : types_sclam2d.cpp.i
 
 types_sclam2d.s: types_sclam2d.cpp.s
@@ -244,7 +244,7 @@ types_sclam2d.s: types_sclam2d.cpp.s
 
 # target to generate assembly for a file
 types_sclam2d.cpp.s:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/build.make g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/types_sclam2d.cpp.s
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/build.make g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/types_sclam2d.cpp.s
 .PHONY : types_sclam2d.cpp.s
 
 vertex_odom_differential_params.o: vertex_odom_differential_params.cpp.o
@@ -252,7 +252,7 @@ vertex_odom_differential_params.o: vertex_odom_differential_params.cpp.o
 
 # target to build an object file
 vertex_odom_differential_params.cpp.o:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/build.make g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/vertex_odom_differential_params.cpp.o
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/build.make g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/vertex_odom_differential_params.cpp.o
 .PHONY : vertex_odom_differential_params.cpp.o
 
 vertex_odom_differential_params.i: vertex_odom_differential_params.cpp.i
@@ -260,7 +260,7 @@ vertex_odom_differential_params.i: vertex_odom_differential_params.cpp.i
 
 # target to preprocess a source file
 vertex_odom_differential_params.cpp.i:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/build.make g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/vertex_odom_differential_params.cpp.i
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/build.make g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/vertex_odom_differential_params.cpp.i
 .PHONY : vertex_odom_differential_params.cpp.i
 
 vertex_odom_differential_params.s: vertex_odom_differential_params.cpp.s
@@ -268,7 +268,7 @@ vertex_odom_differential_params.s: vertex_odom_differential_params.cpp.s
 
 # target to generate assembly for a file
 vertex_odom_differential_params.cpp.s:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/build.make g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/vertex_odom_differential_params.cpp.s
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/build.make g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/vertex_odom_differential_params.cpp.s
 .PHONY : vertex_odom_differential_params.cpp.s
 
 # Help Target
@@ -309,6 +309,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

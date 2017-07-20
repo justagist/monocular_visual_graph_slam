@@ -1,4 +1,4 @@
-# Install script for directory: /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/examples/interactive_slam/g2o_incremental
+# Install script for directory: /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/g2o_incremental
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -41,7 +41,7 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
   IF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
-FILE(INSTALL DESTINATION "/usr/local/lib" TYPE SHARED_LIBRARY FILES "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/examples/interactive_slam/g2o_incremental/CMakeFiles/CMakeRelink.dir/libg2o_incremental.so")
+FILE(INSTALL DESTINATION "/usr/local/lib" TYPE SHARED_LIBRARY FILES "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/g2o_incremental/CMakeFiles/CMakeRelink.dir/libg2o_incremental.so")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
@@ -53,7 +53,7 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
   IF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
-FILE(INSTALL DESTINATION "/usr/local/bin" TYPE EXECUTABLE FILES "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/examples/interactive_slam/g2o_incremental/CMakeFiles/CMakeRelink.dir/g2o_incremental")
+FILE(INSTALL DESTINATION "/usr/local/bin" TYPE EXECUTABLE FILES "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/g2o_incremental/CMakeFiles/CMakeRelink.dir/g2o_incremental")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
@@ -66,9 +66,9 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
 FILE(INSTALL DESTINATION "/usr/local/include/g2o/examples/interactive_slam/g2o_incremental" TYPE FILE FILES
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/examples/interactive_slam/g2o_incremental/linear_solver_cholmod_online.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/examples/interactive_slam/g2o_incremental/graph_optimizer_sparse_incremental.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/examples/interactive_slam/g2o_incremental/g2o_incremental_api.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/g2o_incremental/linear_solver_cholmod_online.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/g2o_incremental/graph_optimizer_sparse_incremental.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/g2o_incremental/g2o_incremental_api.h"
     )
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 

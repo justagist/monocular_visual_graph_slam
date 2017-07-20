@@ -1,4 +1,4 @@
-# Install script for directory: /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/apps/g2o_cli
+# Install script for directory: /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_cli
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -41,7 +41,7 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
   IF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
-FILE(INSTALL DESTINATION "/usr/local/lib" TYPE SHARED_LIBRARY FILES "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/apps/g2o_cli/CMakeFiles/CMakeRelink.dir/libg2o_cli.so")
+FILE(INSTALL DESTINATION "/usr/local/lib" TYPE SHARED_LIBRARY FILES "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_cli/CMakeFiles/CMakeRelink.dir/libg2o_cli.so")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
@@ -53,7 +53,7 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
   IF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
-FILE(INSTALL DESTINATION "/usr/local/bin" TYPE EXECUTABLE FILES "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/apps/g2o_cli/CMakeFiles/CMakeRelink.dir/g2o")
+FILE(INSTALL DESTINATION "/usr/local/bin" TYPE EXECUTABLE FILES "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_cli/CMakeFiles/CMakeRelink.dir/g2o")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
@@ -66,10 +66,10 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
 FILE(INSTALL DESTINATION "/usr/local/include/g2o/apps/g2o_cli" TYPE FILE FILES
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/apps/g2o_cli/g2o_cli_api.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/apps/g2o_cli/g2o_common.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/apps/g2o_cli/output_helper.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/apps/g2o_cli/dl_wrapper.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_cli/g2o_cli_api.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_cli/g2o_common.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_cli/output_helper.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_cli/dl_wrapper.h"
     )
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 

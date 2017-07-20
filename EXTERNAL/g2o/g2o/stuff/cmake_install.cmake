@@ -1,4 +1,4 @@
-# Install script for directory: /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/stuff
+# Install script for directory: /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/stuff
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -41,7 +41,7 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
   IF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
-FILE(INSTALL DESTINATION "/usr/local/lib" TYPE SHARED_LIBRARY FILES "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/stuff/CMakeFiles/CMakeRelink.dir/libg2o_stuff.so")
+FILE(INSTALL DESTINATION "/usr/local/lib" TYPE SHARED_LIBRARY FILES "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/stuff/CMakeFiles/CMakeRelink.dir/libg2o_stuff.so")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
@@ -53,7 +53,7 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
   IF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
-FILE(INSTALL DESTINATION "/usr/local/lib" TYPE SHARED_LIBRARY FILES "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/stuff/CMakeFiles/CMakeRelink.dir/libg2o_opengl_helper.so")
+FILE(INSTALL DESTINATION "/usr/local/lib" TYPE SHARED_LIBRARY FILES "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/stuff/CMakeFiles/CMakeRelink.dir/libg2o_opengl_helper.so")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
@@ -66,23 +66,23 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
 FILE(INSTALL DESTINATION "/usr/local/include/g2o/stuff" TYPE FILE FILES
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/stuff/string_tools.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/stuff/filesys_tools.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/stuff/tictoc.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/stuff/g2o_stuff_api.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/stuff/macros.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/stuff/opengl_primitives.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/stuff/unscented.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/stuff/sparse_helper.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/stuff/scoped_pointer.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/stuff/opengl_wrapper.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/stuff/color_macros.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/stuff/os_specific.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/stuff/property.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/stuff/misc.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/stuff/sampler.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/stuff/command_args.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/stuff/timeutil.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/stuff/string_tools.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/stuff/filesys_tools.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/stuff/tictoc.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/stuff/g2o_stuff_api.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/stuff/macros.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/stuff/opengl_primitives.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/stuff/unscented.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/stuff/sparse_helper.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/stuff/scoped_pointer.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/stuff/opengl_wrapper.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/stuff/color_macros.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/stuff/os_specific.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/stuff/property.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/stuff/misc.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/stuff/sampler.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/stuff/command_args.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/stuff/timeutil.h"
     )
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 

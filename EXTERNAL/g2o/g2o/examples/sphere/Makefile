@@ -42,10 +42,10 @@ EQUALS = =
 CMAKE_EDIT_COMMAND = /usr/bin/cmake-gui
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o
+CMAKE_SOURCE_DIR = /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o
+CMAKE_BINARY_DIR = /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -103,14 +103,14 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(CMAKE_COMMAND) -E cmake_progress_start /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/CMakeFiles /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/examples/sphere/CMakeFiles/progress.marks
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/sphere/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/CMakeFiles 0
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(CMAKE_COMMAND) -E cmake_progress_start /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/CMakeFiles /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/sphere/CMakeFiles/progress.marks
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/sphere/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/sphere/clean
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/sphere/clean
 .PHONY : clean
 
 # The main clean target
@@ -119,22 +119,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/sphere/preinstall
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/sphere/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/sphere/preinstall
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/sphere/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 g2o/examples/sphere/CMakeFiles/create_sphere.dir/rule:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/sphere/CMakeFiles/create_sphere.dir/rule
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/sphere/CMakeFiles/create_sphere.dir/rule
 .PHONY : g2o/examples/sphere/CMakeFiles/create_sphere.dir/rule
 
 # Convenience name for target.
@@ -143,7 +143,7 @@ create_sphere: g2o/examples/sphere/CMakeFiles/create_sphere.dir/rule
 
 # fast build rule for target.
 create_sphere/fast:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f g2o/examples/sphere/CMakeFiles/create_sphere.dir/build.make g2o/examples/sphere/CMakeFiles/create_sphere.dir/build
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/examples/sphere/CMakeFiles/create_sphere.dir/build.make g2o/examples/sphere/CMakeFiles/create_sphere.dir/build
 .PHONY : create_sphere/fast
 
 create_sphere.o: create_sphere.cpp.o
@@ -151,7 +151,7 @@ create_sphere.o: create_sphere.cpp.o
 
 # target to build an object file
 create_sphere.cpp.o:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f g2o/examples/sphere/CMakeFiles/create_sphere.dir/build.make g2o/examples/sphere/CMakeFiles/create_sphere.dir/create_sphere.cpp.o
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/examples/sphere/CMakeFiles/create_sphere.dir/build.make g2o/examples/sphere/CMakeFiles/create_sphere.dir/create_sphere.cpp.o
 .PHONY : create_sphere.cpp.o
 
 create_sphere.i: create_sphere.cpp.i
@@ -159,7 +159,7 @@ create_sphere.i: create_sphere.cpp.i
 
 # target to preprocess a source file
 create_sphere.cpp.i:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f g2o/examples/sphere/CMakeFiles/create_sphere.dir/build.make g2o/examples/sphere/CMakeFiles/create_sphere.dir/create_sphere.cpp.i
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/examples/sphere/CMakeFiles/create_sphere.dir/build.make g2o/examples/sphere/CMakeFiles/create_sphere.dir/create_sphere.cpp.i
 .PHONY : create_sphere.cpp.i
 
 create_sphere.s: create_sphere.cpp.s
@@ -167,7 +167,7 @@ create_sphere.s: create_sphere.cpp.s
 
 # target to generate assembly for a file
 create_sphere.cpp.s:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f g2o/examples/sphere/CMakeFiles/create_sphere.dir/build.make g2o/examples/sphere/CMakeFiles/create_sphere.dir/create_sphere.cpp.s
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/examples/sphere/CMakeFiles/create_sphere.dir/build.make g2o/examples/sphere/CMakeFiles/create_sphere.dir/create_sphere.cpp.s
 .PHONY : create_sphere.cpp.s
 
 # Help Target
@@ -196,6 +196,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

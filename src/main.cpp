@@ -12,18 +12,18 @@ namespace vo = visual_odometry;
 bool visualize_flag = false;
 bool ros_flag = false;
 int vis_odo_baseline = 100;
-int ismar_baselines[] = {175, 50, 80, 100, 100, 100, 100, 100};
+int ismar_baselines[] = {175, 50, 80, 100, 100, 100, 75, 100};
 int main(int argc, char** argv){
 
     if( argc < 2 ){
-        printf(" usage: rosrun visual_odom <node_name> <scene_number> [visualize? (1 = true | 0 = false(default))] [ros? (1 = true | 0 = false(default))]\n where <scene_number> = 1 - 7\n\n");
+        printf(" usage: rosrun visual_odom <node_name> <scene_number> [visualize? (1 = true | 0 = false(default))] [ros? (1 = true | 0 = false(default))]\n where <scene_number> = 1 - 8\n\n");
         exit(1);
     }
     else{
         SCENE = atoi(argv[1]);
         if( SCENE > 8 || SCENE < 1 )
         {
-             printf(" usage: rosrun visual_odom <node_name> <scene_number> [visualize? (1 = true | 0 = false(default))] [ros? (1 = true | 0 = false(default))]\n where <scene_number> = 1 - 7\n\n");
+             printf(" usage: rosrun visual_odom <node_name> <scene_number> [visualize? (1 = true | 0 = false(default))] [ros? (1 = true | 0 = false(default))]\n where <scene_number> = 1 - 8\n\n");
              exit(1);
         }
         if (SCENE > 0 && SCENE < 4)

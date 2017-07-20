@@ -1,4 +1,4 @@
-# Install script for directory: /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/slam3d_addons
+# Install script for directory: /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d_addons
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -41,7 +41,7 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
   IF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
-FILE(INSTALL DESTINATION "/usr/local/lib" TYPE SHARED_LIBRARY FILES "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/slam3d_addons/CMakeFiles/CMakeRelink.dir/libg2o_types_slam3d_addons.so")
+FILE(INSTALL DESTINATION "/usr/local/lib" TYPE SHARED_LIBRARY FILES "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d_addons/CMakeFiles/CMakeRelink.dir/libg2o_types_slam3d_addons.so")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
@@ -54,18 +54,18 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
 FILE(INSTALL DESTINATION "/usr/local/include/g2o/types/slam3d_addons" TYPE FILE FILES
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/slam3d_addons/edge_se3_line.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/slam3d_addons/vertex_line3d.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/slam3d_addons/edge_se3_calib.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/slam3d_addons/line3d.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/slam3d_addons/vertex_plane.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/slam3d_addons/vertex_se3_euler.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/slam3d_addons/g2o_types_slam3d_addons_api.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/slam3d_addons/edge_plane.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/slam3d_addons/edge_se3_euler.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/slam3d_addons/types_slam3d_addons.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/slam3d_addons/plane3d.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/slam3d_addons/edge_se3_plane_calib.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d_addons/edge_se3_line.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d_addons/vertex_line3d.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d_addons/edge_se3_calib.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d_addons/line3d.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d_addons/vertex_plane.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d_addons/vertex_se3_euler.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d_addons/g2o_types_slam3d_addons_api.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d_addons/edge_plane.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d_addons/edge_se3_euler.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d_addons/types_slam3d_addons.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d_addons/plane3d.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d_addons/edge_se3_plane_calib.h"
     )
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 

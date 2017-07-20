@@ -1,4 +1,4 @@
-# Install script for directory: /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/examples/data_fitting
+# Install script for directory: /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/data_fitting
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)

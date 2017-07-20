@@ -42,10 +42,10 @@ EQUALS = =
 CMAKE_EDIT_COMMAND = /usr/bin/cmake-gui
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o
+CMAKE_SOURCE_DIR = /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o
+CMAKE_BINARY_DIR = /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -103,14 +103,14 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(CMAKE_COMMAND) -E cmake_progress_start /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/CMakeFiles /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/examples/plane_slam/CMakeFiles/progress.marks
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/plane_slam/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/CMakeFiles 0
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(CMAKE_COMMAND) -E cmake_progress_start /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/CMakeFiles /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/plane_slam/CMakeFiles/progress.marks
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/plane_slam/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/plane_slam/clean
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/plane_slam/clean
 .PHONY : clean
 
 # The main clean target
@@ -119,22 +119,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/plane_slam/preinstall
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/plane_slam/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/plane_slam/preinstall
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/plane_slam/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 g2o/examples/plane_slam/CMakeFiles/simulator_3d_plane.dir/rule:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/plane_slam/CMakeFiles/simulator_3d_plane.dir/rule
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/plane_slam/CMakeFiles/simulator_3d_plane.dir/rule
 .PHONY : g2o/examples/plane_slam/CMakeFiles/simulator_3d_plane.dir/rule
 
 # Convenience name for target.
@@ -143,7 +143,7 @@ simulator_3d_plane: g2o/examples/plane_slam/CMakeFiles/simulator_3d_plane.dir/ru
 
 # fast build rule for target.
 simulator_3d_plane/fast:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f g2o/examples/plane_slam/CMakeFiles/simulator_3d_plane.dir/build.make g2o/examples/plane_slam/CMakeFiles/simulator_3d_plane.dir/build
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/examples/plane_slam/CMakeFiles/simulator_3d_plane.dir/build.make g2o/examples/plane_slam/CMakeFiles/simulator_3d_plane.dir/build
 .PHONY : simulator_3d_plane/fast
 
 simulator_3d_plane.o: simulator_3d_plane.cpp.o
@@ -151,7 +151,7 @@ simulator_3d_plane.o: simulator_3d_plane.cpp.o
 
 # target to build an object file
 simulator_3d_plane.cpp.o:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f g2o/examples/plane_slam/CMakeFiles/simulator_3d_plane.dir/build.make g2o/examples/plane_slam/CMakeFiles/simulator_3d_plane.dir/simulator_3d_plane.cpp.o
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/examples/plane_slam/CMakeFiles/simulator_3d_plane.dir/build.make g2o/examples/plane_slam/CMakeFiles/simulator_3d_plane.dir/simulator_3d_plane.cpp.o
 .PHONY : simulator_3d_plane.cpp.o
 
 simulator_3d_plane.i: simulator_3d_plane.cpp.i
@@ -159,7 +159,7 @@ simulator_3d_plane.i: simulator_3d_plane.cpp.i
 
 # target to preprocess a source file
 simulator_3d_plane.cpp.i:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f g2o/examples/plane_slam/CMakeFiles/simulator_3d_plane.dir/build.make g2o/examples/plane_slam/CMakeFiles/simulator_3d_plane.dir/simulator_3d_plane.cpp.i
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/examples/plane_slam/CMakeFiles/simulator_3d_plane.dir/build.make g2o/examples/plane_slam/CMakeFiles/simulator_3d_plane.dir/simulator_3d_plane.cpp.i
 .PHONY : simulator_3d_plane.cpp.i
 
 simulator_3d_plane.s: simulator_3d_plane.cpp.s
@@ -167,7 +167,7 @@ simulator_3d_plane.s: simulator_3d_plane.cpp.s
 
 # target to generate assembly for a file
 simulator_3d_plane.cpp.s:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f g2o/examples/plane_slam/CMakeFiles/simulator_3d_plane.dir/build.make g2o/examples/plane_slam/CMakeFiles/simulator_3d_plane.dir/simulator_3d_plane.cpp.s
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/examples/plane_slam/CMakeFiles/simulator_3d_plane.dir/build.make g2o/examples/plane_slam/CMakeFiles/simulator_3d_plane.dir/simulator_3d_plane.cpp.s
 .PHONY : simulator_3d_plane.cpp.s
 
 # Help Target
@@ -196,6 +196,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

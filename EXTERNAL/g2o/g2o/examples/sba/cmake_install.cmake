@@ -1,4 +1,4 @@
-# Install script for directory: /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/examples/sba
+# Install script for directory: /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/sba
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)

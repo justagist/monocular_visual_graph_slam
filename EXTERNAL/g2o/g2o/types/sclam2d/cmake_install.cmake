@@ -1,4 +1,4 @@
-# Install script for directory: /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/sclam2d
+# Install script for directory: /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/sclam2d
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -41,7 +41,7 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
   IF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
-FILE(INSTALL DESTINATION "/usr/local/lib" TYPE SHARED_LIBRARY FILES "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/sclam2d/CMakeFiles/CMakeRelink.dir/libg2o_types_sclam2d.so")
+FILE(INSTALL DESTINATION "/usr/local/lib" TYPE SHARED_LIBRARY FILES "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/sclam2d/CMakeFiles/CMakeRelink.dir/libg2o_types_sclam2d.so")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
@@ -54,12 +54,12 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
 FILE(INSTALL DESTINATION "/usr/local/include/g2o/types/sclam2d" TYPE FILE FILES
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/sclam2d/types_sclam2d.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/sclam2d/g2o_types_sclam2d_api.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/sclam2d/odometry_measurement.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/sclam2d/edge_se2_sensor_calib.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/sclam2d/vertex_odom_differential_params.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/sclam2d/edge_se2_odom_differential_calib.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/sclam2d/types_sclam2d.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/sclam2d/g2o_types_sclam2d_api.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/sclam2d/odometry_measurement.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/sclam2d/edge_se2_sensor_calib.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/sclam2d/vertex_odom_differential_params.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/sclam2d/edge_se2_odom_differential_calib.h"
     )
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 

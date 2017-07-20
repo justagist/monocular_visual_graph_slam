@@ -1,4 +1,4 @@
-# Install script for directory: /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/examples/interactive_slam/slam_parser/parser
+# Install script for directory: /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/slam_parser/parser
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -41,7 +41,7 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
   IF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
-FILE(INSTALL DESTINATION "/usr/local/lib" TYPE SHARED_LIBRARY FILES "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/lib/libg2o_parser.so")
+FILE(INSTALL DESTINATION "/usr/local/lib" TYPE SHARED_LIBRARY FILES "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/lib/libg2o_parser.so")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
@@ -54,15 +54,15 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
 FILE(INSTALL DESTINATION "/usr/local/include/slam_parser/parser" TYPE FILE FILES
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/examples/interactive_slam/slam_parser/parser/commands.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/examples/interactive_slam/slam_parser/parser/driver.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/examples/interactive_slam/slam_parser/parser/scanner.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/examples/interactive_slam/slam_parser/parser/FlexLexer.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/examples/interactive_slam/slam_parser/parser/bison_parser.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/examples/interactive_slam/slam_parser/parser/slam_context.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/examples/interactive_slam/slam_parser/parser/stack.hh"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/examples/interactive_slam/slam_parser/parser/position.hh"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/examples/interactive_slam/slam_parser/parser/location.hh"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/slam_parser/parser/commands.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/slam_parser/parser/driver.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/slam_parser/parser/scanner.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/slam_parser/parser/FlexLexer.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/slam_parser/parser/bison_parser.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/slam_parser/parser/slam_context.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/slam_parser/parser/stack.hh"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/slam_parser/parser/position.hh"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/slam_parser/parser/location.hh"
     )
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 

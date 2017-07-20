@@ -42,10 +42,10 @@ EQUALS = =
 CMAKE_EDIT_COMMAND = /usr/bin/cmake-gui
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o
+CMAKE_SOURCE_DIR = /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o
+CMAKE_BINARY_DIR = /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -103,14 +103,14 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(CMAKE_COMMAND) -E cmake_progress_start /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/CMakeFiles /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/examples/bal/CMakeFiles/progress.marks
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/bal/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/CMakeFiles 0
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(CMAKE_COMMAND) -E cmake_progress_start /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/CMakeFiles /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/bal/CMakeFiles/progress.marks
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/bal/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/bal/clean
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/bal/clean
 .PHONY : clean
 
 # The main clean target
@@ -119,22 +119,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/bal/preinstall
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/bal/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/bal/preinstall
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/bal/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 g2o/examples/bal/CMakeFiles/bal_example.dir/rule:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/bal/CMakeFiles/bal_example.dir/rule
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/bal/CMakeFiles/bal_example.dir/rule
 .PHONY : g2o/examples/bal/CMakeFiles/bal_example.dir/rule
 
 # Convenience name for target.
@@ -143,7 +143,7 @@ bal_example: g2o/examples/bal/CMakeFiles/bal_example.dir/rule
 
 # fast build rule for target.
 bal_example/fast:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f g2o/examples/bal/CMakeFiles/bal_example.dir/build.make g2o/examples/bal/CMakeFiles/bal_example.dir/build
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/examples/bal/CMakeFiles/bal_example.dir/build.make g2o/examples/bal/CMakeFiles/bal_example.dir/build
 .PHONY : bal_example/fast
 
 bal_example.o: bal_example.cpp.o
@@ -151,7 +151,7 @@ bal_example.o: bal_example.cpp.o
 
 # target to build an object file
 bal_example.cpp.o:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f g2o/examples/bal/CMakeFiles/bal_example.dir/build.make g2o/examples/bal/CMakeFiles/bal_example.dir/bal_example.cpp.o
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/examples/bal/CMakeFiles/bal_example.dir/build.make g2o/examples/bal/CMakeFiles/bal_example.dir/bal_example.cpp.o
 .PHONY : bal_example.cpp.o
 
 bal_example.i: bal_example.cpp.i
@@ -159,7 +159,7 @@ bal_example.i: bal_example.cpp.i
 
 # target to preprocess a source file
 bal_example.cpp.i:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f g2o/examples/bal/CMakeFiles/bal_example.dir/build.make g2o/examples/bal/CMakeFiles/bal_example.dir/bal_example.cpp.i
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/examples/bal/CMakeFiles/bal_example.dir/build.make g2o/examples/bal/CMakeFiles/bal_example.dir/bal_example.cpp.i
 .PHONY : bal_example.cpp.i
 
 bal_example.s: bal_example.cpp.s
@@ -167,7 +167,7 @@ bal_example.s: bal_example.cpp.s
 
 # target to generate assembly for a file
 bal_example.cpp.s:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f g2o/examples/bal/CMakeFiles/bal_example.dir/build.make g2o/examples/bal/CMakeFiles/bal_example.dir/bal_example.cpp.s
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/examples/bal/CMakeFiles/bal_example.dir/build.make g2o/examples/bal/CMakeFiles/bal_example.dir/bal_example.cpp.s
 .PHONY : bal_example.cpp.s
 
 # Help Target
@@ -196,6 +196,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

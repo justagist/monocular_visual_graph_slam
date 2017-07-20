@@ -1,4 +1,4 @@
-# Install script for directory: /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/data
+# Install script for directory: /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/data
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -41,7 +41,7 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
   IF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
-FILE(INSTALL DESTINATION "/usr/local/lib" TYPE SHARED_LIBRARY FILES "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/data/CMakeFiles/CMakeRelink.dir/libg2o_types_data.so")
+FILE(INSTALL DESTINATION "/usr/local/lib" TYPE SHARED_LIBRARY FILES "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/data/CMakeFiles/CMakeRelink.dir/libg2o_types_data.so")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
@@ -54,15 +54,15 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
 FILE(INSTALL DESTINATION "/usr/local/include/g2o/types/data" TYPE FILE FILES
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/data/vertex_ellipse.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/data/robot_laser.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/data/vertex_tag.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/data/types_data.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/data/g2o_types_data_api.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/data/data_queue.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/data/laser_parameters.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/data/robot_data.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/types/data/raw_laser.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/data/vertex_ellipse.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/data/robot_laser.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/data/vertex_tag.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/data/types_data.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/data/g2o_types_data_api.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/data/data_queue.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/data/laser_parameters.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/data/robot_data.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/data/raw_laser.h"
     )
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 

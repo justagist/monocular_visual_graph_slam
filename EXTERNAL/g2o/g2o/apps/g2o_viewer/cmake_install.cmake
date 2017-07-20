@@ -1,4 +1,4 @@
-# Install script for directory: /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/apps/g2o_viewer
+# Install script for directory: /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_viewer
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -41,7 +41,7 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
   IF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
-FILE(INSTALL DESTINATION "/usr/local/bin" TYPE EXECUTABLE FILES "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/apps/g2o_viewer/CMakeFiles/CMakeRelink.dir/g2o_viewer")
+FILE(INSTALL DESTINATION "/usr/local/bin" TYPE EXECUTABLE FILES "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_viewer/CMakeFiles/CMakeRelink.dir/g2o_viewer")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
@@ -53,7 +53,7 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
   IF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
-FILE(INSTALL DESTINATION "/usr/local/lib" TYPE SHARED_LIBRARY FILES "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/apps/g2o_viewer/CMakeFiles/CMakeRelink.dir/libg2o_viewer.so")
+FILE(INSTALL DESTINATION "/usr/local/lib" TYPE SHARED_LIBRARY FILES "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_viewer/CMakeFiles/CMakeRelink.dir/libg2o_viewer.so")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
@@ -66,16 +66,16 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
 FILE(INSTALL DESTINATION "/usr/local/include/g2o/apps/g2o_viewer" TYPE FILE FILES
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/apps/g2o_viewer/ui_base_main_window.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/apps/g2o_viewer/run_g2o_viewer.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/apps/g2o_viewer/stream_redirect.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/apps/g2o_viewer/gui_hyper_graph_action.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/apps/g2o_viewer/ui_base_properties_widget.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/apps/g2o_viewer/properties_widget.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/apps/g2o_viewer/g2o_viewer_api.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/apps/g2o_viewer/main_window.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/apps/g2o_viewer/g2o_qglviewer.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/apps/g2o_viewer/viewer_properties_widget.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_viewer/ui_base_main_window.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_viewer/run_g2o_viewer.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_viewer/stream_redirect.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_viewer/gui_hyper_graph_action.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_viewer/ui_base_properties_widget.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_viewer/properties_widget.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_viewer/g2o_viewer_api.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_viewer/main_window.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_viewer/g2o_qglviewer.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_viewer/viewer_properties_widget.h"
     )
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
@@ -89,8 +89,8 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
 FILE(INSTALL DESTINATION "/usr/local/include/g2o/apps/g2o_viewer" TYPE FILE FILES
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/apps/g2o_viewer/ui_base_main_window.h"
-    "/home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/apps/g2o_viewer/ui_base_properties_widget.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_viewer/ui_base_main_window.h"
+    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_viewer/ui_base_properties_widget.h"
     )
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 

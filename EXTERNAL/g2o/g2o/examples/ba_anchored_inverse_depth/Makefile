@@ -42,10 +42,10 @@ EQUALS = =
 CMAKE_EDIT_COMMAND = /usr/bin/cmake-gui
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o
+CMAKE_SOURCE_DIR = /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o
+CMAKE_BINARY_DIR = /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -103,14 +103,14 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(CMAKE_COMMAND) -E cmake_progress_start /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/CMakeFiles /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/g2o/examples/ba_anchored_inverse_depth/CMakeFiles/progress.marks
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/ba_anchored_inverse_depth/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o/CMakeFiles 0
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(CMAKE_COMMAND) -E cmake_progress_start /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/CMakeFiles /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/ba_anchored_inverse_depth/CMakeFiles/progress.marks
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/ba_anchored_inverse_depth/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/ba_anchored_inverse_depth/clean
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/ba_anchored_inverse_depth/clean
 .PHONY : clean
 
 # The main clean target
@@ -119,22 +119,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/ba_anchored_inverse_depth/preinstall
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/ba_anchored_inverse_depth/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/ba_anchored_inverse_depth/preinstall
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/ba_anchored_inverse_depth/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 g2o/examples/ba_anchored_inverse_depth/CMakeFiles/ba_anchored_inverse_depth_demo.dir/rule:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/ba_anchored_inverse_depth/CMakeFiles/ba_anchored_inverse_depth_demo.dir/rule
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/ba_anchored_inverse_depth/CMakeFiles/ba_anchored_inverse_depth_demo.dir/rule
 .PHONY : g2o/examples/ba_anchored_inverse_depth/CMakeFiles/ba_anchored_inverse_depth_demo.dir/rule
 
 # Convenience name for target.
@@ -143,7 +143,7 @@ ba_anchored_inverse_depth_demo: g2o/examples/ba_anchored_inverse_depth/CMakeFile
 
 # fast build rule for target.
 ba_anchored_inverse_depth_demo/fast:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f g2o/examples/ba_anchored_inverse_depth/CMakeFiles/ba_anchored_inverse_depth_demo.dir/build.make g2o/examples/ba_anchored_inverse_depth/CMakeFiles/ba_anchored_inverse_depth_demo.dir/build
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/examples/ba_anchored_inverse_depth/CMakeFiles/ba_anchored_inverse_depth_demo.dir/build.make g2o/examples/ba_anchored_inverse_depth/CMakeFiles/ba_anchored_inverse_depth_demo.dir/build
 .PHONY : ba_anchored_inverse_depth_demo/fast
 
 ba_anchored_inverse_depth_demo.o: ba_anchored_inverse_depth_demo.cpp.o
@@ -151,7 +151,7 @@ ba_anchored_inverse_depth_demo.o: ba_anchored_inverse_depth_demo.cpp.o
 
 # target to build an object file
 ba_anchored_inverse_depth_demo.cpp.o:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f g2o/examples/ba_anchored_inverse_depth/CMakeFiles/ba_anchored_inverse_depth_demo.dir/build.make g2o/examples/ba_anchored_inverse_depth/CMakeFiles/ba_anchored_inverse_depth_demo.dir/ba_anchored_inverse_depth_demo.cpp.o
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/examples/ba_anchored_inverse_depth/CMakeFiles/ba_anchored_inverse_depth_demo.dir/build.make g2o/examples/ba_anchored_inverse_depth/CMakeFiles/ba_anchored_inverse_depth_demo.dir/ba_anchored_inverse_depth_demo.cpp.o
 .PHONY : ba_anchored_inverse_depth_demo.cpp.o
 
 ba_anchored_inverse_depth_demo.i: ba_anchored_inverse_depth_demo.cpp.i
@@ -159,7 +159,7 @@ ba_anchored_inverse_depth_demo.i: ba_anchored_inverse_depth_demo.cpp.i
 
 # target to preprocess a source file
 ba_anchored_inverse_depth_demo.cpp.i:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f g2o/examples/ba_anchored_inverse_depth/CMakeFiles/ba_anchored_inverse_depth_demo.dir/build.make g2o/examples/ba_anchored_inverse_depth/CMakeFiles/ba_anchored_inverse_depth_demo.dir/ba_anchored_inverse_depth_demo.cpp.i
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/examples/ba_anchored_inverse_depth/CMakeFiles/ba_anchored_inverse_depth_demo.dir/build.make g2o/examples/ba_anchored_inverse_depth/CMakeFiles/ba_anchored_inverse_depth_demo.dir/ba_anchored_inverse_depth_demo.cpp.i
 .PHONY : ba_anchored_inverse_depth_demo.cpp.i
 
 ba_anchored_inverse_depth_demo.s: ba_anchored_inverse_depth_demo.cpp.s
@@ -167,7 +167,7 @@ ba_anchored_inverse_depth_demo.s: ba_anchored_inverse_depth_demo.cpp.s
 
 # target to generate assembly for a file
 ba_anchored_inverse_depth_demo.cpp.s:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(MAKE) -f g2o/examples/ba_anchored_inverse_depth/CMakeFiles/ba_anchored_inverse_depth_demo.dir/build.make g2o/examples/ba_anchored_inverse_depth/CMakeFiles/ba_anchored_inverse_depth_demo.dir/ba_anchored_inverse_depth_demo.cpp.s
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/examples/ba_anchored_inverse_depth/CMakeFiles/ba_anchored_inverse_depth_demo.dir/build.make g2o/examples/ba_anchored_inverse_depth/CMakeFiles/ba_anchored_inverse_depth_demo.dir/ba_anchored_inverse_depth_demo.cpp.s
 .PHONY : ba_anchored_inverse_depth_demo.cpp.s
 
 # Help Target
@@ -196,6 +196,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/saif/test_ws/src/visual_odom/EXTERNAL/g2o && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

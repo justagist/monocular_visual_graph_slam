@@ -3,8 +3,7 @@ import sys
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-# fig = plt.figure()
-# ax = fig.add_subplot(111, projection='3d')
+# USAGE: rosrun graph_slam trajectory plotter <trajectory_file.txt>
 
 def main(argv):
     fig = plt.figure()
@@ -34,5 +33,7 @@ def main(argv):
 
 
 if __name__ == "__main__":
-   main(sys.argv[1:])
+    if len(sys.argv) < 2:
+        sys.exit("USAGE: rosrun graph_slam trajectory plotter <trajectory_file.txt>")
+    main(sys.argv[1:])
 
