@@ -74,6 +74,7 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
             Eigen::Vector3d t0 = (spot_src->getPose()*link->transform_).translation();
             Eigen::Vector3d t1 = data_spot_ptr->getPose().translation();
             float dist = (t1-t0).norm();
+            std::cout <<"               DISTANCE:    " <<dist << std::endl;
 
             if( dist > 0.20 ) // If near loop is close in time but too far to be near, then it's not a valid transform
             { 

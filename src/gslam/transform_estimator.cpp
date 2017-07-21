@@ -60,6 +60,11 @@ namespace gSlam
         prop_matches = double(correspondences)/max_points;
         std::cout << "converge_status: " << converge_status << " variance: " << variance << " correspondences: " << correspondences << " prop_matches: " << prop_matches << std::endl;
 
+        if(correspondences == 0)
+        {
+            relative_transformation = data_spot_src->getPose().inverse()*data_spot_target->getPose();
+        }
+
         return relative_transformation;
 
     }
