@@ -29,7 +29,7 @@ namespace gSlam
 
             geometry_msgs::TransformStamped odom_trans;
             odom_trans.header.stamp = ros::Time::now();
-            odom_trans.header.frame_id = "ismar_frame";
+            odom_trans.header.frame_id = "world_frame";
             odom_trans.child_frame_id = "cam_frame";
 
 
@@ -62,7 +62,7 @@ namespace gSlam
         {
             geometry_msgs::TransformStamped transf;
             transf.header.stamp = ros::Time::now();
-            transf.header.frame_id = "ismar_frame";
+            transf.header.frame_id = "world_frame";
             transf.child_frame_id = "world_frame_corrected";
 
             transf.transform.translation.x = 0;
