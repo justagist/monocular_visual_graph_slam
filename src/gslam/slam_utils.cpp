@@ -772,9 +772,9 @@ namespace slam_utils
         std::cout << symMatches.size() << " matches out of "<<imgpts1.size() << " and " << imgpts2.size() << std::endl;
 
         cv::Mat out_match;
-        cv::drawMatches(image1,imgpts1, image2, imgpts2, symMatches, out_match);
-        cv::imshow("window3",out_match);
-        cv::waitKey(0);
+        // cv::drawMatches(image1,imgpts1, image2, imgpts2, symMatches, out_match);
+        // cv::imshow("window3",out_match);
+        // cv::waitKey(0);
 
         // std::cout << "this here" << std::endl;
         for (std::vector<cv::DMatch>::

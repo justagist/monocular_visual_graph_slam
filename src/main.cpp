@@ -152,7 +152,7 @@ int main(int argc, char** argv)
         gSlam::customtype::WorldPtsType world_points = vOdom.getCurrent3dPoints2();
         gSlam::customtype::WorldPtsType points3d = vOdom.getCurrent3dPoints();
         // std::cout << world_points.size() << std::endl;
-        std::cout << points3d.size() << std::endl;
+        // std::cout << points3d.size() << std::endl;
         // std::cout <<"wpts" << world_points.size() << std::endl;
         // std::cout << "here size " << world_points.size() << std::endl;
         // for (int i = 0; i<world_points.size(); ++i)
