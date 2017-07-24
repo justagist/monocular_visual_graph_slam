@@ -758,10 +758,10 @@ namespace slam_utils
         symmetryTest(matches1,matches2,symMatches);
         // std::cout << symMatches.size() << "symsize" << std::endl;
 
-        std::vector<cv::DMatch> matches;
-        // 5. Validate matches using RANSAC
-        cv::Mat fundemental = ransacTest(symMatches,
-                        imgpts1, imgpts2, matches);
+        // std::vector<cv::DMatch> matches;
+        // // 5. Validate matches using RANSAC (if using, change symMatches to matches in the for loop below)
+        // cv::Mat fundemental = ransacTest(symMatches,
+        //                 imgpts1, imgpts2, matches);
 
         // for (int i = 0; i<imgpts2.size(); ++i)
         //     {
@@ -769,17 +769,17 @@ namespace slam_utils
         // std::cout << "imgpts1 size " << imgpts1.size() << std::endl;
         // std::cout << "imgpts2 size " << imgpts2.size() << std::endl;
 
-        std::cout << matches.size() << " matches" << std::endl;
+        std::cout << symMatches.size() << " matches out of "<<imgpts1.size() << " and " << imgpts2.size() << std::endl;
 
         cv::Mat out_match;
-        // cv::drawMatches(image1,imgpts1, image2, imgpts2, symMatches, out_match);
-        // cv::imshow("window3",out_match);
-        // cv::waitKey(0);
+        cv::drawMatches(image1,imgpts1, image2, imgpts2, symMatches, out_match);
+        cv::imshow("window3",out_match);
+        cv::waitKey(0);
 
         // std::cout << "this here" << std::endl;
         for (std::vector<cv::DMatch>::
-                 const_iterator it= matches.begin();
-                 it!= matches.end(); ++it) 
+                 const_iterator it= symMatches.begin();
+                 it!= symMatches.end(); ++it) 
         {
             // std::cout << it->queryIdx << " " << it->trainIdx << std::endl;
             out_1.push_back(wrldpts1[it->queryIdx]);

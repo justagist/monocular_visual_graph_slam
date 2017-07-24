@@ -15,7 +15,8 @@ int vis_odo_baseline = 100;
 int ismar_baselines[] = {175, 50, 80, 100, 100, 100, 75, 75, 175 /*150*/,150 /*175*/,135 /*150*/};
 bool write_file = false;
 bool optimise_graph = false;
-int main(int argc, char** argv){
+int main(int argc, char** argv)
+{
 
     if( argc < 2 ){
         printf(" usage: rosrun visual_odom <node_name> <scene_number> [visualize? (0/1)] [publish rostopics? (0/1)] [save trajectory to txt file? (0/1)] [run graph optimisation thread? (0/1)] [baseline for visual odometry]\n where <scene_number> = 1 - 8\n\n");
@@ -150,6 +151,8 @@ int main(int argc, char** argv){
         // get 3D worldpoints for visualization in ROS
         gSlam::customtype::WorldPtsType world_points = vOdom.getCurrent3dPoints2();
         gSlam::customtype::WorldPtsType points3d = vOdom.getCurrent3dPoints();
+        // std::cout << world_points.size() << std::endl;
+        std::cout << points3d.size() << std::endl;
         // std::cout <<"wpts" << world_points.size() << std::endl;
         // std::cout << "here size " << world_points.size() << std::endl;
         // for (int i = 0; i<world_points.size(); ++i)
@@ -159,6 +162,7 @@ int main(int argc, char** argv){
 
         gSlam::customtype::KeyPoints key_points;
         cv::KeyPoint::convert(vOdom.getCurrent2dKeyPoints(), key_points);
+        // std::cout <<"2: " << key_points.size() << std::endl;
 
         // for (int i = 0; i < key_points.size(); ++i)
         // {
