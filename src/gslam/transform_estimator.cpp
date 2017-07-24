@@ -29,7 +29,7 @@ namespace gSlam
         // status_good = true; // TEMPORARY
         // variance = 1; // TEMPORARY
 
-
+        variance = 1;
         customtype::WorldPtsType src_wrldpts;
         customtype::WorldPtsType tgt_wrldpts;
         // customtype::
@@ -39,33 +39,48 @@ namespace gSlam
         // std::cout << data_spot_target->getImagePoints().size() << " checking " << std::endl;
         // std::cout << data_spot_src->getImagePoints().size() << " checking " << std::endl;
         // std::cout << "here !!" << std::endl;
-        if (src_wrldpts.size() < 0.5*data_spot_src->getWorldPoints().size() or src_wrldpts.size() < 0.5*data_spot_target->getWorldPoints().size())
+        // if (src_wrldpts.size() < 0.5*data_spot_src->getWorldPoints().size() or src_wrldpts.size() < 0.5*data_spot_target->getWorldPoints().size())
+        assert (src_wrldpts.size() == tgt_wrldpts.size());
+        correspondences = src_wrldpts.size();
+        customtype::TransformSE3 relative_transformation;
+        if (correspondences > 100)
         {
             src_wrldpts = data_spot_src->getWorldPoints();
             tgt_wrldpts = data_spot_target->getWorldPoints();
+        
+            customtype::PointCloudPtr src_cloud(new customtype::PointCloud());
+            customtype::PointCloudPtr tgt_cloud(new customtype::PointCloud());
+
+            src_cloud = slam_utils::convert3dPointsToCloud(src_wrldpts);
+            tgt_cloud = slam_utils::convert3dPointsToCloud(tgt_wrldpts);
+
+
+            // std::cout << "tgt" << tgt_cloud << std::endl;
+            // bool converge_status;
+
+            // relative_transformation = slam_utils::icp(src_cloud, tgt_cloud, 0.1, 50, &converge_status, &variance, &correspondences);
+            std::vector<int> inliers;
+            relative_transformation = slam_utils::transformFromXYZCorrespondences(src_cloud, tgt_cloud, 0.05, 30, true, 3.0, 5, &inliers, &variance);
+            converge_status = true;
+            prop_matches = double(correspondences)/max_points;
+            std::cout << "converge_status: " << converge_status << " variance: " << variance << " correspondences: " << correspondences << " prop_matches: " << prop_matches << std::endl;
+
+            return relative_transformation;
+
+            // std::cout << relative_transformation.matrix() << std::endl;
         }
-        customtype::PointCloudPtr src_cloud(new customtype::PointCloud());
-        customtype::PointCloudPtr tgt_cloud(new customtype::PointCloud());
-
-        src_cloud = slam_utils::convert3dPointsToCloud(src_wrldpts);
-        tgt_cloud = slam_utils::convert3dPointsToCloud(tgt_wrldpts);
-
-
-        // std::cout << "tgt" << tgt_cloud << std::endl;
-        // bool converge_status;
-
-        customtype::TransformSE3 relative_transformation;
-        relative_transformation = slam_utils::icp(src_cloud, tgt_cloud, 0.1, 50, &converge_status, &variance, &correspondences);
-        // std::cout << relative_transformation.matrix() << std::endl;
-        prop_matches = double(correspondences)/max_points;
-        std::cout << "converge_status: " << converge_status << " variance: " << variance << " correspondences: " << correspondences << " prop_matches: " << prop_matches << std::endl;
-
-        if(correspondences == 0)
+        else
         {
-            relative_transformation = data_spot_src->getPose().inverse()*data_spot_target->getPose();
+            converge_status = false;
+            std::cout << "Too few correspondences to estimate PointCloud Transformation" << std::endl;
+            return customtype::TransformSE3();
         }
 
-        return relative_transformation;
+        // if(correspondences == 0)
+        // {
+        //     relative_transformation = data_spot_src->getPose().inverse()*data_spot_target->getPose();
+        // }
+
 
     }
 
