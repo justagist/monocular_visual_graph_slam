@@ -60,6 +60,10 @@ private:
     cv::Ptr<cv::BOWImgDescriptorExtractor> bide;
     cv::Ptr<cv::of2::FabMap> fabMap;
 
+    std::vector<cv::Mat> bow_storage_;
+    int storage_retrival_counter_;
+
+    int min_fabmap_baseline_;
 
     bool printConfusionMatrix;
     cv::Mat confusionMat;
