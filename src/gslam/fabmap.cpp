@@ -147,7 +147,7 @@ void FabMap::compareAndAdd(const cv::Mat& keyFrameImage, int& out_newID, int& ou
     //cv::cvtColor(frame, frame, CV_GRAY2RGB);
 
     // Generate FabMap bag-of-words data (image descriptor)
-    cv::Mat bow;
+    cv::Mat bow, bow2;
     out_kpts.clear();
     detector->detect(frame, out_kpts);
     // std::cout << "reached here!@" << std::endl;
@@ -163,7 +163,11 @@ void FabMap::compareAndAdd(const cv::Mat& keyFrameImage, int& out_newID, int& ou
     std::vector<cv::of2::IMatch> matches;
     if (nextImageID > 0)
         fabMap->compare(bow, matches);
-    fabMap->add(bow);
+    // if (nextImageID > 1)
+    fabMap->addTraining(bow);
+    // std::cout << bow.size() << std::endl;
+    std::cout << fabMap->getTrainingImgDescriptors().size() << std::endl;
+    // bow2 = bow;
     out_newID = nextImageID;
     ++nextImageID;
 
@@ -198,10 +202,13 @@ void FabMap::compareAndAdd(const cv::Mat& keyFrameImage, int& out_newID, int& ou
         }
         else
         {
+            int imageid = l->imgIdx;
+            int queryid = l->queryIdx;
             // Probability for existing place
-            if (l->match >= minLoopProbability)
+            if (l->match >= minLoopProbability && (queryid - imageid)>50)
             {
                 out_loopID = l->imgIdx;
+                std::cout << out_loopID << " LOOP ID IN FABMAP \n\n\n\n\n" << std::endl;
                 if (debugProbabilites)
                     printf("\n");
                 return;
