@@ -84,7 +84,8 @@ namespace slam_utils
 
             detector_ = new cv::StarFeatureDetector(32, 10, 18, 18, 20);//new cv::SurfFeatureDetector();
             // extractor_ = new cv::SURF(1000, 4, 7, true, false);//new cv::SurfDescriptorExtractor();
-            extractor_ = new cv::SIFT(0,3,0.04,10,1.6);
+            // extractor_ = new cv::SIFT(0,3,0.04,10,1.6);
+            extractor_ = new cv::SurfDescriptorExtractor(1000, 4, 2, true, false);
         }
 
         DataSpotMatcher(float ratio, double confidence, double distance, bool refineF = true) : ratio_(ratio), refineF_(refineF),

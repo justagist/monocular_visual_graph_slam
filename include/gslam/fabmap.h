@@ -63,7 +63,9 @@ private:
     std::vector<cv::Mat> bow_storage_;
     int storage_retrival_counter_;
 
-    int min_fabmap_baseline_;
+    int min_fabmap_baseline_, skip;
+
+    cv::Mat prev_bow_;
 
     bool printConfusionMatrix;
     cv::Mat confusionMat;
