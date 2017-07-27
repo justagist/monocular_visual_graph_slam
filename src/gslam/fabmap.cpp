@@ -120,7 +120,7 @@ namespace gSlam
     nextImageID = 0;
     storage_retrival_counter_ = 0;
     min_fabmap_baseline_ = 0;
-    skip = 100;
+    skip = 200;
     valid = true;   
 }
 
