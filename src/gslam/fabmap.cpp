@@ -120,7 +120,7 @@ namespace gSlam
     nextImageID = 0;
     storage_retrival_counter_ = 0;
     min_fabmap_baseline_ = 0;
-    skip = 200;
+    skip = 150;
     valid = true;   
 }
 
@@ -183,7 +183,7 @@ void FabMap::compareAndAdd(const cv::Mat& keyFrameImage, int& out_newID, int& ou
     //     // std::cout << bow_storage_[storage_retrival_counter_-1]<< std::endl << fabMap->getTestImgDescriptors()[storage_retrival_counter_-1] << std::endl;
     // }
 
-    if (nextImageID%skip == 0)
+    if (nextImageID%skip == 0 && nextImageID != 0)
     {   
         if (!prev_bow_.empty())
         {
@@ -211,17 +211,17 @@ void FabMap::compareAndAdd(const cv::Mat& keyFrameImage, int& out_newID, int& ou
         }
     }
 
-    const float minLoopProbability = 0.98f;
-    float accumulatedProbability = 0;
-    const bool debugProbabilites = false;
-    if (debugProbabilites)
-        printf("FabMap probabilities:");
+    // const float minLoopProbability = 0.98f;
+    // float accumulatedProbability = 0;
+    // const bool debugProbabilites = false;
+    // if (debugProbabilites)
+    //     printf("FabMap probabilities:");
     // int match_id, queryid;
     float best_match = 0;
     for(std::vector<cv::of2::IMatch>::iterator l = matches.begin(); l != matches.end(); ++ l)
     {
-        if (debugProbabilites)
-            printf(" (%i: %f)", l->imgIdx, l->match);
+        // if (debugProbabilites)
+        //     printf(" (%i: %f)", l->imgIdx, l->match);
 
             // Probability for existing place
             // if (l->match >= minLoopProbability)
@@ -232,11 +232,11 @@ void FabMap::compareAndAdd(const cv::Mat& keyFrameImage, int& out_newID, int& ou
             //     return;
             // }
             float temp_match = l->match*255;
-            std::cout << " matchid " << l->imgIdx  << " " << l->match*255 << std::endl;
+            // std::cout << " matchid " << l->imgIdx  << " " << l->match*255 << std::endl;
             if (temp_match > best_match)// && temp_match > 0.99*255)
             {
                 best_match = temp_match;
-                out_loopID = (l->imgIdx!=-1)?(l->imgIdx * skip):(-1);
+                out_loopID = (l->imgIdx!=-1)?((l->imgIdx * skip)+skip):(-1);
                 // queryid = l->queryIdx;
                 // out_loopID = match_id;
             }
@@ -251,8 +251,8 @@ void FabMap::compareAndAdd(const cv::Mat& keyFrameImage, int& out_newID, int& ou
         //     break; // not possible anymore to find a frame with high enough probability
     }
     std::cout << "best match " << /*imageNames[imageNames.size()-1] <<" to " <<*/ out_loopID << " by " << best_match << std::endl;
-    if (debugProbabilites)
-        printf("\n");
+    // if (debugProbabilites)
+    //     printf("\n");
     // if (out_loopID!=-1)
     // {
     //     std::cout <<"waiting " << std::endl;

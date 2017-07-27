@@ -769,13 +769,17 @@ namespace slam_utils
         // std::cout << "imgpts1 size " << imgpts1.size() << std::endl;
         // std::cout << "imgpts2 size " << imgpts2.size() << std::endl;
 
-        std::cout << symMatches.size() << " matches out of "<<imgpts1.size() << " and " << imgpts2.size() << std::endl;
+        // std::cout << symMatches.size() << " matches out of "<<imgpts1.size() << " and " << imgpts2.size() << " (" << std::endl;
+        printf("%lu matches out of %lu and %lu (%f%% , %f%%)\n",symMatches.size(), imgpts1.size(), imgpts2.size(), (float(symMatches.size())/float(imgpts1.size()))*100.0,(float(symMatches.size())/float(imgpts2.size()))*100.0);
+        // printf("%s\n", );
 
         cv::Mat out_match;
-        // cv::drawMatches(image1,imgpts1, image2, imgpts2, symMatches, out_match);
-        // cv::imshow("window3",out_match);
-        // cv::waitKey(0);
-
+        if (symMatches.size()>(0.45*float(imgpts1.size())) || symMatches.size()>(0.45*float(imgpts2.size())))
+        {
+            cv::drawMatches(image1,imgpts1, image2, imgpts2, symMatches, out_match);
+            cv::imshow("loop closure matches",out_match);
+            cv::waitKey(0);
+        }
         // std::cout << "this here" << std::endl;
         for (std::vector<cv::DMatch>::
                  const_iterator it= symMatches.begin();
