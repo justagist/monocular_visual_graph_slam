@@ -36,6 +36,10 @@ namespace gSlam
 
         spot_matcher_.findMatchingWorldpoints(data_spot_src->getImageColor(), data_spot_target->getImageColor(), data_spot_src->getImagePoints(), data_spot_target->getImagePoints(), data_spot_src->getWorldPoints(), data_spot_target->getWorldPoints(), src_wrldpts, tgt_wrldpts);//, data_spot_src->getWorldPoints(), data_spot_target->getWorldPoints())
 
+        // REMOVE ++++++++++++++++++++++++++_+===================
+        return customtype::TransformSE3();
+        // =++++++++++++++++++++=+++++++++++++==========++++++=========
+
         // std::cout << data_spot_target->getImagePoints().size() << " checking " << std::endl;
         // std::cout << data_spot_src->getImagePoints().size() << " checking " << std::endl;
         // std::cout << "here !!" << std::endl;

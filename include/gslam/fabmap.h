@@ -63,7 +63,7 @@ private:
     std::vector<cv::Mat> bow_storage_;
     int storage_retrival_counter_;
 
-    int min_fabmap_baseline_, skip;
+    int min_fabmap_baseline_, skip, first_bow_img_;
 
     cv::Mat prev_bow_;
 

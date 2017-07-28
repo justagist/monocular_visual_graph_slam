@@ -706,14 +706,6 @@ namespace slam_utils
         cv::Mat descriptors1, descriptors2;
         extractor_->compute(image1,imgpts1,descriptors1);
         extractor_->compute(image2,imgpts2,descriptors2);
-        cv::Mat out_img;
-        // cv::drawKeypoints(image1, imgpts1, out_img);
-        // cv::imshow("window", out_img);
-        // cv::waitKey(0);
-        // cv::Mat out_img2;
-        // cv::drawKeypoints(image2, imgpts2, out_img2);
-        // cv::imshow("window2", out_img);
-        // cv::waitKey(0);
         // std::cout << " size " << imgpts2.size() << std::endl;
         // std::cout << " size " << imgpts1.size()<< std::endl;
         // std::cout  << "size " << wrldpts1.size() << std::endl;
@@ -758,32 +750,41 @@ namespace slam_utils
         symmetryTest(matches1,matches2,symMatches);
         // std::cout << symMatches.size() << "symsize" << std::endl;
 
-        // std::vector<cv::DMatch> matches;
-        // // 5. Validate matches using RANSAC (if using, change symMatches to matches in the for loop below)
+        std::vector<cv::DMatch> good_matches, final_matches;
+        // 5. Validate matches using RANSAC // (if using, change symMatches to matches in the for loop below)
         // cv::Mat fundemental = ransacTest(symMatches,
-        //                 imgpts1, imgpts2, matches);
+        //                 imgpts1, imgpts2, good_matches);
 
         // for (int i = 0; i<imgpts2.size(); ++i)
         //     {
         //     }
         // std::cout << "imgpts1 size " << imgpts1.size() << std::endl;
         // std::cout << "imgpts2 size " << imgpts2.size() << std::endl;
-
+        final_matches = symMatches;
         // std::cout << symMatches.size() << " matches out of "<<imgpts1.size() << " and " << imgpts2.size() << " (" << std::endl;
-        printf("%lu matches out of %lu and %lu (%f%% , %f%%)\n",symMatches.size(), imgpts1.size(), imgpts2.size(), (float(symMatches.size())/float(imgpts1.size()))*100.0,(float(symMatches.size())/float(imgpts2.size()))*100.0);
+        printf("%lu matches out of %lu and %lu (%f%% , %f%%)\n",final_matches.size(), imgpts1.size(), imgpts2.size(), (float(final_matches.size())/float(imgpts1.size()))*100.0,(float(final_matches.size())/float(imgpts2.size()))*100.0);
         // printf("%s\n", );
 
         cv::Mat out_match;
-        if (symMatches.size()>(0.45*float(imgpts1.size())) || symMatches.size()>(0.45*float(imgpts2.size())))
+        if (((final_matches.size()>(0.19*float(imgpts1.size())) && final_matches.size()>(0.19*float(imgpts2.size()))) && (imgpts1.size()>200 && imgpts2.size()>200))||final_matches.size() > 100)
         {
-            cv::drawMatches(image1,imgpts1, image2, imgpts2, symMatches, out_match);
+            // cv::Mat out_img;
+            // cv::drawKeypoints(image1, imgpts1, out_img);
+            // cv::imshow("window", out_img);
+            // cv::waitKey(1);
+            // cv::Mat out_img2;
+            // cv::drawKeypoints(image2, imgpts2, out_img2);
+            // cv::imshow("window2", out_img2);
+            // cv::waitKey(0);
+
+            cv::drawMatches(image1,imgpts1, image2, imgpts2, final_matches, out_match);
             cv::imshow("loop closure matches",out_match);
-            cv::waitKey(0);
+            cv::waitKey(1);
         }
         // std::cout << "this here" << std::endl;
         for (std::vector<cv::DMatch>::
-                 const_iterator it= symMatches.begin();
-                 it!= symMatches.end(); ++it) 
+                 const_iterator it= final_matches.begin();
+                 it!= final_matches.end(); ++it) 
         {
             // std::cout << it->queryIdx << " " << it->trainIdx << std::endl;
             out_1.push_back(wrldpts1[it->queryIdx]);

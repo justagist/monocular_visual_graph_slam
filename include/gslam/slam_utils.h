@@ -72,7 +72,7 @@ namespace slam_utils
     class DataSpotMatcher {
     public:
 
-        DataSpotMatcher() : ratio_(0.68f), refineF_(true),
+        DataSpotMatcher() : ratio_(0.75f), refineF_(true),
             confidence_(0.99), distance_(2.0) { // confidence before 0.99, distance before was 3.0
             // SURF is the default feature
 
@@ -85,7 +85,7 @@ namespace slam_utils
             detector_ = new cv::StarFeatureDetector(32, 10, 18, 18, 20);//new cv::SurfFeatureDetector();
             // extractor_ = new cv::SURF(1000, 4, 7, true, false);//new cv::SurfDescriptorExtractor();
             // extractor_ = new cv::SIFT(0,3,0.04,10,1.6);
-            extractor_ = new cv::SurfDescriptorExtractor(1000, 4, 2, true, false);
+            extractor_ = new cv::SurfDescriptorExtractor(1000, 4, 2, true, true);
         }
 
         DataSpotMatcher(float ratio, double confidence, double distance, bool refineF = true) : ratio_(ratio), refineF_(refineF),
@@ -145,6 +145,10 @@ namespace slam_utils
         void symmetryTest(
                 const std::vector<std::vector< cv::DMatch> >& matches1,
                 const std::vector<std::vector< cv::DMatch> >& matches2,
+                std::vector<cv::DMatch>& symMatches);
+        void symmetryTest(
+                const std::vector< cv::DMatch>& matches1,
+                const std::vector< cv::DMatch>& matches2,
                 std::vector<cv::DMatch>& symMatches);
 
         // Identify good matches using RANSAC

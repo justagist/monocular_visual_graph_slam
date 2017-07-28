@@ -16,13 +16,20 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
     // std::cout << " checking loop closure " << std::endl;
 
     //Loop closure constraints
+    // if (data_spot_ptr->getId() == 201)
+    // {
+    //     cv::Mat out_img;
+    //     cv::drawKeypoints(data_spot_ptr->getImageColor(), data_spot_ptr->getImagePoints(), out_img);
+    //     cv::imshow("gslam_window", out_img);
+    //     cv::waitKey(0);
+    // }
     int new_id, loop_id;
     fabmap_.compareAndAdd(data_spot_ptr, new_id, loop_id);
     // std::cout << data_spot_ptr->getImagePoints().size() << "check " << std::endl;
     // std::cout << data_spot_ptr->getWorldPoints().size() << " check" << std::endl;
     assert(data_spot_ptr->getImagePoints().size() == data_spot_ptr->getWorldPoints().size());
 
-    std::cout << " LoopID: " << loop_id << " new_id: " << new_id << std::endl;
+    std::cout << "                                                                 LoopID: " << loop_id << " new_id: " << new_id << std::endl;
 
     if( loop_id >= 0 && new_id > 0 && (new_id - loop_id) > 50) 
     {
