@@ -45,6 +45,8 @@ namespace slam_utils
 
     customtype::TransformSE3 getTransformation (double x, double y, double z, double qx, double qy, double qz, double qw);
 
+    customtype::TransformSE3 getFrameAligner();
+
     Eigen::Matrix4d transformFromXYZCorrespondences(const customtype::PointCloudPtr & cloud1,
                                                     const customtype::PointCloudPtr & cloud2,
                                                     double inlierThreshold,

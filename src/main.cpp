@@ -97,15 +97,6 @@ int main(int argc, char** argv)
     cv::Mat frame;
     vo::STAM vOdom;
 
-    /* FOR TRAJECTORY OUTPUT
-    **
-    // std::stringstream traj_name;
-    // traj_name << "trajectory_scene" << argv[1] << ".txt";
-    // std::ofstream traj_out(traj_name.str());
-    */
-
-    // std::string path_prefix[] = { "S01_INPUT" , "S02_INPUT", "S03_INPUT"};
-    // std::string next_frame_format[] = { "S01_INPUT/S01L03_VGA/S01L03_VGA_%04d.png", "S02_INPUT/S02L03_VGA/S02L03_VGA_%04d.png", "S03_INPUT/S03L03_VGA/S03L03_VGA_%04d.png"};
     int i = 0;
     if (template_file_fmt[SCENE-1] == "checkerboard")
     {
@@ -115,9 +106,12 @@ int main(int argc, char** argv)
     else vOdom.init(video_source.readNextFrame(next_frame_format[SCENE-1]),next_frame_format[SCENE-1], intrinsics_file[SCENE-1], points3d_init_file[SCENE-1], template_file_fmt[SCENE-1], vis_odo_baseline);
     visual_odometry::Frame::Ptr current_odom_frame;
     gSlam::CameraParameters cam_params(vOdom.intrinsics_);
-    // std::cout << vOdom.intrinsics_ << std::endl;
-    // std::cout << cam_params.intrinsicsMat_.matrix() << std::endl;
 
+    // get transformation between camera frame and drone body frame (tracked by mocap for ground truth)
+    gSlam::customtype::TransformSE3 frame_aligner = gSlam::customtype::TransformSE3::Identity();
+    if (SCENE > 3)
+        frame_aligner = gSlam::slam_utils::getFrameAligner();
+    // std::cout << frame_aligner.matrix() << std::endl;
     // ==============================================================================================================
 
     gSlam::GrSLAM::Ptr slam(new gSlam::GrSLAM());
@@ -182,6 +176,9 @@ int main(int argc, char** argv)
         // get current camera pose from STAM
         gSlam::customtype::TransformSE3 posemat; 
         cv::cv2eigen(current_odom_frame->getCurrentPose(),posemat.matrix()); // conversion of cv::Mat to Eigen for quaternion calculation and further slam process
+
+        // align with body frame of drone
+        posemat = frame_aligner*posemat;
 
         gSlam::customtype::ProjMatType projectionMatrix;
         cv::cv2eigen(current_odom_frame->projMatrix,projectionMatrix);

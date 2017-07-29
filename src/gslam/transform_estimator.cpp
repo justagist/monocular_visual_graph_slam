@@ -47,7 +47,7 @@ namespace gSlam
         assert (src_wrldpts.size() == tgt_wrldpts.size());
         correspondences = src_wrldpts.size();
         customtype::TransformSE3 relative_transformation;
-        if (correspondences > 10)
+        if (correspondences > 0)
         {
             src_wrldpts = data_spot_src->getWorldPoints();
             tgt_wrldpts = data_spot_target->getWorldPoints();

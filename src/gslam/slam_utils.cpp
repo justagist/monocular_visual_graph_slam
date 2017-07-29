@@ -58,6 +58,20 @@ namespace slam_utils
 
     }
 
+    customtype::TransformSE3 getFrameAligner()
+    {
+        customtype::TransformSE3 trans1 = getTransformation(434.0832, 108.9862, 100.4308, 0.0286645627421, -0.675561322247, 0.00385381425015, 0.736736338523);
+        customtype::TransformSE3 trans2 = getTransformation(448.131, 83.3348, 783.64, 0.721576, -0.690575, 0.0393842, -0.0297034);
+        return trans2.inverse()*trans1;
+
+        //1500460881 197633981 73 0.4340832 0.1089862 1.004308 0.0286645627421 -0.675561322247 0.00385381425015 0.736736338523
+        // 0 448.131 83.3348 783.64 0.721576 -0.690575 0.0393842 -0.0297034
+
+        // 1500727147 836250066 3 0.3716057 0.5966728 0.8541285 0.0159701753714 -0.656663861278 0.0481162864216 0.752477491358
+        // 0 327.202 619.078 629.919 -0.686012 0.716403 -0.107153 0.0683575
+
+    }
+
     // Get transform from cloud2 to cloud1
     Eigen::Matrix4d transformFromXYZCorrespondences(
             const customtype::PointCloudPtr & cloud1,
@@ -780,20 +794,20 @@ namespace slam_utils
             cv::drawMatches(image1,imgpts1, image2, imgpts2, final_matches, out_match);
             cv::imshow("loop closure matches",out_match);
             cv::waitKey(1);
+            for (std::vector<cv::DMatch>::
+                     const_iterator it= final_matches.begin();
+                     it!= final_matches.end(); ++it) 
+            {
+                // std::cout << it->queryIdx << " " << it->trainIdx << std::endl;
+                out_1.push_back(wrldpts1[it->queryIdx]);
+                // std::cout << wrldpts1[it->queryIdx].x << " "  << wrldpts1[it->queryIdx].y << " " << wrldpts1[it->queryIdx].z << " " <<std::endl;
+                    // std::cout << "imgpts1 " << imgpts1.at(it->queryIdx).pt.x << " " << imgpts1.at(it->queryIdx).pt.y << std::endl;
+                out_2.push_back(wrldpts2[it->trainIdx]);
+                // std::cout << wrldpts2[it->trainIdx].x << " "  << wrldpts2[it->trainIdx].y << " " << wrldpts2[it->trainIdx].z << " " <<std::endl;
+                    // std::cout << "imgpts2 " << imgpts2.at(it->trainIdx).pt.x << " " << imgpts2.at(it->trainIdx).pt.y << std::endl;
+            }
         }
         // std::cout << "this here" << std::endl;
-        for (std::vector<cv::DMatch>::
-                 const_iterator it= final_matches.begin();
-                 it!= final_matches.end(); ++it) 
-        {
-            // std::cout << it->queryIdx << " " << it->trainIdx << std::endl;
-            out_1.push_back(wrldpts1[it->queryIdx]);
-            // std::cout << wrldpts1[it->queryIdx].x << " "  << wrldpts1[it->queryIdx].y << " " << wrldpts1[it->queryIdx].z << " " <<std::endl;
-                // std::cout << "imgpts1 " << imgpts1.at(it->queryIdx).pt.x << " " << imgpts1.at(it->queryIdx).pt.y << std::endl;
-            out_2.push_back(wrldpts2[it->trainIdx]);
-            // std::cout << wrldpts2[it->trainIdx].x << " "  << wrldpts2[it->trainIdx].y << " " << wrldpts2[it->trainIdx].z << " " <<std::endl;
-                // std::cout << "imgpts2 " << imgpts2.at(it->trainIdx).pt.x << " " << imgpts2.at(it->trainIdx).pt.y << std::endl;
-        }
         // return 0;
 
 
