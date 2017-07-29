@@ -60,15 +60,15 @@ namespace slam_utils
 
     customtype::TransformSE3 getFrameAligner()
     {
-        customtype::TransformSE3 trans1 = getTransformation(434.0832, 108.9862, 100.4308, 0.0286645627421, -0.675561322247, 0.00385381425015, 0.736736338523);
-        customtype::TransformSE3 trans2 = getTransformation(448.131, 83.3348, 783.64, 0.721576, -0.690575, 0.0393842, -0.0297034);
+        customtype::TransformSE3 trans1 = getTransformation(762.0954, 751.126, 1207.522, 0.0201935529872, 0.668273782067, -0.0372556846314, 0.742707462599);
+        customtype::TransformSE3 trans2 = getTransformation(684.025, 761.131, 952.153, -0.673607, 0.730574, -0.0861964, 0.0713069);
         return trans2.inverse()*trans1;
 
-        //1500460881 197633981 73 0.4340832 0.1089862 1.004308 0.0286645627421 -0.675561322247 0.00385381425015 0.736736338523
-        // 0 448.131 83.3348 783.64 0.721576 -0.690575 0.0393842 -0.0297034
+        // 1500727324 678121089 3990 0.3952285 0.5984764 0.9603633 0.020576022865 -0.662864768588 0.0584081485361 0.746173840335
+        // 0 367.595 637.203 871.495 0.688904 -0.684562 0.238185 0.00738495
 
-        // 1500727147 836250066 3 0.3716057 0.5966728 0.8541285 0.0159701753714 -0.656663861278 0.0481162864216 0.752477491358
-        // 0 327.202 619.078 629.919 -0.686012 0.716403 -0.107153 0.0683575
+        // 0.7620954 0.751126 1.207522 -0.0201935529872 -0.668273782067 0.0372556846314 0.742707462599
+        // 684.025 761.131 952.153 -0.673607 0.730574 -0.0861964 0.0713069
 
     }
 
@@ -791,9 +791,9 @@ namespace slam_utils
             // cv::imshow("window2", out_img2);
             // cv::waitKey(0);
 
-            cv::drawMatches(image1,imgpts1, image2, imgpts2, final_matches, out_match);
-            cv::imshow("loop closure matches",out_match);
-            cv::waitKey(1);
+            // cv::drawMatches(image1,imgpts1, image2, imgpts2, final_matches, out_match);
+            // cv::imshow("loop closure matches",out_match);
+            // cv::waitKey(1);
             for (std::vector<cv::DMatch>::
                      const_iterator it= final_matches.begin();
                      it!= final_matches.end(); ++it) 

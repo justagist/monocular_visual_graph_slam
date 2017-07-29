@@ -178,7 +178,7 @@ int main(int argc, char** argv)
         cv::cv2eigen(current_odom_frame->getCurrentPose(),posemat.matrix()); // conversion of cv::Mat to Eigen for quaternion calculation and further slam process
 
         // align with body frame of drone
-        posemat = frame_aligner*posemat;
+        posemat = posemat*frame_aligner;
 
         gSlam::customtype::ProjMatType projectionMatrix;
         cv::cv2eigen(current_odom_frame->projMatrix,projectionMatrix);
