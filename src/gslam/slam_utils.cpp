@@ -87,13 +87,14 @@ namespace slam_utils
         //NOTE: this method is a mix of two methods:
         //  - getRemainingCorrespondences() in pcl/registration/impl/correspondence_rejection_sample_consensus.hpp
         //  - refineModel() in pcl/sample_consensus/sac.h
-
+        inlierThreshold = 10;
+        iterations = 10000;
         if(varianceOut)
         {
             *varianceOut = 1.0;
         }
         Eigen::Matrix4d transform;
-        if(cloud1->size() >=3 && cloud1->size() == cloud2->size())
+        if(cloud1->size() >= 3 && cloud1->size() == cloud2->size())
         {
             // RANSAC
             printf("DEBUG: iterations=%d inlierThreshold=%f\n", iterations, inlierThreshold);
@@ -106,6 +107,9 @@ namespace slam_utils
                 source_indices[i] = i;
                 target_indices[i] = i;
             }
+
+            std::cout << source_indices.size() << " source indices size"<< std::endl;
+            std::cout << target_indices.size() << " target indices size " << std::endl;
 
             // From the set of correspondences found, attempt to remove outliers
             // Create the registration model
@@ -124,6 +128,7 @@ namespace slam_utils
                 Eigen::VectorXf model_coefficients;
 
                 sac.getInliers(inliers);
+                std::cout << inliers.size() << "inliers size " << std::endl;
                 sac.getModelCoefficients (model_coefficients);
 
                 if (refineModel)
@@ -702,20 +707,46 @@ namespace slam_utils
         return fundemental;
     }
 
+    // not used because images are already undistorted
+    void DataSpotMatcher::findMatchingWorldpoints(DataSpot3D::DataSpot3DPtr data_spot_src, DataSpot3D::DataSpot3DPtr data_spot_target,
+                                                  customtype::WorldPtsType& src_wrldpts, customtype::WorldPtsType& tgt_wrldpts, bool& good_match_status)
+    {
+        cv::Mat src_img, tgt_img;
+        // std::cout << data_spot_src->getCamParams().intrinsics_ << std::endl;
+        // std::cout << data_spot_src->getCamParams().distortion_ << std::endl;
+        
+        cv::undistort(data_spot_src->getImageColor(), src_img, data_spot_src->getCamParams().intrinsics_, data_spot_src->getCamParams().distortion_);
+        cv::undistort(data_spot_target->getImageColor(), tgt_img, data_spot_target->getCamParams().intrinsics_, data_spot_target->getCamParams().distortion_);
+
+        src_img = data_spot_src->getImageColor(); tgt_img = data_spot_target->getImageColor();
+        findMatchingWorldpoints(src_img, tgt_img, data_spot_src->getImagePoints(), data_spot_target->getImagePoints(), data_spot_src->getWorldPoints(), data_spot_target->getWorldPoints(), src_wrldpts, tgt_wrldpts, good_match_status);
+
+        // cv::imshow("window 1", src_img);
+        // cv::waitKey(1);
+        // cv::imshow("window 2", data_spot_src->getImageColor());
+        // cv::waitKey(0);
+
+    }
+
     void DataSpotMatcher::findMatchingWorldpoints(cv::Mat image1, cv::Mat image2, 
                                                  customtype::KeyPoints imgpts1,
                                                  customtype::KeyPoints imgpts2, 
                                                  customtype::WorldPtsType wrldpts1,
                                                  customtype::WorldPtsType wrldpts2,
                                                  customtype::WorldPtsType& out_1,
-                                                 customtype::WorldPtsType& out_2)
+                                                 customtype::WorldPtsType& out_2,
+                                                 bool& good_match)
     {
 
         cv::cvtColor(image1, image1, CV_BGR2GRAY);
         cv::cvtColor(image2, image2, CV_BGR2GRAY);
 
+        // cv::undistort()
+
         // detector_->detect(image1,imgpts1);
         // detector_->detect(image2,imgpts2);
+
+        good_match = false;
 
         cv::Mat descriptors1, descriptors2;
         extractor_->compute(image1,imgpts1,descriptors1);
@@ -790,9 +821,9 @@ namespace slam_utils
             // cv::drawKeypoints(image2, imgpts2, out_img2);
             // cv::imshow("window2", out_img2);
             // cv::waitKey(0);
-
-            // cv::drawMatches(image1,imgpts1, image2, imgpts2, final_matches, out_match);
-            // cv::imshow("loop closure matches",out_match);
+            good_match = true;
+            cv::drawMatches(image1,imgpts1, image2, imgpts2, final_matches, out_match);
+            cv::imshow("loop closure matches",out_match);
             // cv::waitKey(1);
             for (std::vector<cv::DMatch>::
                      const_iterator it= final_matches.begin();

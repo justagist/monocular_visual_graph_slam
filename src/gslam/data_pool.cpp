@@ -23,6 +23,7 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
     //     cv::imshow("gslam_window", out_img);
     //     cv::waitKey(0);
     // }
+    // std::cout << data_spot_ptr->getCamParams().intrinsics_ << std::endl;
     int new_id, loop_id;
     fabmap_.compareAndAdd(data_spot_ptr, new_id, loop_id);
     // std::cout << data_spot_ptr->getImagePoints().size() << "check " << std::endl;

@@ -49,9 +49,14 @@ void GrSLAM::processData(const customtype::TransformSE3& odom_pose,
     // std::cout << "here size " << world_pts.size() << std::endl;
     // std::cout << "here size " << img_pts.size() << std::endl;
 
-    DataSpot3D::DataSpot3DPtr data_spot_new( new DataSpot3D(corrected_pose, cam_params, image_color, projectionMatrix, world_pts, img_pts));// tstamp));
+    // undistorting images before storing it the dataspot
+    cv::Mat undistorted_frame;
+    cv::undistort(image_color, undistorted_frame, cam_params.intrinsics_, cam_params.distortion_);
+    
+        // current_odom_frame = vOdom.process(undistorted_frame,visualize_flag);
+    DataSpot3D::DataSpot3DPtr data_spot_new( new DataSpot3D(corrected_pose, cam_params, undistorted_frame, projectionMatrix, world_pts, img_pts));// tstamp));
 
-
+    // std::cout << data_spot_new->getCamParams().distortion_ << std::endl;
     bool need_optimization = false;
     bool optimize_near = false;
     bool optimize_far = false;

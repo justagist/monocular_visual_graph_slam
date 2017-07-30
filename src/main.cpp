@@ -105,7 +105,9 @@ int main(int argc, char** argv)
     }
     else vOdom.init(video_source.readNextFrame(next_frame_format[SCENE-1]),next_frame_format[SCENE-1], intrinsics_file[SCENE-1], points3d_init_file[SCENE-1], template_file_fmt[SCENE-1], vis_odo_baseline);
     visual_odometry::Frame::Ptr current_odom_frame;
-    gSlam::CameraParameters cam_params(vOdom.intrinsics_);
+    gSlam::CameraParameters cam_params(vOdom.intrinsics_, vOdom.getDistortion());
+
+    // std::cout << cam_params.intrinsics_ << std::endl << cam_params.distortion_ << std::endl;
 
     // get transformation between camera frame and drone body frame (tracked by mocap for ground truth)
     gSlam::customtype::TransformSE3 frame_aligner = gSlam::customtype::TransformSE3::Identity();

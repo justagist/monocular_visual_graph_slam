@@ -74,7 +74,7 @@ namespace slam_utils
     class DataSpotMatcher {
     public:
 
-        DataSpotMatcher() : ratio_(0.75f), refineF_(true),
+        DataSpotMatcher() : ratio_(0.65f), refineF_(true),
             confidence_(0.99), distance_(2.0) { // confidence before 0.99, distance before was 3.0
             // SURF is the default feature
 
@@ -113,6 +113,9 @@ namespace slam_utils
             extractor_ = desc;
         }
 
+        void findMatchingWorldpoints(DataSpot3D::DataSpot3DPtr data_spot_src, DataSpot3D::DataSpot3DPtr data_spot_target,
+                                                  customtype::WorldPtsType& src_wrldpts, customtype::WorldPtsType& tgt_wrldpts, bool& good_match_status);
+
 
         void findMatchingWorldpoints(cv::Mat image1, cv::Mat image2, 
                                      customtype::KeyPoints imgpts1,
@@ -120,7 +123,8 @@ namespace slam_utils
                                      customtype::WorldPtsType wrldpts1,
                                      customtype::WorldPtsType wrldpts2,
                                      customtype::WorldPtsType& out_1,
-                                     customtype::WorldPtsType& out_2);
+                                     customtype::WorldPtsType& out_2,
+                                     bool& good_match);
 
         void findMatches(DataSpot3D::DataSpot3DPtr spot_src, DataSpot3D::DataSpot3DPtr spot_target, std::vector<cv::DMatch>& matches);
 
