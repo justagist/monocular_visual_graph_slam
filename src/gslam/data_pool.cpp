@@ -63,7 +63,7 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
         link->inf_matrix_ *= info;
         link->active = true;
         link->type = DataLink3D::LoopClosureConstraint;
-        std::cout << "LOOP: corr " <<  correspondences << /*" info " << info <<*/ std::endl;
+        std::cout << "Loop Closure Status: " << std::boolalpha << status_good << std::noboolalpha << "  LOOP: corr " <<  correspondences << "  variance:  " << variance << "  infor : " << info << std::endl;
         if( status_good )
         {
 

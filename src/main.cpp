@@ -113,9 +113,9 @@ int main(int argc, char** argv)
     gSlam::customtype::TransformSE3 frame_aligner = gSlam::customtype::TransformSE3::Identity();
     if (SCENE > 3)
         frame_aligner = gSlam::slam_utils::getFrameAligner();
+    // frame_aligner = gSlam::customtype::TransformSE3::Identity();
     // std::cout << frame_aligner.matrix() << std::endl;
     // ==============================================================================================================
-
     gSlam::GrSLAM::Ptr slam(new gSlam::GrSLAM());
     if (optimise_graph)
         slam->init();

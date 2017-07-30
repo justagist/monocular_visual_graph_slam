@@ -78,7 +78,7 @@ namespace gSlam
             converge_status = true;
             prop_matches = double(correspondences)/max_points;
             std::cout << "converge_status: "  << std::boolalpha << converge_status << std::noboolalpha << " variance: " << variance << " correspondences: " << correspondences << " prop_matches: " << prop_matches << std::endl;
-            cv::waitKey(0);
+            // cv::waitKey(1);
             return relative_transformation;
 
             // std::cout << relative_transformation.matrix() << std::endl;
@@ -93,7 +93,8 @@ namespace gSlam
             std::cout << "converge_status: "  << std::boolalpha << converge_status << std::noboolalpha << " variance: " << variance << " correspondences: " << correspondences << std::endl; 
             // std::cout << "returning default TransformSE3 value " << customtype::TransformSE3().matrix() << std::endl;
             // cv::waitKey(0);
-            return customtype::TransformSE3().Identity();
+            // customtype::TransformSE3 test_mat = customtype::TransformSE3::Identity();
+            return customtype::TransformSE3::Identity();
         }
 
         // if(correspondences == 0)
