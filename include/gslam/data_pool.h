@@ -52,6 +52,9 @@ private:
     int new_count_loop_far_; // far in time
     int new_count_loop_near_; // near in time
 
+    int prev_loop_id_;
+    bool repeat_match_;
+
 };
 
 }

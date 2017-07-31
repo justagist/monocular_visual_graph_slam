@@ -3,7 +3,7 @@
 namespace gSlam
 {
     customtype::TransformSE3 TransformEstimator::estimateTransform(DataSpot3D::DataSpot3DPtr data_spot_src, DataSpot3D::DataSpot3DPtr data_spot_target,
-                                                   double& variance, int& correspondences, double& prop_matches, bool& converge_status) 
+                                                   double& variance, int& correspondences, double& prop_matches, bool& converge_status, bool repeat_loop_match) 
     {
         // CameraParameters src_cam = data_spot_src->getCamParams();
         // CameraParameters tgt_cam = data_spot_target->getCamParams();
@@ -12,6 +12,8 @@ namespace gSlam
         // findMatches(data_spot_src, data_spot_target, matches);
         
         // correspondences = matches.size();
+
+        std::cout << "Repeat status " << repeat_loop_match << std::endl;
         size_t tmp = std::max(data_spot_src->getImagePoints().size(), data_spot_target->getImagePoints().size());
         
         double max_points = (double)std::max(tmp,(size_t)1);
@@ -35,6 +37,16 @@ namespace gSlam
         customtype::WorldPtsType src_wrldpts;
         customtype::WorldPtsType tgt_wrldpts;
 
+        if (repeat_match_counter_>20)
+            repeat_match_counter_ = 0;
+
+        if (repeat_loop_match)
+            repeat_match_counter_++;
+        else repeat_match_counter_ = 0;
+
+
+
+
 
         //// this method should be used only if the images are distorted -----------------
 
@@ -44,7 +56,7 @@ namespace gSlam
 
 
         // using undistorted image
-        spot_matcher_.findMatchingWorldpoints(data_spot_src->getImageColor(), data_spot_target->getImageColor(), data_spot_src->getImagePoints(), data_spot_target->getImagePoints(), data_spot_src->getWorldPoints(), data_spot_target->getWorldPoints(), src_wrldpts, tgt_wrldpts, good_match_status);//, data_spot_src->getWorldPoints(), data_spot_target->getWorldPoints())
+        spot_matcher_.findMatchingWorldpoints(data_spot_src->getImageColor(), data_spot_target->getImageColor(), data_spot_src->getImagePoints(), data_spot_target->getImagePoints(), data_spot_src->getWorldPoints(), data_spot_target->getWorldPoints(), src_wrldpts, tgt_wrldpts, good_match_status, repeat_match_counter_);//, data_spot_src->getWorldPoints(), data_spot_target->getWorldPoints())
 
         // REMOVE ++++++++++++++++++++++++++_+===================
         // return customtype::TransformSE3();
@@ -74,12 +86,21 @@ namespace gSlam
 
             // relative_transformation = slam_utils::icp(src_cloud, tgt_cloud, 0.1, 50, &converge_status, &variance, &correspondences);
             std::vector<int> inliers;
-            relative_transformation = slam_utils::transformFromXYZCorrespondences(src_cloud, tgt_cloud, 0.05, 100, true, 3.0, 5, &inliers, &variance);
-            converge_status = true;
+            relative_transformation = slam_utils::transformFromXYZCorrespondences(src_cloud, tgt_cloud, 10, 10000, true, 10, 100 , &inliers, &variance, converge_status);
+            // converge_status = true;
+
             prop_matches = double(correspondences)/max_points;
             std::cout << "converge_status: "  << std::boolalpha << converge_status << std::noboolalpha << " variance: " << variance << " correspondences: " << correspondences << " prop_matches: " << prop_matches << std::endl;
-            // cv::waitKey(1);
-            return relative_transformation;
+            // cv::waitKey(0);
+            if (converge_status)
+            {
+                return relative_transformation;
+            }
+            else
+            {
+                std::cout << " ICP Transformation failed. Sending Identity Transform.\n";
+                return customtype::TransformSE3::Identity();
+            }
 
             // std::cout << relative_transformation.matrix() << std::endl;
         }

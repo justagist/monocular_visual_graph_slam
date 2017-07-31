@@ -50,11 +50,11 @@ void GrSLAM::processData(const customtype::TransformSE3& odom_pose,
     // std::cout << "here size " << img_pts.size() << std::endl;
 
     // undistorting images before storing it the dataspot
-    cv::Mat undistorted_frame;
-    cv::undistort(image_color, undistorted_frame, cam_params.intrinsics_, cam_params.distortion_);
+    // cv::Mat undistorted_frame;
+    // cv::undistort(image_color, undistorted_frame, cam_params.intrinsics_, cam_params.distortion_);
     
         // current_odom_frame = vOdom.process(undistorted_frame,visualize_flag);
-    DataSpot3D::DataSpot3DPtr data_spot_new( new DataSpot3D(corrected_pose, cam_params, undistorted_frame, projectionMatrix, world_pts, img_pts));// tstamp));
+    DataSpot3D::DataSpot3DPtr data_spot_new( new DataSpot3D(corrected_pose, cam_params, image_color, projectionMatrix, world_pts, img_pts));// tstamp));
 
     // std::cout << data_spot_new->getCamParams().distortion_ << std::endl;
     bool need_optimization = false;
@@ -160,6 +160,8 @@ void GrSLAM::optmizeGraphThread(){
 
         old_pose = data_pool_.getLastSpot()->getPose(); // Old pose before optimization
 
+        std::cout << " old Pose " << " ------------------------------------ -------------------------\n" << old_pose.matrix() << std::endl;
+
         pose_graph_.fixed_iter_ = false;
         if( optimize_near_ ){
             pose_graph_.optimizeGraph(10);
@@ -176,13 +178,16 @@ void GrSLAM::optmizeGraphThread(){
 
         optimized_pose = data_pool_.getLastSpot()->getPose(); // Now that's the new optimized pose
 
+        std::cout << " new Pose " << " ------------------------------------ -------------------------\n" << optimized_pose.matrix() << std::endl;
         map_correction_ = (optimized_pose*old_pose.inverse())*map_correction_;
 
         std::cout << "Map Correction: " << map_correction_.matrix() << std:: endl;
 
         // Send data back to main()
         //processed = true;
-        std::cout << "Worker thread signals data processing completed\n";
+        std::cout << "Worker thread signals data processing completed  \nPress return to continue\n";
+
+        std::cin.get();
 
         // Restarting loop count
         if( optimize_near_ ){

@@ -55,7 +55,8 @@ namespace slam_utils
                                                     double refineModelSigma,
                                                     int refineModelIterations,
                                                     std::vector<int> * inliersOut,
-                                                    double * varianceOut);
+                                                    double * varianceOut,
+                                                    bool& got_transform);
 
     customtype::PointCloudPtr convert3dPointsToCloud(customtype::WorldPtsType wrldpts);
 
@@ -75,7 +76,8 @@ namespace slam_utils
     public:
 
         DataSpotMatcher() : ratio_(0.65f), refineF_(true),
-            confidence_(0.99), distance_(2.0) { // confidence before 0.99, distance before was 3.0
+            confidence_(0.99), distance_(2.0) // confidence before 0.99, distance before was 3.0
+        {
             // SURF is the default feature
 
             // maxSize – maximum size of the features. The following values are supported: 4, 6, 8, 11, 12, 16, 22, 23, 32, 45, 46, 64, 90, 128. In the case of a different value the result is undefined.
@@ -91,7 +93,8 @@ namespace slam_utils
         }
 
         DataSpotMatcher(float ratio, double confidence, double distance, bool refineF = true) : ratio_(ratio), refineF_(refineF),
-            confidence_(confidence), distance_(distance) {
+            confidence_(confidence), distance_(distance) 
+        {
             // SURF is the default feature
             detector_ = new cv::StarFeatureDetector(32, 10, 18, 18, 20);
                     //new cv::StarFeatureDetector(32, 10, 18, 18, 20);//new cv::SurfFeatureDetector();
@@ -124,7 +127,8 @@ namespace slam_utils
                                      customtype::WorldPtsType wrldpts2,
                                      customtype::WorldPtsType& out_1,
                                      customtype::WorldPtsType& out_2,
-                                     bool& good_match);
+                                     bool& good_match,
+                                     int repeat_match_count = 0);
 
         void findMatches(DataSpot3D::DataSpot3DPtr spot_src, DataSpot3D::DataSpot3DPtr spot_target, std::vector<cv::DMatch>& matches);
 
@@ -173,6 +177,9 @@ namespace slam_utils
         bool refineF_; // if true will refine the F matrix
         double distance_; // min distance to epipolar
         double confidence_; // confidence level (probability)
+
+        // int repeat_match_count_;
+        // cv::Mat prev_frame_;
 
     }; // class dataspotmatcher
 

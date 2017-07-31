@@ -82,13 +82,16 @@ namespace slam_utils
             double refineModelSigma,
             int refineModelIterations,
             std::vector<int> * inliersOut,
-            double * varianceOut)
+            double * varianceOut,
+            bool& got_transform)
     {
         //NOTE: this method is a mix of two methods:
         //  - getRemainingCorrespondences() in pcl/registration/impl/correspondence_rejection_sample_consensus.hpp
         //  - refineModel() in pcl/sample_consensus/sac.h
+
         inlierThreshold = 10;
         iterations = 10000;
+        got_transform = false;
         if(varianceOut)
         {
             *varianceOut = 1.0;
@@ -169,7 +172,7 @@ namespace slam_utils
                         printf ("DEBUG: RANSAC refineModel: New estimated error threshold: %f (variance=%f) on iteration %d out of %d.\n",
                                 error_threshold, variance, refine_iterations, refineModelIterations);
                         inlier_changed = false;
-                        std::swap (prev_inliers, new_inliers);
+                        std::swap (prev_inliers, new_inliers);  
 
                         // If the number of inliers changed, then we are still optimizing
                         if (new_inliers.size () != prev_inliers.size ())
@@ -238,7 +241,7 @@ namespace slam_utils
                     std::ostringstream ss;
                     ss << transform;
                     printf("DEBUG: RANSAC inliers=%d/%d tf=%s", (int)inliers.size(), (int)cloud1->size(),ss.str().c_str());
-
+                    got_transform = true;
                     return transform.inverse(); // inverse to get actual pose transform (not correspondences transform)
                 }
                 else
@@ -735,18 +738,33 @@ namespace slam_utils
                                                  customtype::WorldPtsType wrldpts2,
                                                  customtype::WorldPtsType& out_1,
                                                  customtype::WorldPtsType& out_2,
-                                                 bool& good_match)
+                                                 bool& good_match,
+                                                 int repeat_match_count)
     {
 
         cv::cvtColor(image1, image1, CV_BGR2GRAY);
         cv::cvtColor(image2, image2, CV_BGR2GRAY);
 
         // cv::undistort()
-
+        // cv2.countNonZero(cv2.subtract(self.mat,cv_img))>0
+        // if (!prev_frame_.empty())
+        // {
+        //     cv::Mat diff_val;
+        //     cv::subtract(prev_frame_, image1, diff_val);
+        //     if (cv::countNonZero(diff_val)==0)
+        //     {
+        //         repeat_match_count_ ++;
+        //         std::cout << "--------------------------------------------------repeating match x"<<repeat_match_count_ << std::endl;
+        //     }
+        //     else repeat_match_count_ = 0;
+        // }
         // detector_->detect(image1,imgpts1);
         // detector_->detect(image2,imgpts2);
 
         good_match = false;
+
+        if (repeat_match_count > 0)
+            std::cout << "--------------------------------------------------repeating match x"<<repeat_match_count << std::endl;
 
         cv::Mat descriptors1, descriptors2;
         extractor_->compute(image1,imgpts1,descriptors1);
@@ -811,7 +829,12 @@ namespace slam_utils
         // printf("%s\n", );
 
         cv::Mat out_match;
-        if (((final_matches.size()>(0.19*float(imgpts1.size())) && final_matches.size()>(0.19*float(imgpts2.size()))) && (imgpts1.size()>200 && imgpts2.size()>200))||final_matches.size() > 100)
+        if (
+            ((final_matches.size()>(0.18*float(imgpts1.size())) && final_matches.size()>(0.18*float(imgpts2.size()))) && (imgpts1.size()>200 && imgpts2.size()>200))
+            // ||final_matches.size() > 100 
+            || (repeat_match_count >= 15 && final_matches.size()>50)
+            // || (final_matches.size()>50 && (final_matches.size()>(0.2*float(imgpts1.size()))||(final_matches.size()>(0.2*float(imgpts1.size())) ) ))
+           )
         {
             // cv::Mat out_img;
             // cv::drawKeypoints(image1, imgpts1, out_img);
@@ -822,9 +845,9 @@ namespace slam_utils
             // cv::imshow("window2", out_img2);
             // cv::waitKey(0);
             good_match = true;
-            // cv::drawMatches(image1,imgpts1, image2, imgpts2, final_matches, out_match);
-            // cv::imshow("loop closure matches",out_match);
-            // cv::waitKey(1);
+            cv::drawMatches(image1,imgpts1, image2, imgpts2, final_matches, out_match);
+            cv::imshow("loop closure matches",out_match);
+            // cv::waitKey(0);
             for (std::vector<cv::DMatch>::
                      const_iterator it= final_matches.begin();
                      it!= final_matches.end(); ++it) 

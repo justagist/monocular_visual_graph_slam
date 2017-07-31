@@ -6,7 +6,7 @@ namespace gSlam
 {
 
 
-DataPool::DataPool() : loop_count_far_(0), loop_count_near_(0) {}
+DataPool::DataPool() : loop_count_far_(0), loop_count_near_(0), repeat_match_ (false), prev_loop_id_(-2){}
 
 void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
 
@@ -30,8 +30,17 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
     // std::cout << data_spot_ptr->getWorldPoints().size() << " check" << std::endl;
     assert(data_spot_ptr->getImagePoints().size() == data_spot_ptr->getWorldPoints().size());
 
-    std::cout << "                                                                 LoopID: " << loop_id << " new_id: " << new_id << std::endl;
+    std::cout << "                                                                 LoopID: " << loop_id << " new_id: " << new_id << " prev_loop_id_: " << prev_loop_id_<< std::endl;
 
+    if (prev_loop_id_ == loop_id)
+    {
+        repeat_match_ = true;
+        // std::cout << "prev_loop_id_ = loop_id ************"<<repeat_match_<<"************************\n";
+    }
+    else repeat_match_ = false;
+
+
+    prev_loop_id_ = loop_id; 
     if( loop_id >= 0 && new_id > 0 && (new_id - loop_id) > 50) 
     {
         std::cout << "Possible loop closure : " << new_id << "->" << loop_id << std::endl;
@@ -46,7 +55,7 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
         link->to_id_ = data_spot_ptr->getId();
         
         std::cout << " Estimating Loop Closure Transform " <<std::endl;
-        link->transform_ = transform_est_.estimateTransform(spot_src, data_spot_ptr, variance, correspondences, prop_matches, status_good);
+        link->transform_ = transform_est_.estimateTransform(spot_src, data_spot_ptr, variance, correspondences, prop_matches, status_good, repeat_match_);
 
         // --- Enforce 2D ---
         // float x,y,z,r,p,yaw;
@@ -68,7 +77,7 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
         {
 
             bool valid = true;
-            if( (new_id - loop_id) > 10 ) // FAR LOOP
+            if( (new_id - loop_id) > 400 ) // FAR LOOP
             {
                 loop_count_far_++;
                 new_count_loop_far_++;
@@ -84,18 +93,12 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
             float dist = (t1-t0).norm();
             std::cout <<"               DISTANCE:    " <<dist << std::endl;
 
-            if( dist > 0.20 ) // If near loop is close in time but too far to be near, then it's not a valid transform
-            { 
-                valid = false;
-                // std::cout << " too far to be a near loop: dist: " <<dist << std::endl;
-            }
+            spot_src->addLink(link);
 
-            if( valid ) 
-            {
-                spot_src->addLink(link);
-
-                std::cout << " LOOP ADDED ! NFar " << loop_count_far_ << " NNear " << loop_count_near_ << std::endl;
-            }
+            std::cout << " LOOP ADDED ! NFar " << loop_count_far_ << " NNear " << loop_count_near_ << std::endl;
+            cv::waitKey(0);
+            std::cout << "Press Return to continue\n " << std::endl;
+            // std::cin.get();
         }
     }  // loop closure -- if()
 
