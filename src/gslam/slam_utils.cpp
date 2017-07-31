@@ -832,7 +832,7 @@ namespace slam_utils
         if (
             ((final_matches.size()>(0.18*float(imgpts1.size())) && final_matches.size()>(0.18*float(imgpts2.size()))) && (imgpts1.size()>200 && imgpts2.size()>200))
             // ||final_matches.size() > 100 
-            || (repeat_match_count >= 15 && final_matches.size()>50)
+            || (repeat_match_count >= 15)// && final_matches.size()>50)
             // || (final_matches.size()>50 && (final_matches.size()>(0.2*float(imgpts1.size()))||(final_matches.size()>(0.2*float(imgpts1.size())) ) ))
            )
         {

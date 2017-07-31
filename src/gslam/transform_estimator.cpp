@@ -37,7 +37,7 @@ namespace gSlam
         customtype::WorldPtsType src_wrldpts;
         customtype::WorldPtsType tgt_wrldpts;
 
-        if (repeat_match_counter_>20)
+        if (repeat_match_counter_>30)
             repeat_match_counter_ = 0;
 
         if (repeat_loop_match)
@@ -86,7 +86,7 @@ namespace gSlam
 
             // relative_transformation = slam_utils::icp(src_cloud, tgt_cloud, 0.1, 50, &converge_status, &variance, &correspondences);
             std::vector<int> inliers;
-            relative_transformation = slam_utils::transformFromXYZCorrespondences(src_cloud, tgt_cloud, 10, 10000, true, 10, 100 , &inliers, &variance, converge_status);
+            relative_transformation = slam_utils::transformFromXYZCorrespondences(src_cloud, tgt_cloud, 10, 10000, true, 3, 100 , &inliers, &variance, converge_status);
             // converge_status = true;
 
             prop_matches = double(correspondences)/max_points;
@@ -111,7 +111,7 @@ namespace gSlam
                 std::cout << "False Positive Loop Closure Ignored" << std::endl;
             if (correspondences <= 0) 
                 std::cout << "Too few correspondences to estimate PointCloud Transformation" << std::endl;
-            std::cout << "converge_status: "  << std::boolalpha << converge_status << std::noboolalpha << " variance: " << variance << " correspondences: " << correspondences << std::endl; 
+            std::cout << "converge_status: "  << std::boolalpha << converge_status << std::noboolalpha << "; variance: " << variance << " correspondences: " << correspondences << std::endl; 
             // std::cout << "returning default TransformSE3 value " << customtype::TransformSE3().matrix() << std::endl;
             // cv::waitKey(0);
             // customtype::TransformSE3 test_mat = customtype::TransformSE3::Identity();
