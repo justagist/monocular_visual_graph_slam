@@ -12,7 +12,7 @@ namespace vo = visual_odometry;
 bool visualize_flag = false;
 bool ros_flag = false;
 int vis_odo_baseline = 100;
-int ismar_baselines[] = {175, 50, 80, 100, 100, 100, 75, 75, 175 /*150*/,150 /*175*/,135 /*150*/};
+int ismar_baselines[] = {175, 50, 80, 100, 100, 100, 75, 75, 175 /*150*/,100 /*100 is probably better for loop closure*/ /*150*/ /*175*/,75 /*135*/ /*150*/};
 bool write_file = false;
 bool optimise_graph = false;
 int main(int argc, char** argv)
