@@ -96,7 +96,7 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
             spot_src->addLink(link);
 
             std::cout << " LOOP ADDED ! NFar " << loop_count_far_ << " NNear " << loop_count_near_ << std::endl;
-            cv::waitKey(0);
+            cv::waitKey(1);
             std::cout << "Press Return to continue\n " << std::endl;
             // std::cin.get();
         }

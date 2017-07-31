@@ -160,8 +160,12 @@ void FabMap::compareAndAdd(const cv::Mat& keyFrameImage, int& out_newID, int& ou
 
     // Generate FabMap bag-of-words data (image descriptor)
     cv::Mat bow;
+
+    
     out_kpts.clear();
     detector->detect(frame, out_kpts);
+
+
     // std::cout << "reached here!@" << std::endl;
     if (out_kpts.empty())
     {
