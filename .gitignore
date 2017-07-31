@@ -4,3 +4,4 @@ S0*
 trajectory_scene*
 **/CMakeFiles/
 !ground_truths/*
+!estimated_trajectories/*

@@ -123,108 +123,116 @@ int main(int argc, char** argv)
     while( !(frame = video_source.readNextFrame(next_frame_format[SCENE-1])).empty() && rosNode.ok())
 
     {
-        // break; // ++++++++++++
-        ros::spinOnce();               // check for incoming messages
-        current_time = ros::Time::now();
-
-        // perform visual odometry on current frame
-        current_odom_frame = vOdom.process(frame,visualize_flag);
-        // std::cout << vOdom.key_frames_.size() << " size of keyframes " << std::endl;
-
-
-        // cv::KeyPoint pt = current_odom_frame->keypoints.at(0);
-        // std::cout <<"kpts" << current_odom_frame->keypoints.size() << std::endl;
-        // std::cout <<"desc" << current_odom_frame->descriptors.size() << std::endl;
-
-        // Available methods from STAM: ------------------------------------------------------------------------------
-
-        // gSlam::customtype::p2d_vec kpts = current_odom_frame->keypoints; // list of 2d keypoints in each frame
-        // cv::Mat descriptors = current_odom_frame->descriptors; // list of descripts, one to each keypoint in the list of keypoints
-        // gSlam::customtype::ProjectionCorrespondences kps = vOdom.getKeypointsInFrame(i); // get correspondence keypoints (3d and 2d) from STAM 
-
-        // -----------------------------------------------------------------------------------------------------------
-
-        // get 3D worldpoints for visualization in ROS
-        gSlam::customtype::WorldPtsType world_points = vOdom.getCurrent3dPoints2();
-        gSlam::customtype::WorldPtsType points3d = vOdom.getCurrent3dPoints();
-        // std::cout << world_points.size() << std::endl;
-        // std::cout << points3d.size() << std::endl;
-        // std::cout <<"wpts" << world_points.size() << std::endl;
-        // std::cout << "here size " << world_points.size() << std::endl;
-        // for (int i = 0; i<world_points.size(); ++i)
-        // {
-        //     std::cout << world_points.at(i).x << " " << world_points.at(i).y << std::endl;
-        // }
-
-        gSlam::customtype::KeyPoints key_points;
-        cv::KeyPoint::convert(vOdom.getCurrent2dKeyPoints(), key_points);
-        // std::cout <<"2: " << key_points.size() << std::endl;
-
-        // for (int i = 0; i < key_points.size(); ++i)
-        // {
-        //     std::cout << world_points[i].x << " " << world_points[i].y << " "<< world_points[i].z << std::endl;
-        //     std::cout << key_points[i].pt.x << " " << key_points[i].pt.y << std::endl;
-        // }
-        // std::cout << "here size " << key_points.size() << std::endl;
-        // for (int i = 0; i < key_points.size(); ++i)
-        // {
-        //     std::cout << key_points.at(i).pt.x << "  " << key_points.at(i).pt.y << std::endl;
-        // }
-        // std::cout << key_points.size() << " " << world_points.size() << std::endl;
-        // std::cout << key_points << std::endl << world_points << std::endl;
-        if (world_points.size()>0)
-            gSlam::ros_utils::createPointMsg(world_visualizer, world_points);
-
-        // get current camera pose from STAM
-        gSlam::customtype::TransformSE3 posemat; 
-        cv::cv2eigen(current_odom_frame->getCurrentPose(),posemat.matrix()); // conversion of cv::Mat to Eigen for quaternion calculation and further slam process
-
-        // align with body frame of drone
-        posemat = posemat*frame_aligner;
-
-        gSlam::customtype::ProjMatType projectionMatrix;
-        cv::cv2eigen(current_odom_frame->projMatrix,projectionMatrix);
-        // std::cout << cam_params.intrinsicsMat_*projectionMatrix << std::endl;
-
-        // std::cout << projectionMatrix << std::endl;
-        // std::cout << projectionMatrix.block(0,0,3,3).inverse() << std::endl;
-
-        
-        //  STAM Bundle Adjustment 
-        // **
-        // if( SCENE > 1 && i%100 == 0 )
-        //     vOdom.optimise();
-        
-
-        slam->processData(posemat, cam_params, frame, projectionMatrix, points3d, key_points);
-        i++;
-        // cv::Mat p;
-        // std::cout << "eigen: " << cam_params.intrinsicsMat_*prj << std::endl;
-         // writing trajectory to file
-        /**/
-        // cv::Mat pM = vOdom.intrinsics_*current_odom_frame->projMatrix;//.mul(1.0/274759.971);
-        // std::cout << " cv: " << pM << std::endl;
-        // for (int j = 0; j < 3; j++)
-        //     traj_out << pM.at<double>(j, 0) << "," << pM.at<double>(j, 1) << "," << pM.at<double>(j, 2) << "," << pM.at<double>(j, 3) << std::endl;
-        
-
-        
-        geometry_msgs::TransformStamped odom_trans = gSlam::ros_utils::createOdomMsg(posemat);
-
-        // geometry_msgs::TransformStamped coordinate_correction = gSlam::ros_utils::setFrameCorrection(); // coordinate frame orientation correction for ISMAR dataset
-        if (ros_flag)
+        try
         {
-        //publish the transform and world points
-        odom_broadcaster.sendTransform(odom_trans);
-        world_point_pub.publish(world_visualizer);
-        // frame_corrector.sendTransform(coordinate_correction); // coordinate frame orientation correction for ISMAR dataset
+            // break; // ++++++++++++
+            ros::spinOnce();               // check for incoming messages
+            current_time = ros::Time::now();
+
+            // perform visual odometry on current frame
+            current_odom_frame = vOdom.process(frame,visualize_flag);
+            // std::cout << vOdom.key_frames_.size() << " size of keyframes " << std::endl;
+
+
+            // cv::KeyPoint pt = current_odom_frame->keypoints.at(0);
+            // std::cout <<"kpts" << current_odom_frame->keypoints.size() << std::endl;
+            // std::cout <<"desc" << current_odom_frame->descriptors.size() << std::endl;
+
+            // Available methods from STAM: ------------------------------------------------------------------------------
+
+            // gSlam::customtype::p2d_vec kpts = current_odom_frame->keypoints; // list of 2d keypoints in each frame
+            // cv::Mat descriptors = current_odom_frame->descriptors; // list of descripts, one to each keypoint in the list of keypoints
+            // gSlam::customtype::ProjectionCorrespondences kps = vOdom.getKeypointsInFrame(i); // get correspondence keypoints (3d and 2d) from STAM 
+
+            // -----------------------------------------------------------------------------------------------------------
+
+            // get 3D worldpoints for visualization in ROS
+            gSlam::customtype::WorldPtsType world_points = vOdom.getCurrent3dPoints2();
+            gSlam::customtype::WorldPtsType points3d = vOdom.getCurrent3dPoints();
+            // std::cout << world_points.size() << std::endl;
+            // std::cout << points3d.size() << std::endl;
+            // std::cout <<"wpts" << world_points.size() << std::endl;
+            // std::cout << "here size " << world_points.size() << std::endl;
+            // for (int i = 0; i<world_points.size(); ++i)
+            // {
+            //     std::cout << world_points.at(i).x << " " << world_points.at(i).y << std::endl;
+            // }
+
+            gSlam::customtype::KeyPoints key_points;
+            cv::KeyPoint::convert(vOdom.getCurrent2dKeyPoints(), key_points);
+            // std::cout <<"2: " << key_points.size() << std::endl;
+
+            // for (int i = 0; i < key_points.size(); ++i)
+            // {
+            //     std::cout << world_points[i].x << " " << world_points[i].y << " "<< world_points[i].z << std::endl;
+            //     std::cout << key_points[i].pt.x << " " << key_points[i].pt.y << std::endl;
+            // }
+            // std::cout << "here size " << key_points.size() << std::endl;
+            // for (int i = 0; i < key_points.size(); ++i)
+            // {
+            //     std::cout << key_points.at(i).pt.x << "  " << key_points.at(i).pt.y << std::endl;
+            // }
+            // std::cout << key_points.size() << " " << world_points.size() << std::endl;
+            // std::cout << key_points << std::endl << world_points << std::endl;
+            if (world_points.size()>0)
+                gSlam::ros_utils::createPointMsg(world_visualizer, world_points);
+
+            // get current camera pose from STAM
+            gSlam::customtype::TransformSE3 posemat; 
+            cv::cv2eigen(current_odom_frame->getCurrentPose(),posemat.matrix()); // conversion of cv::Mat to Eigen for quaternion calculation and further slam process
+
+            // align with body frame of drone
+            posemat = posemat*frame_aligner;
+
+            gSlam::customtype::ProjMatType projectionMatrix;
+            cv::cv2eigen(current_odom_frame->projMatrix,projectionMatrix);
+            // std::cout << cam_params.intrinsicsMat_*projectionMatrix << std::endl;
+
+            // std::cout << projectionMatrix << std::endl;
+            // std::cout << projectionMatrix.block(0,0,3,3).inverse() << std::endl;
+
+            
+            //  STAM Bundle Adjustment 
+            // **
+            // if( SCENE > 1 && i%100 == 0 )
+            //     vOdom.optimise();
+            
+
+            slam->processData(posemat, cam_params, frame, projectionMatrix, points3d, key_points);
+            i++;
+            // cv::Mat p;
+            // std::cout << "eigen: " << cam_params.intrinsicsMat_*prj << std::endl;
+             // writing trajectory to file
+            /**/
+            // cv::Mat pM = vOdom.intrinsics_*current_odom_frame->projMatrix;//.mul(1.0/274759.971);
+            // std::cout << " cv: " << pM << std::endl;
+            // for (int j = 0; j < 3; j++)
+            //     traj_out << pM.at<double>(j, 0) << "," << pM.at<double>(j, 1) << "," << pM.at<double>(j, 2) << "," << pM.at<double>(j, 3) << std::endl;
+            
+
+            
+            geometry_msgs::TransformStamped odom_trans = gSlam::ros_utils::createOdomMsg(posemat);
+
+            // geometry_msgs::TransformStamped coordinate_correction = gSlam::ros_utils::setFrameCorrection(); // coordinate frame orientation correction for ISMAR dataset
+            if (ros_flag)
+            {
+            //publish the transform and world points
+            odom_broadcaster.sendTransform(odom_trans);
+            world_point_pub.publish(world_visualizer);
+            // frame_corrector.sendTransform(coordinate_correction); // coordinate frame orientation correction for ISMAR dataset
+            }
+
+
+            last_time = current_time;
+            r.sleep();
+            // if (i==2)
+            // break;
         }
-
-
-        last_time = current_time;
-        r.sleep();
-        // if (i==2)
-        // break;
+        catch (const cv::Exception& e)
+        {
+            std::cout << "STAM failed due to correspondence loss. Try reducing triangulation baseline.\n STOPPING SLAM due to Visual Odometry failure... " << std::endl;
+            break;
+        }
 
     } // while
 
@@ -235,8 +243,8 @@ int main(int argc, char** argv)
     {
         std::stringstream traj_name;
         if (optimise_graph)
-            traj_name << "optimised_trajectory" << SCENE << ".txt";
-        else traj_name << "trajectory" << SCENE << ".txt";
+            traj_name << "/home/saif/test_ws/src/graph_slam/estimated_trajectories/optimised_trajectory" << SCENE << ".txt";
+        else traj_name << "/home/saif/test_ws/src/graph_slam/estimated_trajectories/trajectory" << SCENE << ".txt";
 
         if (slam->getDataPool().getDataSpots().size() > 1)
         {
