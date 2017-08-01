@@ -24,6 +24,7 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
     //     cv::waitKey(0);
     // }
     // std::cout << data_spot_ptr->getCamParams().intrinsics_ << std::endl;
+    require_optimization_flag_ = false;
     int new_id, loop_id;
     fabmap_.compareAndAdd(data_spot_ptr, new_id, loop_id);
     // std::cout << data_spot_ptr->getImagePoints().size() << "check " << std::endl;
@@ -32,6 +33,8 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
 
     std::cout << "                                                                 LoopID: " << loop_id << " new_id: " << new_id << " prev_loop_id_: " << prev_loop_id_<< std::endl;
 
+
+    // checking if fabmap detects same frame as loop closure continuously. If detected more times than some threshold, it is probably a true loop closure.
     if (prev_loop_id_ == loop_id)
     {
         repeat_match_ = true;
@@ -59,12 +62,12 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
 
         // --- Enforce 2D ---
         // float x,y,z,r,p,yaw;
-        // slam_x_utils::getTranslationAndEulerAngles(link->transform_, x, y, z, r, p , yaw);
+        // slam_x_slam_utils::getTranslationAndEulerAngles(link->transform_, x, y, z, r, p , yaw);
         // link->transform_ = slam_utils::getTransformation(x, y, 0, 0, 0, yaw);
 
         if (variance == 0)
             variance = 1.0;
-        double info = 1.0/(variance); // before 1.0/(variance*100);
+        double info = 1.0/(variance*1); // before 1.0/(variance*100);
 
         // info before was 100
         // if( info > 0 && info < 1000000) link->inf_matrix_ *= info*1;
@@ -72,10 +75,12 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
         link->inf_matrix_ *= info;
         link->active = true;
         link->type = DataLink3D::LoopClosureConstraint;
-        std::cout << "Loop Closure Status: " << std::boolalpha << status_good << std::noboolalpha << "  LOOP: corr " <<  correspondences << "  variance:  " << variance << "  infor : " << info << std::endl;
+        std::cout << "Loop Closure Status: " << std::boolalpha << status_good << std::noboolalpha << ";  LOOP: corr " <<  correspondences << "  variance:  " << variance << "  infor : " << info << std::endl;
         if( status_good )
         {
 
+            // std::cout << link->transform_.matrix() << std::endl;
+            // std::cin.get();
             bool valid = true;
             if( (new_id - loop_id) > 400 ) // FAR LOOP
             {
@@ -95,9 +100,13 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
 
             spot_src->addLink(link);
 
+            // if (dist > 500)
+            require_optimization_flag_ = true; // TODO: add some condition to check if optimization is required.
+
             std::cout << " LOOP ADDED ! NFar " << loop_count_far_ << " NNear " << loop_count_near_ << std::endl;
-            cv::waitKey(1);
-            std::cout << "Press Return to continue\n " << std::endl;
+            // cv::waitKey(1);
+
+            // std::cout << "Press Return to continue\n " << std::endl;
             // std::cin.get();
         }
     }  // loop closure -- if()
@@ -107,24 +116,43 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
     if( last_spot_.get() )
     {
         customtype::TransformSE3 rel_transform = last_spot_->getPose().inverse()*data_spot_ptr->getPose();
-        // float cx, cy, fx, fy;
-        // cx = last_spot_->getCamParams().cx_;
-        // cy = last_spot_->getCamParams().cy_;
-        // fx = last_spot_->getCamParams().fx_;
-        // fy = last_spot_->getCamParams().fy_;
+        customtype::PointCloudPtr cloud_src = slam_utils::convert3dPointsToCloud(last_spot_->getWorldPoints());
 
-        // std::cout << "ODOM: corr " <<  odom_correspondences << " info " << info << std::endl;
+        customtype::PointCloudPtr cloud_tgt = slam_utils::convert3dPointsToCloud(data_spot_ptr->getWorldPoints());
+
+        // std::cout << cloud_src->size() << " " << std::cout << cloud_tgt->size() << std::endl;
+
+        bool has_converged = false;
+        double odom_variance;
+        int odom_correspondences;
+        slam_utils::computeVariance(cloud_src, cloud_tgt, rel_transform, 10.0, &has_converged, &odom_variance, &odom_correspondences);
+
+        double info = 1.0/(odom_variance*10); //+ 2.0/data_spot_ptr->getId(); // before 1.0/(odom_variance*100);
+
+
+
+        // Force 2D?
+        // float x,y,z,r,p,yaw;
+        //                     transform.getTranslationAndEulerAngles(x,y,z, r,p,yaw);
+        //                     transform = Transform(x,y,0, 0, 0, yaw);
+        //                     pcl::getTranslationAndEulerAngles(toEigen3f(), x, y, z, roll, pitch, yaw);
+
+        std::cout << "ODOM: corr " <<  odom_correspondences << " info " << info << std::endl;
 
         DataLink3D::DataLinkPtr link( new DataLink3D() );
 
+        // before was 100
+        if( info > 0 && info < 1000000 ) link->inf_matrix_ *= info;
+        else if (info > 1000000) link->inf_matrix_ *= 1000000;//0.5;
+        else link->inf_matrix_ *= 10;//0.5;
 
         // before was 100
-        double odom_variance = 1;
-        double info = 1/odom_variance; // TEMPORARY -- TODO
-        // if( info > 0 && info < 1000000 ) link->inf_matrix_ *= info;
-        // else if (info > 1000000) link->inf_matrix_ *= 1000000;//0.5;
-        // else link->inf_matrix_ *= 10;//0.5;
-        link->inf_matrix_ *= info;
+        // double odom_variance = 1;
+        // double info = 1/odom_variance; // TEMPORARY -- TODO
+        // // if( info > 0 && info < 1000000 ) link->inf_matrix_ *= info;
+        // // else if (info > 1000000) link->inf_matrix_ *= 1000000;//0.5;
+        // // else link->inf_matrix_ *= 10;//0.5;
+        // link->inf_matrix_ *= info;
 
         link->transform_ = rel_transform;
         link->from_id_ = last_spot_->getId();

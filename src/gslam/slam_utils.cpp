@@ -72,6 +72,148 @@ namespace slam_utils
 
     }
 
+    customtype::PointCloudPtr getCleanCloud(customtype::PointCloudPtr cloud_in){
+        customtype::PointCloudPtr cloud_out(new customtype::PointCloud());
+
+
+        for(int i = 0; i < cloud_in->size(); i++){
+
+            customtype::CloudPoint& p = cloud_in->at(i);
+
+            if( p.x != p.x || p.y != p.y || p.z != p.z )
+                continue;
+
+            cloud_out->points.push_back(p);
+        }
+
+        return cloud_out;
+    }
+
+    void computeVariance(const customtype::PointCloudPtr & cloud_source,
+                         const customtype::PointCloudPtr & cloud_target,
+                         const customtype::TransformSE3& rel_transform, // rel_transform:how much the sensor moved w.r.t to world
+                         double maxCorrespondenceDistance,
+                         bool * hasConvergedOut,
+                         double * variance,
+                         int * correspondencesOut){
+
+        // rel_transform.inverse(): how much the world (points) moved w.r.t to the previous sensor pose
+
+        customtype::PointCloudPtr clean_src(new customtype::PointCloud()), clean_tgt(new customtype::PointCloud());
+        clean_src = getCleanCloud(cloud_source);
+        clean_tgt = getCleanCloud(cloud_target);
+
+
+        customtype::PointCloudPtr cloud_source_registered(new customtype::PointCloud()), clean_cloud_source_registered(new customtype::PointCloud());
+        std::cout << "TRANSFORM: \n" << rel_transform.inverse().matrix() << std::endl;
+        pcl::transformPointCloud(*clean_src, *cloud_source_registered, rel_transform.inverse());
+
+        clean_cloud_source_registered = getCleanCloud(cloud_source_registered);
+
+
+        std::cout << "Src Size: " << clean_cloud_source_registered->size() << " Tgt Size: " << clean_tgt->size() << std::endl;
+
+        // compute variance
+        if((correspondencesOut || variance) && clean_tgt->size() >=3 && clean_cloud_source_registered->size()>=3)
+        {
+            pcl::registration::CorrespondenceEstimation<customtype::CloudPoint, customtype::CloudPoint, double>::Ptr est;
+            est.reset(new pcl::registration::CorrespondenceEstimation<customtype::CloudPoint, customtype::CloudPoint, double>);
+            est->setInputTarget(clean_tgt);
+            est->setInputSource(clean_cloud_source_registered);
+            pcl::Correspondences correspondences;
+            est->determineCorrespondences(correspondences, maxCorrespondenceDistance);
+            if(variance)
+            {
+                if(correspondences.size()>=3)
+                {
+                    std::vector<double> distances(correspondences.size());
+                    for(unsigned int i=0; i<correspondences.size(); ++i)
+                    {
+                        distances[i] = correspondences[i].distance;
+                    }
+
+                    //variance
+                    std::sort(distances.begin (), distances.end ());
+                    double median_error_sqr = distances[distances.size () >> 1];
+                    *variance = (2.1981 * median_error_sqr);
+                }
+                else
+                {
+                    *hasConvergedOut = false;
+                    *variance = -1.0;
+                }
+            }
+
+            if(correspondencesOut)
+            {
+                *correspondencesOut = (int)correspondences.size();
+            }
+        }
+    }
+
+    customtype::PointCloudPtr voxelize(
+            const customtype::PointCloudPtr & cloud,
+            float voxelSize)
+    {
+        assert(voxelSize > 0);
+        customtype::PointCloudPtr output(new customtype::PointCloud());
+        pcl::VoxelGrid<customtype::CloudPoint> filter;
+        filter.setLeafSize(voxelSize, voxelSize, voxelSize);
+        filter.setInputCloud(cloud);
+        filter.filter(*output);
+        return output;
+    }
+
+    customtype::PointCloudPtr sampling(
+            const customtype::PointCloudPtr & cloud, int samples)
+    {
+
+        assert(samples > 0);
+        customtype::PointCloudPtr output(new  customtype::PointCloud());
+        pcl::RandomSample<customtype::CloudPoint> filter;
+        filter.setSample(samples);
+        filter.setInputCloud(cloud);
+        filter.filter(*output);
+        return output;
+    }
+
+    // If "voxel" > 0, "samples" is ignored
+    customtype::PointCloudPtr getICPReadyCloud(
+            const customtype::PointCloudPtr cloud_in,
+            float voxel,
+            int samples,
+            const customtype::TransformSE3 & transform)
+    {
+
+        customtype::PointCloudPtr cloud_out(new customtype::PointCloud());
+
+
+
+        if(cloud_in->size())
+        {
+            if(voxel>0)
+            {
+                cloud_out = voxelize(cloud_in, voxel);
+            }
+            else if(samples>0 && (int)cloud_in->size() > samples)
+            {
+                cloud_out = sampling(cloud_in, samples);
+            }
+
+            if(cloud_out->size())
+            {
+                pcl::transformPointCloud (*cloud_out, *cloud_out, transform.matrix().cast<float>());
+            }
+            else if( cloud_in->size() )
+            {
+                pcl::transformPointCloud (*cloud_in, *cloud_out, transform.matrix().cast<float>());
+            }
+        }
+
+
+        return cloud_out;
+    }
+
     // Get transform from cloud2 to cloud1
     Eigen::Matrix4d transformFromXYZCorrespondences(
             const customtype::PointCloudPtr & cloud1,
@@ -89,8 +231,8 @@ namespace slam_utils
         //  - getRemainingCorrespondences() in pcl/registration/impl/correspondence_rejection_sample_consensus.hpp
         //  - refineModel() in pcl/sample_consensus/sac.h
 
-        inlierThreshold = 10;
-        iterations = 10000;
+        // inlierThreshold = 10;
+        // iterations = 10000;
         got_transform = false;
         if(varianceOut)
         {
@@ -236,11 +378,11 @@ namespace slam_utils
                     bestTransformation.row (1) = model_coefficients.segment<4>(4);
                     bestTransformation.row (2) = model_coefficients.segment<4>(8);
                     bestTransformation.row (3) = model_coefficients.segment<4>(12);
-
+                    // std::cout << bestTransformation << std::endl;
                     transform = bestTransformation.cast<double>();
                     std::ostringstream ss;
                     ss << transform;
-                    printf("DEBUG: RANSAC inliers=%d/%d tf=%s", (int)inliers.size(), (int)cloud1->size(),ss.str().c_str());
+                    printf("DEBUG: RANSAC inliers =%d/%d tf =\n%s\n", (int)inliers.size(), (int)cloud1->size(),ss.str().c_str());
                     got_transform = true;
                     return transform.inverse(); // inverse to get actual pose transform (not correspondences transform)
                 }
@@ -348,7 +490,7 @@ namespace slam_utils
     //     }
 
     //     Eigen::Matrix4d m = icp.getFinalTransformation();
-    //     //slam_x::TransformSE3 rel_transform = icp.getFinalTransformation().matrix();
+    //     //customtype::TransformSE3 rel_transform = icp.getFinalTransformation().matrix();
     //     return m;
     // }
 

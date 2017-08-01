@@ -304,7 +304,7 @@ void GraphOptimizer::optimizeGraph(int iter){
         int currentIt = 0;
         do {
             prev_chi2 = chi2; //chi2 is numeric_limits::max() in first iteration
-            currentIt += optimizer_.optimize(5);//optimize 10 iterations per step
+            currentIt += optimizer_.optimize(iter);//optimize 10 iterations per step
             optimizer_.computeActiveErrors();
             chi2 = optimizer_.chi2();
         } while(chi2/prev_chi2 < (1.0 - 0.01));//e.g.  999/1000 < (1.0 - 0.01) => 0.999 < 0.99

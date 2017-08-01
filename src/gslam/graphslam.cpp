@@ -69,16 +69,18 @@ void GrSLAM::processData(const customtype::TransformSE3& odom_pose,
 
         std::cout << " ADDED DATA SPOT " << std::endl;
 
-        optimize_near = data_pool_.getNewLoopsCountNear() >= 2;
-        // std::cout << "optimize near " << optimize_near << std::endl;
-        optimize_far = data_pool_.getNewLoopsCountFar() >= 10; // before was 5
-        need_optimization = optimize_near && optimize_far;
-        need_optimization = optimize_near;
+        // optimize_near = data_pool_.getNewLoopsCountNear() >= 2;
+        // // std::cout << "optimize near " << optimize_near << std::endl;
+        // optimize_far = data_pool_.getNewLoopsCountFar() >= 10; // before was 5
+        // need_optimization = optimize_near && optimize_far;
+        // need_optimization = optimize_near;
+        need_optimization = data_pool_.checkOptimizationRequirement();
 
     }
 
     if( need_optimization )
-    {
+    {   
+        std::cout << "Requires graph optimization. Calling g2o optimization thread... " << std::endl;
         GrSLAM::optimizeGraph(optimize_near, optimize_far );
     }
 
@@ -89,7 +91,6 @@ void GrSLAM::optimizeGraph(bool optimize_near, bool optimize_far){
 
     {
         customtype::Lock lk(mutex_graph_);
-        std::cout << "reaching here " << std::endl;
         optimize_now_ = true;
         optimize_near_ = optimize_near;
         optimize_far_ = optimize_far;
@@ -163,20 +164,21 @@ void GrSLAM::optmizeGraphThread(){
         std::cout << " old Pose " << " ------------------------------------ -------------------------\n" << old_pose.matrix() << std::endl;
 
         pose_graph_.fixed_iter_ = false;
-        if( optimize_near_ ){
-            pose_graph_.optimizeGraph(10);
-        }
-        else if( optimize_far_ ) {
-            pose_graph_.fixed_iter_ = true;
-            pose_graph_.optimizeGraph(50);
-        }
+        // if( optimize_near_ ){
+        //     pose_graph_.optimizeGraph(10);
+        // }
+        // else if( optimize_far_ ) {
+        //     pose_graph_.fixed_iter_ = true;
+        //     pose_graph_.optimizeGraph(50);
+        // }
+        pose_graph_.optimizeGraph(5);
         pose_graph_.updateVertices(data_pool_.getDataSpots());
         pose_graph_.release();
 
         //Just setting optimize_now_ to false, since we just optimized the graph
         optimize_now_ = false;
 
-        optimized_pose = data_pool_.getLastSpot()->getPose(); // Now that's the new optimized pose
+        optimized_pose = data_pool_.getLastSpot()->getPose(); // the new optimized pose
 
         std::cout << " new Pose " << " ------------------------------------ -------------------------\n" << optimized_pose.matrix() << std::endl;
         map_correction_ = (optimized_pose*old_pose.inverse())*map_correction_;
@@ -185,19 +187,19 @@ void GrSLAM::optmizeGraphThread(){
 
         // Send data back to main()
         //processed = true;
-        std::cout << "Worker thread signals data processing completed  \nPress return to continue\n";
+        std::cout << "Worker thread signals data processing completed";//  \nPress return to continue\n";
 
-        std::cin.get();
+        // std::cin.get();
 
         // Restarting loop count
-        if( optimize_near_ ){
-            data_pool_.restartNewLoopsCountNear();
-            optimize_near_ = false;
-        }
-        if( optimize_far_ ){
-            data_pool_.restartNewLoopsCountFar();
-            optimize_far_ = false;
-        }
+        // if( optimize_near_ ){
+        //     data_pool_.restartNewLoopsCountNear();
+        //     optimize_near_ = false;
+        // }
+        // if( optimize_far_ ){
+        //     data_pool_.restartNewLoopsCountFar();
+        //     optimize_far_ = false;
+        // }
 
         // Manual unlocking is done before notifying, to avoid waking up
         // the waiting thread only to block again (see notify_one for details)

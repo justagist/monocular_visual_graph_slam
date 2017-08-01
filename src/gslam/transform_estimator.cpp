@@ -94,6 +94,7 @@ namespace gSlam
             // cv::waitKey(0);
             if (converge_status)
             {
+                // std::cout <<"in transform_estimator " << relative_transformation.matrix() << std::endl;
                 return relative_transformation;
             }
             else

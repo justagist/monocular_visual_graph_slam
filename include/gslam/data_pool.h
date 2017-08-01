@@ -39,6 +39,8 @@ public:
     int getLoopCountNear() { return  loop_count_near_; }
     int getLoopCountFar() { return loop_count_far_; }
 
+    bool checkOptimizationRequirement() { return require_optimization_flag_; }
+
 private:
     DataSpot3D::DataSpot3DPtr last_spot_;
     DataSpot3D::DataSpotMap data_spots_;
@@ -54,6 +56,8 @@ private:
 
     int prev_loop_id_;
     bool repeat_match_;
+
+    bool require_optimization_flag_;
 
 };
 
