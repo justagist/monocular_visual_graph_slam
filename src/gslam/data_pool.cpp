@@ -6,7 +6,7 @@ namespace gSlam
 {
 
 
-DataPool::DataPool() : loop_count_far_(0), loop_count_near_(0), repeat_match_ (false), prev_loop_id_(-2){}
+DataPool::DataPool() : loop_count_far_(0), loop_count_near_(0), repeat_match_ (false), prev_loop_id_(-2), odom_drift_(1), drift_rate_(0.1){}
 
 void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
 
@@ -51,6 +51,7 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
         int correspondences;
         bool status_good = false;
         DataLink3D::DataLinkPtr link( new DataLink3D() );
+        link->inf_matrix_ = customtype::InformationMatrix3D::Identity();
 
         DataSpot3D::DataSpot3DPtr spot_src = data_spots_.find(loop_id)->second;
 
@@ -67,12 +68,13 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
 
         if (variance == 0)
             variance = 1.0;
-        double info = 1.0/(variance*1); // before 1.0/(variance*100);
+        double info = 1.0/(variance); // before 1.0/(variance*100);
 
         // info before was 100
         // if( info > 0 && info < 1000000) link->inf_matrix_ *= info*1;
         // else link->inf_matrix_ *= 1;//0.5*(1+prop_matches)*2;
         link->inf_matrix_ *= info;
+        // std::cout << "info matrix loop closure \n" << link->inf_matrix_ << std::endl;
         link->active = true;
         link->type = DataLink3D::LoopClosureConstraint;
         std::cout << "Loop Closure Status: " << std::boolalpha << status_good << std::noboolalpha << ";  LOOP: corr " <<  correspondences << "  variance:  " << variance << "  infor : " << info << std::endl;
@@ -116,18 +118,18 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
     if( last_spot_.get() )
     {
         customtype::TransformSE3 rel_transform = last_spot_->getPose().inverse()*data_spot_ptr->getPose();
-        customtype::PointCloudPtr cloud_src = slam_utils::convert3dPointsToCloud(last_spot_->getWorldPoints());
+        // customtype::PointCloudPtr cloud_src = slam_utils::convert3dPointsToCloud(last_spot_->getWorldPoints());
 
-        customtype::PointCloudPtr cloud_tgt = slam_utils::convert3dPointsToCloud(data_spot_ptr->getWorldPoints());
+        // customtype::PointCloudPtr cloud_tgt = slam_utils::convert3dPointsToCloud(data_spot_ptr->getWorldPoints());
 
         // std::cout << cloud_src->size() << " " << std::cout << cloud_tgt->size() << std::endl;
 
         bool has_converged = false;
         double odom_variance;
         int odom_correspondences;
-        slam_utils::computeVariance(cloud_src, cloud_tgt, rel_transform, 10.0, &has_converged, &odom_variance, &odom_correspondences);
+        // slam_utils::computeVariance(cloud_src, cloud_tgt, rel_transform, 10.0, &has_converged, &odom_variance, &odom_correspondences);
 
-        double info = 1.0/(odom_variance*10); //+ 2.0/data_spot_ptr->getId(); // before 1.0/(odom_variance*100);
+        double info = 1000/(odom_drift_); //+ 2.0/data_spot_ptr->getId(); // before 1.0/(odom_variance*100);
 
 
 
@@ -140,11 +142,14 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
         std::cout << "ODOM: corr " <<  odom_correspondences << " info " << info << std::endl;
 
         DataLink3D::DataLinkPtr link( new DataLink3D() );
-
+        link->inf_matrix_ = customtype::InformationMatrix3D::Identity();
+        // std::cout << link->inf_matrix_ << std::endl;
         // before was 100
         if( info > 0 && info < 1000000 ) link->inf_matrix_ *= info;
         else if (info > 1000000) link->inf_matrix_ *= 1000000;//0.5;
         else link->inf_matrix_ *= 10;//0.5;
+
+        // std::cout << "odometry infor matrix \n " << link->inf_matrix_ << std::endl;
 
         // before was 100
         // double odom_variance = 1;
@@ -162,6 +167,7 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
 
         last_spot_->addLink(link);
 
+        odom_drift_ += drift_rate_;
         // link->inf_matrix_; // Identity
 
 

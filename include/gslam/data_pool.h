@@ -59,6 +59,8 @@ private:
 
     bool require_optimization_flag_;
 
+    float odom_drift_, drift_rate_;
+
 };
 
 }

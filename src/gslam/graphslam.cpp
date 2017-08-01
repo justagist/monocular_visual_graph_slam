@@ -183,11 +183,11 @@ void GrSLAM::optmizeGraphThread(){
         std::cout << " new Pose " << " ------------------------------------ -------------------------\n" << optimized_pose.matrix() << std::endl;
         map_correction_ = (optimized_pose*old_pose.inverse())*map_correction_;
 
-        std::cout << "Map Correction: " << map_correction_.matrix() << std:: endl;
+        std::cout << "Map Correction: \n" << map_correction_.matrix() << std:: endl;
 
         // Send data back to main()
         //processed = true;
-        std::cout << "Worker thread signals data processing completed";//  \nPress return to continue\n";
+        std::cout << "Worker thread signals data processing completed\n";//  \nPress return to continue\n";
 
         // std::cin.get();
 

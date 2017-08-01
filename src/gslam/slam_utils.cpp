@@ -105,7 +105,7 @@ namespace slam_utils
 
 
         customtype::PointCloudPtr cloud_source_registered(new customtype::PointCloud()), clean_cloud_source_registered(new customtype::PointCloud());
-        std::cout << "TRANSFORM: \n" << rel_transform.inverse().matrix() << std::endl;
+        // std::cout << "TRANSFORM: \n" << rel_transform.inverse().matrix() << std::endl;
         pcl::transformPointCloud(*clean_src, *cloud_source_registered, rel_transform.inverse());
 
         clean_cloud_source_registered = getCleanCloud(cloud_source_registered);

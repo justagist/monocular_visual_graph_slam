@@ -307,6 +307,7 @@ void GraphOptimizer::optimizeGraph(int iter){
             currentIt += optimizer_.optimize(iter);//optimize 10 iterations per step
             optimizer_.computeActiveErrors();
             chi2 = optimizer_.chi2();
+            // std::cout << "prev_chi2 " << prev_chi2 << std::endl;
         } while(chi2/prev_chi2 < (1.0 - 0.01));//e.g.  999/1000 < (1.0 - 0.01) => 0.999 < 0.99
 
         //updateVertices();
