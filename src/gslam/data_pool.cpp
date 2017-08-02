@@ -61,7 +61,8 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
         std::cout << " Estimating Loop Closure Transform " <<std::endl;
         link->transform_ = transform_est_.estimateTransform(spot_src, data_spot_ptr, variance, correspondences, prop_matches, status_good, repeat_match_);
 
-        // link->transform_ = data_spot_ptr->getPose().inverse()*spot_src->getPose();
+
+        link->transform_ = data_spot_ptr->getPose().inverse()*spot_src->getPose();
         // --- Enforce 2D ---
         // float x,y,z,r,p,yaw;
         // slam_x_slam_utils::getTranslationAndEulerAngles(link->transform_, x, y, z, r, p , yaw);
@@ -103,13 +104,16 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
             float dist = (t1-t0).norm();
             std::cout <<"               DISTANCE:    " <<dist << std::endl;
 
-            // spot_src->addLink(link); // =======================
 
             // if (dist > 500)
-            // require_optimization_flag_ = true; // ==================== // TODO: add some condition to check if optimization is required.
+            char key = 'y';//cv::waitKey(0);
+            if (key == 'y')
+            {
+                spot_src->addLink(link); // =======================
+                require_optimization_flag_ = true; // ==================== // TODO: add some condition to check if optimization is required.
+            }
 
             std::cout << " LOOP ADDED ! NFar " << loop_count_far_ << " NNear " << loop_count_near_ << std::endl;
-            // cv::waitKey(1);
 
             // std::cout << "Press Return to continue\n " << std::endl;
             // std::cin.get();
@@ -121,19 +125,19 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
     if( last_spot_.get() )
     {
         customtype::TransformSE3 rel_transform = last_spot_->getPose().inverse()*data_spot_ptr->getPose();
-        customtype::PointCloudPtr cloud_src = slam_utils::convert3dPointsToCloud(last_spot_->getWorldPoints());
+        // customtype::PointCloudPtr cloud_src = slam_utils::convert3dPointsToCloud(last_spot_->getWorldPoints());
 
-        customtype::PointCloudPtr cloud_tgt = slam_utils::convert3dPointsToCloud(data_spot_ptr->getWorldPoints());
+        // customtype::PointCloudPtr cloud_tgt = slam_utils::convert3dPointsToCloud(data_spot_ptr->getWorldPoints());
 
         // std::cout << cloud_src->size() << " " << std::cout << cloud_tgt->size() << std::endl;
 
         bool has_converged = false;
         double odom_variance;
         int odom_correspondences;
-        slam_utils::computeVariance(cloud_src, cloud_tgt, rel_transform, 10.0, &has_converged, &odom_variance, &odom_correspondences);
+        // slam_utils::computeVariance(cloud_src, cloud_tgt, rel_transform, 10.0, &has_converged, &odom_variance, &odom_correspondences);
 
-        double info = 1000/(odom_variance);
-        // double info = 1000/(odom_drift_); //+ 2.0/data_spot_ptr->getId(); // before 1.0/(odom_variance*100);
+        // double info = 1000/(odom_variance);
+        double info = 1000/(odom_drift_); //+ 2.0/data_spot_ptr->getId(); // before 1.0/(odom_variance*100);
 
 
 
@@ -174,8 +178,8 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
 
         odom_drift_ += drift_rate_;
 
-        if (data_spot_ptr->getId()%10==0)
-            require_optimization_flag_ = true;
+        // if (data_spot_ptr->getId()%10==0)
+        //     require_optimization_flag_ = true;
         // link->inf_matrix_; // Identity
 
 

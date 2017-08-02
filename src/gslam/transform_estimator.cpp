@@ -37,7 +37,7 @@ namespace gSlam
         customtype::WorldPtsType src_wrldpts;
         customtype::WorldPtsType tgt_wrldpts;
 
-        if (repeat_match_counter_>30)
+        if (repeat_match_counter_>35)
             repeat_match_counter_ = 0;
 
         if (repeat_loop_match)

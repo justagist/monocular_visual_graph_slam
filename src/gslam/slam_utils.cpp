@@ -974,7 +974,7 @@ namespace slam_utils
         if (
             ((final_matches.size()>(0.18*float(imgpts1.size())) && final_matches.size()>(0.18*float(imgpts2.size()))) && (imgpts1.size()>200 && imgpts2.size()>200))
             // ||final_matches.size() > 100 
-            || (repeat_match_count >= 15)// && final_matches.size()>50)
+            || (repeat_match_count >= 30)// && final_matches.size()>50)
             // || (final_matches.size()>50 && (final_matches.size()>(0.2*float(imgpts1.size()))||(final_matches.size()>(0.2*float(imgpts1.size())) ) ))
            )
         {
@@ -985,10 +985,11 @@ namespace slam_utils
             // cv::Mat out_img2;
             // cv::drawKeypoints(image2, imgpts2, out_img2);
             // cv::imshow("window2", out_img2);
+            // cv::drawMatches
             // cv::waitKey(0);
             good_match = true;
-            cv::drawMatches(image1,imgpts1, image2, imgpts2, final_matches, out_match);
-            cv::imshow("loop closure matches",out_match);
+            // cv::drawMatches(image1,imgpts1, image2, imgpts2, final_matches, out_match);
+            // cv::imshow("loop closure matches",out_match);
             // cv::waitKey(0);
             for (std::vector<cv::DMatch>::
                      const_iterator it= final_matches.begin();

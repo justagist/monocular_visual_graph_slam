@@ -26,6 +26,7 @@ def main(arguments):
     # ax = fig.add_subplot(2,1,2, projection='3d')
     ax.plot(x1,y1,z1, label= 'trajectory 2')
     ax.scatter(x1[0],y1[0],z1[0],c='r',marker='x',s=500)
+    ax.scatter(x1[len(x1)-1],y1[len(y1)-1],z1[len(z1)-1],c='r',marker='x',s=300)
     ax.legend()
 
     
