@@ -75,7 +75,7 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
         // if( info > 0 && info < 1000000) link->inf_matrix_ *= info*1;
         // else link->inf_matrix_ *= 1;//0.5*(1+prop_matches)*2;
 
-        link->inf_matrix_ *= info; // =========================
+        link->inf_matrix_ *= info; 
 
         // std::cout << "info matrix loop closure \n" << link->inf_matrix_ << std::endl;
         link->active = true;
@@ -86,7 +86,7 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
 
             // std::cout << link->transform_.matrix() << std::endl;
             // std::cin.get();
-            bool valid = true;
+            // bool valid = true;
             if( (new_id - loop_id) > 400 ) // FAR LOOP
             {
                 loop_count_far_++;
@@ -103,10 +103,10 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
             float dist = (t1-t0).norm();
             std::cout <<"               DISTANCE:    " <<dist << std::endl;
 
-            spot_src->addLink(link);
+            // spot_src->addLink(link); // =======================
 
             // if (dist > 500)
-            require_optimization_flag_ = true; // TODO: add some condition to check if optimization is required.
+            // require_optimization_flag_ = true; // ==================== // TODO: add some condition to check if optimization is required.
 
             std::cout << " LOOP ADDED ! NFar " << loop_count_far_ << " NNear " << loop_count_near_ << std::endl;
             // cv::waitKey(1);
@@ -132,7 +132,7 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
         int odom_correspondences;
         // slam_utils::computeVariance(cloud_src, cloud_tgt, rel_transform, 10.0, &has_converged, &odom_variance, &odom_correspondences);
 
-        double info = 100/(odom_drift_); //+ 2.0/data_spot_ptr->getId(); // before 1.0/(odom_variance*100);
+        double info = 1000/(odom_drift_); //+ 2.0/data_spot_ptr->getId(); // before 1.0/(odom_variance*100);
 
 
 
@@ -152,7 +152,8 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
         else if (info > 1000000) link->inf_matrix_ *= 1000000;//0.5;
         else link->inf_matrix_ *= 10;//0.5;
 
-        // std::cout << "odometry infor matrix \n " << link->inf_matrix_ << std::endl;
+        
+        std::cout << "odometry infor matrix \n " << link->inf_matrix_ << std::endl;
 
         // before was 100
         // double odom_variance = 1;
@@ -172,7 +173,7 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
 
         odom_drift_ += drift_rate_;
 
-        if (data_spot_ptr->getId()%50==0)
+        if (data_spot_ptr->getId()%10==0)
             require_optimization_flag_ = true;
         // link->inf_matrix_; // Identity
 

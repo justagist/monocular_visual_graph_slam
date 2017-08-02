@@ -12,7 +12,7 @@ namespace vo = visual_odometry;
 bool visualize_flag = false;
 bool ros_flag = false;
 int vis_odo_baseline = 100;
-int ismar_baselines[] = {175, 50, 80, 100, 100, 100, 75, 75, 175 /*150*/,150 /*100 is probably better for loop closure*/ /*150*/ /*175*/,75 /*135*/ /*150*/};
+int ismar_baselines[] = {175, 50, 80, 100, 100, 100, 75, 75, 175 /*150*/,150 /*100 is probably better for loop closure*/ /*175*/,75 /*135*/ /*150*/};
 bool write_file = false;
 bool optimise_graph = false;
 int main(int argc, char** argv)
@@ -57,7 +57,8 @@ int main(int argc, char** argv)
         }
         if (argc > 6)
         {
-            vis_odo_baseline = atoi(argv[6]);
+            if (atoi(argv[6])!=0)
+                vis_odo_baseline = atoi(argv[6]);
         }
         std::cout << "Writing Trajectory: " << std::boolalpha << write_file << std::noboolalpha << std::endl;
         std::cout << "Running g2o graph optimisation: " << std::boolalpha << optimise_graph << std::noboolalpha << std::endl;
@@ -241,15 +242,21 @@ int main(int argc, char** argv)
 
     if (write_file)
     {
-        std::stringstream traj_name;
+        std::stringstream traj_file;
+        std::string traj_name;
         if (optimise_graph)
-            traj_name << "/home/saif/test_ws/src/graph_slam/estimated_trajectories/optimised_trajectory" << SCENE << ".txt";
-        else traj_name << "/home/saif/test_ws/src/graph_slam/estimated_trajectories/trajectory" << SCENE << ".txt";
+            traj_name = "optimised_trajectory";
+        else traj_name = "trajectory";
+
+        if (argc > 7)
+            traj_name = argv[7];
+
+        traj_file << "/home/saif/test_ws/src/graph_slam/estimated_trajectories/" << traj_name << SCENE <<".txt";
 
         if (slam->getDataPool().getDataSpots().size() > 1)
         {
-            slam->saveTrajectory(traj_name.str());
-            std::cout << "Wrote trajectory to file: " << traj_name.str() << std::endl;
+            slam->saveTrajectory(traj_file.str());
+            std::cout << "Wrote trajectory to file: " << traj_file.str() << std::endl;
         }
         else std::cout << "No poses were found! Trajectory file not written." << std::endl;
     }
