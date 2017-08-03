@@ -11,6 +11,7 @@ DataPool::DataPool() : loop_count_far_(0), loop_count_near_(0), repeat_match_ (f
 void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
 
 {
+    static bool parameters_defined = false;
     // std::cout << " Adding data spot " << std::endl;
 
     // std::cout << " checking loop closure " << std::endl;
@@ -44,6 +45,8 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
 
 
     prev_loop_id_ = loop_id; 
+    float loop_info_numer = 1;
+    float loop_info_denom = 1;
     if( loop_id >= 0 && new_id > 0 && (new_id - loop_id) > 50) 
     {
         std::cout << "Possible loop closure : " << new_id << "->" << loop_id << std::endl;
@@ -62,7 +65,7 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
         link->transform_ = transform_est_.estimateTransform(spot_src, data_spot_ptr, variance, correspondences, prop_matches, status_good, repeat_match_);
 
 
-        link->transform_ = data_spot_ptr->getPose().inverse()*spot_src->getPose();
+        // link->transform_ = data_spot_ptr->getPose().inverse()*spot_src->getPose();
         // --- Enforce 2D ---
         // float x,y,z,r,p,yaw;
         // slam_x_slam_utils::getTranslationAndEulerAngles(link->transform_, x, y, z, r, p , yaw);
@@ -70,7 +73,7 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
 
         if (variance == 0)
             variance = 1.0;
-        double info = 1.00/(variance); // before 1.0/(variance*100);
+        double info = (1*loop_info_numer)/(variance*loop_info_denom); // before 1.0/(variance*100);
 
         // info before was 100
         // if( info > 0 && info < 1000000) link->inf_matrix_ *= info*1;
@@ -106,7 +109,8 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
 
 
             // if (dist > 500)
-            char key = 'y';//cv::waitKey(0);
+            char key = cv::waitKey(0);
+            // char key = 'y';
             if (key == 'y')
             {
                 spot_src->addLink(link); // =======================
@@ -122,6 +126,8 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
 
     // std::cout << " Adding odometry " << std::endl;
     // Odometry constraint
+    float odom_info_numer = 1004.00;
+    float odom_info_denom = 1;
     if( last_spot_.get() )
     {
         customtype::TransformSE3 rel_transform = last_spot_->getPose().inverse()*data_spot_ptr->getPose();
@@ -130,14 +136,13 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
         // customtype::PointCloudPtr cloud_tgt = slam_utils::convert3dPointsToCloud(data_spot_ptr->getWorldPoints());
 
         // std::cout << cloud_src->size() << " " << std::cout << cloud_tgt->size() << std::endl;
-
         bool has_converged = false;
         double odom_variance;
         int odom_correspondences;
         // slam_utils::computeVariance(cloud_src, cloud_tgt, rel_transform, 10.0, &has_converged, &odom_variance, &odom_correspondences);
 
         // double info = 1000/(odom_variance);
-        double info = 1000/(odom_drift_); //+ 2.0/data_spot_ptr->getId(); // before 1.0/(odom_variance*100);
+        double info = (1*odom_info_numer)/(odom_drift_*odom_info_denom); //+ 2.0/data_spot_ptr->getId(); // before 1.0/(odom_variance*100);
 
 
 
@@ -182,8 +187,19 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
         //     require_optimization_flag_ = true;
         // link->inf_matrix_; // Identity
 
-
     } // odometry constriant -- if()
+
+    if (!parameters_defined) // recording all parameters in info object
+    {
+        // Parameters::loopclosure_info_const1 = loop_info_numer;
+        // Parameters::loopclosure_info_const2 = loop_info_denom;
+        // Parameters::odometry_info_const1 = odom_info_numer;
+        // Parameters::odometry_info_const2 = odom_info_denom;
+        parameters_defined = true;
+    }
+
+    // std::cout << "HERE " << gSlam::Parameters::SLAMinfo::dataset_id_ << " " /*<< gSlam::Parameters::odometry_info_const1*/ << std::endl;
+
 
     data_spots_.insert(data_spots_.end(), std::make_pair(data_spot_ptr->getId(),data_spot_ptr));
     last_spot_ = data_spot_ptr;

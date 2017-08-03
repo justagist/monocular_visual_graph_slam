@@ -1,7 +1,7 @@
 #ifndef __SLAM_UTILS__
 #define __SLAM_UTILS__
 
-#include "gslam/typedefs.h"
+// #include "gslam/typedefs.h"
 #include <pcl/registration/icp.h>
 #include <pcl/registration/transformation_estimation_2D.h>
 #include <pcl/sample_consensus/sac_model_registration.h>

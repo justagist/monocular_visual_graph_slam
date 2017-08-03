@@ -127,6 +127,8 @@ void GrSLAM::saveTrajectory(const std::string& filename){
 
     }
 
+    // output << 
+
     output.close();
 
     delete lock;

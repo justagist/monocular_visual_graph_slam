@@ -10,6 +10,8 @@
 #include <condition_variable>
 #include "STAM.h"
 #include <assert.h>
+// #include "gslam/parameters.h"
+
 // #include <iostream>
 
 namespace gSlam
@@ -42,6 +44,7 @@ namespace customtype
 
     typedef std::vector<cv::KeyPoint> KeyPoints; // vector of 2d image points in a frame
     typedef std::vector<cv::Point3f> WorldPtsType;
+
     // typedef std::vector<cv::KeyPoint
 } // namespace customtype
 

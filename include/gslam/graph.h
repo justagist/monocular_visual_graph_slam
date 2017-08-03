@@ -4,7 +4,7 @@
 #define _GSLAM_GRAPH_
 
 #include <map>
-#include <gslam/typedefs.h>
+// #include <gslam/typedefs.h>
 #include <gslam/data_spot.h>
 
 #include "g2o/core/sparse_optimizer.h"

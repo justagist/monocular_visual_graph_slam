@@ -1,7 +1,7 @@
 #ifndef __GRAPH_SLAM__
 #define __GRAPH_SLAM__
 
-#include "gslam/typedefs.h"
+// #include "gslam/typedefs.h"
 #include "gslam/data_spot.h"
 #include "gslam/data_pool.h"
 #include "gslam/graph.h"
@@ -36,6 +36,7 @@ public:
     customtype::Mutex& getMutex() { return mutex_graph_; }
     DataPool& getDataPool() { return data_pool_; }
 
+    // customtype::SLAMinfo& getInfo(){return details_;}
     // Gets map correction atomically
     customtype::TransformSE3 getMapCorrection() {
         mutex_graph_.lock();
@@ -53,13 +54,17 @@ private:
     customtype::Mutex mutex_graph_;
     customtype::CondVar cond_var_;
 
+    // customtype::SLAMinfo details_;
+
     DataPool data_pool_;
 
     GraphOptimizer pose_graph_;
 
     std::thread optimize_graph_thread_;
 
+
 };// class GrSLAM
+
 
 }//namespace gSlam
 

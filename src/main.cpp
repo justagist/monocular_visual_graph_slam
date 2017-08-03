@@ -3,7 +3,7 @@
 #include <fstream>
 #include "gslam/ros_utils.h"
 #include "gslam/graphslam.h"
-
+// #include "gslam/parameters.h"
 // #include <Eigen/Geometry>
 // #include <Eigen/Dense>
 // #include <opencv2/core/eigen.hpp>
@@ -12,7 +12,7 @@ namespace vo = visual_odometry;
 bool visualize_flag = false;
 bool ros_flag = false;
 int vis_odo_baseline = 100;
-int ismar_baselines[] = {175, 50, 80, 100, 100, 100, 75, 75, 175 /*150*/,150 /*100 is probably better for loop closure*/ /*175*/,75 /*135*/ /*150*/};
+int ismar_baselines[] = {175, 50, 80, 100, 100, 100, 75, 75, 175 /*150*/,100 /*100*/ /*100 is probably better for loop closure*/ /*175*/,75 /*135*/ /*150*/};
 bool write_file = false;
 bool optimise_graph = false;
 int main(int argc, char** argv)
@@ -66,6 +66,7 @@ int main(int argc, char** argv)
 
     }
 
+
     std::string next_frame_format[] = {"/home/saif/msc_workspace/slam_test_bag_dataset/ismar/S01_INPUT/S01L03_VGA/S01L03_VGA_%04d.png", "/home/saif/msc_workspace/slam_test_bag_dataset/ismar/S02_INPUT/S02L03_VGA/S02L03_VGA_%04d.png", "/home/saif/msc_workspace/slam_test_bag_dataset/ismar/S03_INPUT/S03L03_VGA/S03L03_VGA_%04d.png", "/home/saif/msc_workspace/slam_test_bag_dataset/datasets_12_07_17/frontb1/data/image_%04d.png", "/home/saif/msc_workspace/slam_test_bag_dataset/datasets_12_07_17/frontb2/data/image_%04d.png", "/home/saif/msc_workspace/slam_test_bag_dataset/datasets_17_07_17/ardrone_front_square1/data/image_%04d.png", "/home/saif/msc_workspace/slam_test_bag_dataset/datasets_17_07_17/ardrone_front_square2/data/image_%04d.png", "/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_line_19_07_17/data/image_%04d.png", "/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_checkerboard_22_07_17/ardrone_checkerboard_1/data/image_%04d.png", "/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_checkerboard_22_07_17/ardrone_checkerboard_2/data/image_%04d.png", "/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_checkerboard_22_07_17/ardrone_checkerboard_3/data/image_%04d.png"};
     std::string intrinsics_file[] = {"/home/saif/msc_workspace/slam_test_bag_dataset/ismar/S01_INPUT/intrinsicsS01.xml", "/home/saif/msc_workspace/slam_test_bag_dataset/ismar/S02_INPUT/intrinsicsS02.xml", "/home/saif/msc_workspace/slam_test_bag_dataset/ismar/S03_INPUT/intrinsicsS03.xml", "/home/saif/msc_workspace/slam_test_bag_dataset/datasets_12_07_17/frontb1/intrinsics.xml", "/home/saif/msc_workspace/slam_test_bag_dataset/datasets_12_07_17/frontb2/intrinsics.xml", "/home/saif/msc_workspace/slam_test_bag_dataset/datasets_17_07_17/ardrone_front_square1/intrinsics.xml", "/home/saif/msc_workspace/slam_test_bag_dataset/datasets_17_07_17/ardrone_front_square2/intrinsics.xml","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_line_19_07_17/intrinsics.xml","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_checkerboard_22_07_17/ardrone_checkerboard_1/intrinsics.xml","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_checkerboard_22_07_17/ardrone_checkerboard_2/intrinsics.xml","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_checkerboard_22_07_17/ardrone_checkerboard_3/intrinsics.xml"};
     std::string points3d_init_file[] = {"/home/saif/msc_workspace/slam_test_bag_dataset/ismar/S01_INPUT/S01_3Ddata_dst_init.csv", "/home/saif/msc_workspace/slam_test_bag_dataset/ismar/S02_INPUT/S02_3Ddata_dst_init.csv", "/home/saif/msc_workspace/slam_test_bag_dataset/ismar/S03_INPUT/S03_3Ddata_dst_init.csv","/home/saif/msc_workspace/slam_test_bag_dataset/datasets_12_07_17/frontb1/3dpoints.csv", "/home/saif/msc_workspace/slam_test_bag_dataset/datasets_12_07_17/frontb2/3dpoints.csv","/home/saif/msc_workspace/slam_test_bag_dataset/datasets_17_07_17/ardrone_front_square1/init_3Ddata.csv", "/home/saif/msc_workspace/slam_test_bag_dataset/datasets_17_07_17/ardrone_front_square2/init_3Ddata.csv", "/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_line_19_07_17/init_3Ddata.csv","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_checkerboard_22_07_17/ardrone_checkerboard_1/init_3Ddata.csv","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_checkerboard_22_07_17/ardrone_checkerboard_2/init_3Ddata.csv","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_checkerboard_22_07_17/ardrone_checkerboard_3/init_3Ddata.csv"};
@@ -118,6 +119,28 @@ int main(int argc, char** argv)
     // std::cout << frame_aligner.matrix() << std::endl;
     // ==============================================================================================================
     gSlam::GrSLAM::Ptr slam(new gSlam::GrSLAM());
+
+    // gSlam::Parameters::SLAMinfo::SLAMinfoPtr info(new gSlam::Parameters::SLAMinfo);
+    {
+    using namespace gSlam;
+        {
+        using namespace Parameters;
+            int SLAMinfo::dataset_id_;// = SCENE;
+        };
+
+    };
+
+    // gSlam::Parameters::SLAMinfo::dataset_id_ = SCENE;
+
+    // gSlam::Parameters::visual_odometry_baseline_ = vis_odo_baseline;
+    // gSlam::Parameters::optimisation_thread_on_ = optimise_graph;
+
+    // std::cout << " baseline " << gSlam::Constants::info.getBaseline() << std::endl;
+    // slam->info.setBaseline(vis_odo_baseline);
+
+    // const int gSlam::Constants::SLAMinfo.baseline = 5;
+    // gSlam::Constants::baseline = 5;
+
     if (optimise_graph)
         slam->init();
 
@@ -127,6 +150,7 @@ int main(int argc, char** argv)
         try
         {
             // break; // ++++++++++++
+
             ros::spinOnce();               // check for incoming messages
             current_time = ros::Time::now();
 
@@ -260,6 +284,7 @@ int main(int argc, char** argv)
         }
         else std::cout << "No poses were found! Trajectory file not written." << std::endl;
     }
+    // std::cout << gSlam::Parameters::visual_odometry_baseline_ << std::endl << gSlam::Parameters::odometry_info_const1 << std::endl;
     printf("EXITING\n");
 
     return 0;

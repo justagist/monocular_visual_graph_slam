@@ -11,14 +11,24 @@ def main(arguments):
     ax = fig.add_subplot(1,1,1, projection='3d')
     with open(str(arguments[0])) as f:
         lines = f.readlines()
+
+        if lines[len(lines)-1].split()[0] == 'info::':
+            print "trajectory 1:", lines[len(lines)-1]
+            lines = lines[:-1]
+
         x = [float(line.split()[1]) for line in lines]
         y = [float(line.split()[2]) for line in lines]
         z = [float(line.split()[3]) for line in lines]
-    # print x
-    ax.plot(x, y, z,label = 'trajectory 1')
-    ax.scatter(x[0],y[0],z[0],c='g',marker='x',s=500)
+    # # print x
+    # ax.plot(x, y, z,label = 'trajectory 1')
+    # ax.scatter(x[0],y[0],z[0],c='g',marker='x',s=500)
     with open(str(arguments[1])) as g:
         glines = g.readlines()
+
+        if glines[len(glines)-1].split()[0] == 'info::':
+            print "trajectory 2:", glines[len(lines)-1]
+            glines = glines[:-1]
+
         x1 = [float(line.split()[1]) for line in glines]
         y1 = [float(line.split()[2]) for line in glines]
         z1 = [float(line.split()[3]) for line in glines]
@@ -40,7 +50,7 @@ def main(arguments):
     # ax.invert_xaxis()
 
 
-    plt.show()
+    # plt.show()
 
 
 if __name__ == "__main__":
