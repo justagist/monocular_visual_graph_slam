@@ -615,7 +615,29 @@ namespace slam_utils
     std::string getSlamParameterInfo(SlamParameters::SLAMinfo::SLAMinfoPtr info)
     {
         std::string scene_info = "Scene No: " + std::to_string(info->dataset_id_);
-        std::string optimisation_status = "Graph Optimization: " + (info->optimisation_thread_on_)?"ON":"OFF";
+        std::string frames = "Frames Processed: " + std::to_string(info->frames_processed_);
+        std::string exit_status = (info->process_success_)?" STAM Success":" STAM failed due to correspondence loss";
+
+        std::string baseline = "VO Triangulation Baseline: " + std::to_string(info->visual_odometry_baseline_);
+
+        std::string optimisation = (info->optimisation_thread_on_==true)?"ON":"OFF";
+
+        std::string loop_closure_info = "Loop Closure Constraint Info = (1*"+std::to_string(info->loopclosure_constraint.const1_)+")/(variance*"+std::to_string(info->loopclosure_constraint.const2_)+")";
+        std::string odometry_constraint_info = "Odometry Constraint Info = (1*"+std::to_string(info->odometry_constraint.const1_)+")/(variance*"+std::to_string(info->odometry_constraint.const2_)+")";
+
+        std::string matcher = "Repeated Matches Required: min " + std::to_string(info->matcher_min_repetition_)+ ", max " + std::to_string(info->matcher_max_repetition_);
+
+        std::string icp = "Loop Closure Transformation ICP Parameters:-";
+        if (info->transform_est_icp_.parameters_defined_)
+            icp += "\n  --Inlier Threshold: "+std::to_string(info->transform_est_icp_.inlier_threshold_)+"; Max Iterations: " + std::to_string(info->transform_est_icp_.max_iterations_)+ "; Refinement Sigma: " + std::to_string(info->transform_est_icp_.refine_sigma_)+ "; Max Refinement Iterations: " + std::to_string(info->transform_est_icp_.refine_max_iterations_);
+        else icp += " No Loop Closures were detected.";
+
+        std::string fabmap = "FabMap Modifiers:- First Image Frame: " + std::to_string(info->fabmap.first_bow_img_) + "; Frames Skipped: " + std::to_string(info->fabmap.skip_);
+
+        // std::cout << optimisation << std::endl;
+        std::string ret_val = "-"+scene_info + "; " + "; " + frames + "; " + exit_status + "\n" + "-"+ baseline + "; Graph Optimization: " +  optimisation + "\n" + "-"+ loop_closure_info + "\n" + "-"+ odometry_constraint_info + "\n" + "-"+ fabmap + "\n" + "-"+ matcher + "\n" + "-"+ icp;
+
+        return ret_val;
     }
 
 

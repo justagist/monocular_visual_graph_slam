@@ -12,13 +12,13 @@ def main(arguments):
     with open(str(arguments[0])) as f:
         lines = f.readlines()
 
-        if lines[len(lines)-1].split()[0] == 'info::':
+        if lines[len(lines)-1].split()[0] == '***':
             print "trajectory 1:", lines[len(lines)-1]
             lines = lines[:-1]
 
-        x = [float(line.split()[1]) for line in lines]
-        y = [float(line.split()[2]) for line in lines]
-        z = [float(line.split()[3]) for line in lines]
+        # x = [float(line.split()[1]) for line in lines]
+        # y = [float(line.split()[2]) for line in lines]
+        # z = [float(line.split()[3]) for line in lines]
     # # print x
     # ax.plot(x, y, z,label = 'trajectory 1')
     # ax.scatter(x[0],y[0],z[0],c='g',marker='x',s=500)
@@ -29,15 +29,15 @@ def main(arguments):
             print "trajectory 2:", glines[len(lines)-1]
             glines = glines[:-1]
 
-        x1 = [float(line.split()[1]) for line in glines]
-        y1 = [float(line.split()[2]) for line in glines]
-        z1 = [float(line.split()[3]) for line in glines]
-    # print x1
-    # ax = fig.add_subplot(2,1,2, projection='3d')
-    ax.plot(x1,y1,z1, label= 'trajectory 2')
-    ax.scatter(x1[0],y1[0],z1[0],c='r',marker='x',s=500)
-    ax.scatter(x1[len(x1)-1],y1[len(y1)-1],z1[len(z1)-1],c='r',marker='x',s=300)
-    ax.legend()
+    #     x1 = [float(line.split()[1]) for line in glines]
+    #     y1 = [float(line.split()[2]) for line in glines]
+    #     z1 = [float(line.split()[3]) for line in glines]
+    # # print x1
+    # # ax = fig.add_subplot(2,1,2, projection='3d')
+    # ax.plot(x1,y1,z1, label= 'trajectory 2')
+    # ax.scatter(x1[0],y1[0],z1[0],c='r',marker='x',s=500)
+    # ax.scatter(x1[len(x1)-1],y1[len(y1)-1],z1[len(z1)-1],c='r',marker='x',s=300)
+    # ax.legend()
 
     
     # ax.set_xlabel('z')

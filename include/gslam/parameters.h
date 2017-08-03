@@ -37,6 +37,9 @@ namespace SlamParameters
 
         typedef boost::shared_ptr<SLAMinfo> SLAMinfoPtr;
 
+        int frames_processed_;
+        bool process_success_;
+
         int matcher_min_repetition_; // minimum times fabmap should detect the same frame consecutively as a loop closure to accept as true loop closure in DataSpotMatcher::findMatchingWorldPoints()
         int matcher_max_repetition_; // maximum repetition after which the counter is restarted
 

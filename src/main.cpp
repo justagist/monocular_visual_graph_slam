@@ -129,7 +129,8 @@ int main(int argc, char** argv)
     else std::cout << "NO DEFINITION" << std::endl;
 
     gSlam::SlamParameters::info->optimisation_thread_on_ = optimise_graph;
-    gSlam::SlamParameters::info->dataset_id_ = 5;
+    gSlam::SlamParameters::info->dataset_id_ = SCENE;
+    gSlam::SlamParameters::info->visual_odometry_baseline_ = vis_odo_baseline;
     // {
     // using namespace gSlam;
     //     {
@@ -152,6 +153,10 @@ int main(int argc, char** argv)
 
     if (optimise_graph)
         slam->init();
+
+    int frame_no = 0;
+
+    bool exit_safe = true;
 
     while( !(frame = video_source.readNextFrame(next_frame_format[SCENE-1])).empty() && rosNode.ok())
 
@@ -259,12 +264,15 @@ int main(int argc, char** argv)
 
             last_time = current_time;
             r.sleep();
+
+            frame_no++;
             // if (i==2)
             // break;
         }
         catch (const cv::Exception& e)
         {
             std::cout << "STAM failed due to correspondence loss. Try reducing triangulation baseline.\n STOPPING SLAM due to Visual Odometry failure... " << std::endl;
+            exit_safe = false;
             break;
         }
 
@@ -272,6 +280,9 @@ int main(int argc, char** argv)
 
     // vOdom.optimise();
     // vOdom.dump();
+
+    gSlam::SlamParameters::info->frames_processed_ = frame_no;
+    gSlam::SlamParameters::info->process_success_ = exit_safe;
 
     if (write_file)
     {
@@ -293,7 +304,10 @@ int main(int argc, char** argv)
         }
         else std::cout << "No poses were found! Trajectory file not written." << std::endl;
     }
-    std::cout << gSlam::SlamParameters::info->loopclosure_constraint.const1_ << " " <<gSlam::SlamParameters::info->odometry_constraint.const2_ << " " << gSlam::SlamParameters::info->fabmap.first_bow_img_ << " " << gSlam::SlamParameters::info->matcher_min_repetition_ << " " << gSlam::SlamParameters::info->transform_est_icp_.parameters_defined_ <<  std::endl;
+    // std::cout << gSlam::SlamParameters::info->loopclosure_constraint.const1_ << " " <<gSlam::SlamParameters::info->odometry_constraint.const2_ << " " << gSlam::SlamParameters::info->fabmap.first_bow_img_ << " " << gSlam::SlamParameters::info->matcher_min_repetition_ << " " << gSlam::SlamParameters::info->transform_est_icp_.parameters_defined_ << " " << gSlam::SlamParameters::info->optimisation_thread_on_ <<std::endl;
+
+    // std::cout << gSlam::slam_utils::getSlamParameterInfo(gSlam::SlamParameters::info) << std::endl;
+
     printf("EXITING\n");
 
     return 0;
