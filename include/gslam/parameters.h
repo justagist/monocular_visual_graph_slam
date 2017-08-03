@@ -6,31 +6,52 @@
 namespace gSlam
 {
 
-namespace Parameters
+namespace SlamParameters
 {
     class SLAMinfo
     {
 
+    private:
+
+        struct FabmapConstants
+        {
+            unsigned int first_bow_img_;
+            unsigned int skip_;
+        };
+
+        struct InformationMatrixConstants
+        {
+            float const1_, const2_; // the two constants in the formula for calculating information of odometry constraint: (1*a)/(drift*b)
+                              // the two constants in the formula for calculating information of loop closure constraint: (1*a)/ (variance*b) 
+        };
+
+        struct icpParameters
+        {
+            double inlier_threshold_, refine_sigma_;
+            int max_iterations_, refine_max_iterations_;
+            bool parameters_defined_ = false;
+        };
+        
+
     public:
 
-    //     SLAMinfo(): dataset_id_(0), visual_odometry_baseline_(0), optimisation_thread_on_(false), odometry_info_const1(0), odometry_info_const2(0), loopclosure_info_const1(0), loopclosure_info_const2(0){}
-        // ~SLAMinfo()
+        typedef boost::shared_ptr<SLAMinfo> SLAMinfoPtr;
 
-        // typedef boost::shared_ptr<SLAMinfo> SLAMinfoPtr;
+        int matcher_min_repetition_; // minimum times fabmap should detect the same frame consecutively as a loop closure to accept as true loop closure in DataSpotMatcher::findMatchingWorldPoints()
+        int matcher_max_repetition_; // maximum repetition after which the counter is restarted
+
 
         int dataset_id_; // dataset used
 
-        // int visual_odometry_baseline_; // triangulation baseline used in STAM visual odometry
+        int visual_odometry_baseline_; // triangulation baseline used in STAM visual odometry
 
-        // bool optimisation_thread_on_; // whether optimisation thread was activated
+        bool optimisation_thread_on_; // whether optimisation thread was activated
 
-        // float odometry_info_const1, odometry_info_const2; // the two constants in the formula for calculating information of odometry constraint: (1*a)/(drift*b)
+        InformationMatrixConstants loopclosure_constraint, odometry_constraint;
+        
+        FabmapConstants fabmap;
 
-        // float loopclosure_info_const1, loopclosure_info_const2; // the two constants in the formula for calculating information of loop closure constraint: (1*a)/(variance*b)
-
-
-
-
+        icpParameters transform_est_icp_;
 
     }; // class SLAMinfo
 
@@ -38,7 +59,7 @@ namespace Parameters
 
     // static gSlam::Parameters::SLAMinfo::SLAMinfoPtr info(new gSlam::Parameters::SLAMinfo());
     // static gSlam::Parameters::SLAMinfo info;
-    extern SLAMinfo info;
+    extern SLAMinfo::SLAMinfoPtr info;
 
 } // namespace Constants
 

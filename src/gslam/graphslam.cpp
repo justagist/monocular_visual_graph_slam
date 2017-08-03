@@ -127,6 +127,9 @@ void GrSLAM::saveTrajectory(const std::string& filename){
 
     }
 
+    // output << "info:: " << 
+    std::string info_line = slam_utils::getSlamParameterInfo(SlamParameters::info);
+
     // output << 
 
     output.close();

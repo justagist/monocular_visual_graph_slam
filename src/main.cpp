@@ -16,7 +16,7 @@ int ismar_baselines[] = {175, 50, 80, 100, 100, 100, 75, 75, 175 /*150*/,100 /*1
 bool write_file = false;
 bool optimise_graph = false;
 
-namespace gSlam{ namespace Parameters { SLAMinfo info; } }
+namespace gSlam{ namespace SlamParameters { SLAMinfo::SLAMinfoPtr info(new SLAMinfo); } }
 
 
 int main(int argc, char** argv)
@@ -124,21 +124,25 @@ int main(int argc, char** argv)
     // ==============================================================================================================
     gSlam::GrSLAM::Ptr slam(new gSlam::GrSLAM());
 
-    // gSlam::Parameters::SLAMinfo::SLAMinfoPtr info(new gSlam::Parameters::SLAMinfo);
-    gSlam::Parameters::info.dataset_id_ = 5;
+    if (gSlam::SlamParameters::info)
+        std::cout << "RECORDING SLAM PARAMETERS TO info OBJECT" << std::endl;
+    else std::cout << "NO DEFINITION" << std::endl;
+
+    gSlam::SlamParameters::info->optimisation_thread_on_ = optimise_graph;
+    gSlam::SlamParameters::info->dataset_id_ = 5;
     // {
     // using namespace gSlam;
     //     {
-    //     using namespace Parameters;
+    //     using namespace SlamParameters;
     //         int SLAMinfo::dataset_id_;// = SCENE;
     //     };
 
     // };
 
-    // gSlam::Parameters::SLAMinfo::dataset_id_ = SCENE;
+    // gSlam::SlamParameters::SLAMinfo::dataset_id_ = SCENE;
 
-    // gSlam::Parameters::visual_odometry_baseline_ = vis_odo_baseline;
-    // gSlam::Parameters::optimisation_thread_on_ = optimise_graph;
+    // gSlam::SlamParameters::visual_odometry_baseline_ = vis_odo_baseline;
+    // gSlam::SlamParameters::optimisation_thread_on_ = optimise_graph;
 
     // std::cout << " baseline " << gSlam::Constants::info.getBaseline() << std::endl;
     // slam->info.setBaseline(vis_odo_baseline);
@@ -280,7 +284,7 @@ int main(int argc, char** argv)
         if (argc > 7)
             traj_name = argv[7];
 
-        traj_file << "/home/saif/test_ws/src/graph_slam/estimated_trajectories/" << traj_name << SCENE <<".txt";
+        traj_file << "/home/saif/test_ws/src/graph_slam/estimated_trajectories/" << traj_name << "_" << SCENE <<".txt";
 
         if (slam->getDataPool().getDataSpots().size() > 1)
         {
@@ -289,7 +293,7 @@ int main(int argc, char** argv)
         }
         else std::cout << "No poses were found! Trajectory file not written." << std::endl;
     }
-    // std::cout << gSlam::Parameters::visual_odometry_baseline_ << std::endl << gSlam::Parameters::odometry_info_const1 << std::endl;
+    std::cout << gSlam::SlamParameters::info->loopclosure_constraint.const1_ << " " <<gSlam::SlamParameters::info->odometry_constraint.const2_ << " " << gSlam::SlamParameters::info->fabmap.first_bow_img_ << " " << gSlam::SlamParameters::info->matcher_min_repetition_ << " " << gSlam::SlamParameters::info->transform_est_icp_.parameters_defined_ <<  std::endl;
     printf("EXITING\n");
 
     return 0;

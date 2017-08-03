@@ -91,6 +91,8 @@ namespace slam_utils
                         double * variance,
                         int * correspondencesOut);
 
+    std::string getSlamParameterInfo(SlamParameters::SLAMinfo::SLAMinfoPtr info);
+
 
 
     // DATASPOT MATCHER CLASS
@@ -99,7 +101,7 @@ namespace slam_utils
     public:
 
         DataSpotMatcher() : ratio_(0.65f), refineF_(true),
-            confidence_(0.99), distance_(2.0) // confidence before 0.99, distance before was 3.0
+            confidence_(0.99), distance_(2.0), min_repeat_match_count_(20) // confidence before 0.99, distance before was 3.0
         {
             // SURF is the default feature
 
@@ -113,10 +115,12 @@ namespace slam_utils
             // extractor_ = new cv::SURF(1000, 4, 7, true, false);//new cv::SurfDescriptorExtractor();
             // extractor_ = new cv::SIFT(0,3,0.04,10,1.6);
             extractor_ = new cv::SurfDescriptorExtractor(1000, 4, 2, true, true);
+
+            SlamParameters::info->matcher_min_repetition_ = min_repeat_match_count_;
         }
 
         DataSpotMatcher(float ratio, double confidence, double distance, bool refineF = true) : ratio_(ratio), refineF_(refineF),
-            confidence_(confidence), distance_(distance) 
+            confidence_(confidence), distance_(distance), min_repeat_match_count_(20)
         {
             // SURF is the default feature
             detector_ = new cv::StarFeatureDetector(32, 10, 18, 18, 20);
@@ -124,6 +128,8 @@ namespace slam_utils
             extractor_ = new cv::SURF(1000, 4, 2, true, false);//new cv::SurfDescriptorExtractor();
             // extractor_ = new cv::SIFT();
             cv::StarFeatureDetector(32, 10, 18, 18, 20);
+
+            SlamParameters::info->matcher_min_repetition_ = min_repeat_match_count_;
         }
 
 
@@ -200,6 +206,8 @@ namespace slam_utils
         bool refineF_; // if true will refine the F matrix
         double distance_; // min distance to epipolar
         double confidence_; // confidence level (probability)
+
+        int min_repeat_match_count_; // minimum consecutive repetitions required to accept as a good match
 
         // int repeat_match_count_;
         // cv::Mat prev_frame_;

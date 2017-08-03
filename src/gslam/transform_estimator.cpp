@@ -13,6 +13,8 @@ namespace gSlam
         
         // correspondences = matches.size();
 
+        static bool icp_parameters_defined = false;
+
         std::cout << "Repeat status " << repeat_loop_match << std::endl;
         size_t tmp = std::max(data_spot_src->getImagePoints().size(), data_spot_target->getImagePoints().size());
         
@@ -37,7 +39,7 @@ namespace gSlam
         customtype::WorldPtsType src_wrldpts;
         customtype::WorldPtsType tgt_wrldpts;
 
-        if (repeat_match_counter_>35)
+        if (repeat_match_counter_>max_repeat_match_counter_)
             repeat_match_counter_ = 0;
 
         if (repeat_loop_match)
@@ -86,7 +88,23 @@ namespace gSlam
 
             // relative_transformation = slam_utils::icp(src_cloud, tgt_cloud, 0.1, 50, &converge_status, &variance, &correspondences);
             std::vector<int> inliers;
-            relative_transformation = slam_utils::transformFromXYZCorrespondences(src_cloud, tgt_cloud, 10, 10000, true, 3, 100 , &inliers, &variance, converge_status);
+
+            double inlierThreshold = 10;
+            int iterations = 10000;
+            double refineModelSigma = 3;
+            int refineModelIterations = 100;
+
+            relative_transformation = slam_utils::transformFromXYZCorrespondences(src_cloud, tgt_cloud, inlierThreshold, iterations, true, refineModelSigma, refineModelIterations , &inliers, &variance, converge_status);
+
+            if (!icp_parameters_defined)
+            {
+                SlamParameters::info->transform_est_icp_.inlier_threshold_ = inlierThreshold;
+                SlamParameters::info->transform_est_icp_.max_iterations_ = iterations;
+                SlamParameters::info->transform_est_icp_.refine_sigma_ = refineModelSigma;
+                SlamParameters::info->transform_est_icp_.refine_max_iterations_ = refineModelIterations;
+                SlamParameters::info->transform_est_icp_.parameters_defined_ = true;
+                icp_parameters_defined = true;
+            }
             // converge_status = true;
 
             prop_matches = double(correspondences)/max_points;

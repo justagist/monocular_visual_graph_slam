@@ -126,8 +126,8 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
 
     // std::cout << " Adding odometry " << std::endl;
     // Odometry constraint
-    float odom_info_numer = 1004.00;
-    float odom_info_denom = 1;
+    float odom_info_numer = 1000.00;
+    float odom_info_denom = 15;
     if( last_spot_.get() )
     {
         customtype::TransformSE3 rel_transform = last_spot_->getPose().inverse()*data_spot_ptr->getPose();
@@ -191,14 +191,14 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
 
     if (!parameters_defined) // recording all parameters in info object
     {
-        // Parameters::loopclosure_info_const1 = loop_info_numer;
-        // Parameters::loopclosure_info_const2 = loop_info_denom;
-        // Parameters::odometry_info_const1 = odom_info_numer;
-        // Parameters::odometry_info_const2 = odom_info_denom;
+        SlamParameters::info->loopclosure_constraint.const1_ = loop_info_numer;
+        SlamParameters::info->loopclosure_constraint.const2_ = loop_info_denom;
+        SlamParameters::info->odometry_constraint.const1_ = odom_info_numer;
+        SlamParameters::info->odometry_constraint.const2_ = odom_info_denom;
         parameters_defined = true;
     }
 
-    std::cout << "HERE " << gSlam::Parameters::info.dataset_id_ << " " /*<< gSlam::Parameters::odometry_info_const1*/ << std::endl;
+    std::cout << "HERE " << gSlam::SlamParameters::info->dataset_id_ << " " << gSlam::SlamParameters::info->optimisation_thread_on_ << std::endl;
 
 
     data_spots_.insert(data_spots_.end(), std::make_pair(data_spot_ptr->getId(),data_spot_ptr));

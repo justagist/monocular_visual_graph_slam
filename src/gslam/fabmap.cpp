@@ -123,6 +123,11 @@ namespace gSlam
     first_bow_img_ = 120;
     skip = 250;
     valid = true;   
+
+    // Recording parameters in info object
+    SlamParameters::info->fabmap.first_bow_img_ = first_bow_img_;
+    SlamParameters::info->fabmap.skip_ = skip;
+
 }
 
 FabMap::~FabMap()

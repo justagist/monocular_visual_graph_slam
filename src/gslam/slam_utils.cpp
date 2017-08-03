@@ -612,6 +612,12 @@ namespace slam_utils
         return m;
     }
 
+    std::string getSlamParameterInfo(SlamParameters::SLAMinfo::SLAMinfoPtr info)
+    {
+        std::string scene_info = "Scene No: " + std::to_string(info->dataset_id_);
+        std::string optimisation_status = "Graph Optimization: " + (info->optimisation_thread_on_)?"ON":"OFF";
+    }
+
 
 
 
@@ -974,7 +980,7 @@ namespace slam_utils
         if (
             ((final_matches.size()>(0.18*float(imgpts1.size())) && final_matches.size()>(0.18*float(imgpts2.size()))) && (imgpts1.size()>200 && imgpts2.size()>200))
             // ||final_matches.size() > 100 
-            || (repeat_match_count >= 20)// && final_matches.size()>50)
+            || (repeat_match_count >= min_repeat_match_count_)// && final_matches.size()>50)
             // || (final_matches.size()>50 && (final_matches.size()>(0.2*float(imgpts1.size()))||(final_matches.size()>(0.2*float(imgpts1.size())) ) ))
            )
         {
