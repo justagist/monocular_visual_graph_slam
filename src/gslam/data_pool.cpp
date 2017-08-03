@@ -198,7 +198,7 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
         parameters_defined = true;
     }
 
-    // std::cout << "HERE " << gSlam::Parameters::SLAMinfo::dataset_id_ << " " /*<< gSlam::Parameters::odometry_info_const1*/ << std::endl;
+    std::cout << "HERE " << gSlam::Parameters::info.dataset_id_ << " " /*<< gSlam::Parameters::odometry_info_const1*/ << std::endl;
 
 
     data_spots_.insert(data_spots_.end(), std::make_pair(data_spot_ptr->getId(),data_spot_ptr));

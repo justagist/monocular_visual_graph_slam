@@ -18,7 +18,7 @@ namespace Parameters
 
         // typedef boost::shared_ptr<SLAMinfo> SLAMinfoPtr;
 
-        static int dataset_id_; // dataset used
+        int dataset_id_; // dataset used
 
         // int visual_odometry_baseline_; // triangulation baseline used in STAM visual odometry
 
@@ -38,6 +38,7 @@ namespace Parameters
 
     // static gSlam::Parameters::SLAMinfo::SLAMinfoPtr info(new gSlam::Parameters::SLAMinfo());
     // static gSlam::Parameters::SLAMinfo info;
+    extern SLAMinfo info;
 
 } // namespace Constants
 

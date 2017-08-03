@@ -15,6 +15,10 @@ int vis_odo_baseline = 100;
 int ismar_baselines[] = {175, 50, 80, 100, 100, 100, 75, 75, 175 /*150*/,100 /*100*/ /*100 is probably better for loop closure*/ /*175*/,75 /*135*/ /*150*/};
 bool write_file = false;
 bool optimise_graph = false;
+
+namespace gSlam{ namespace Parameters { SLAMinfo info; } }
+
+
 int main(int argc, char** argv)
 {
 
@@ -121,14 +125,15 @@ int main(int argc, char** argv)
     gSlam::GrSLAM::Ptr slam(new gSlam::GrSLAM());
 
     // gSlam::Parameters::SLAMinfo::SLAMinfoPtr info(new gSlam::Parameters::SLAMinfo);
-    {
-    using namespace gSlam;
-        {
-        using namespace Parameters;
-            int SLAMinfo::dataset_id_;// = SCENE;
-        };
+    gSlam::Parameters::info.dataset_id_ = 5;
+    // {
+    // using namespace gSlam;
+    //     {
+    //     using namespace Parameters;
+    //         int SLAMinfo::dataset_id_;// = SCENE;
+    //     };
 
-    };
+    // };
 
     // gSlam::Parameters::SLAMinfo::dataset_id_ = SCENE;
 
