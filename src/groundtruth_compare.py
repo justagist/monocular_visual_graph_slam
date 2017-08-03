@@ -11,6 +11,7 @@ def main(arguments):
     ax = fig.add_subplot(1,1,1, projection='3d')
     plot1= []
 
+    # Estimated Trajectory --
     with open(str(arguments[0])) as f:
         lines = f.readlines()
         for i in range(len(lines)):
@@ -27,9 +28,10 @@ def main(arguments):
 
     ax.plot(x, y, z,label = 'estimated path')
     ax.scatter(x[0],y[0],z[0],c='g',marker='x',s=500)
+    ax.scatter(x[len(x)-1],y[len(y)-1],z[len(z)-1],c='c',marker='x',s=300)
 
 
-
+    # Ground Truth Plot --
     with open(str(arguments[1])) as g:
         glines = g.readlines()
         x1 = [1000*float(line.split()[3]) for line in glines]

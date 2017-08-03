@@ -145,6 +145,14 @@ namespace gSlam
 
     }
 
+    customtype::TransformSE3 TransformEstimator::estimateTransformUsingOpticalFlow(DataSpot3D::DataSpot3DPtr data_spot_src, 
+                                                                                   DataSpot3D::DataSpot3DPtr data_spot_target,
+                                                                                   double& variance, int& correspondences, double& prop_matches, 
+                                                                                   bool& converge_status, bool repeat_loop_match)
+    {
+
+    }
+
     
 
 } // namespace gSlam

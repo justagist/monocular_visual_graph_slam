@@ -3,6 +3,7 @@
 
 // #include "typedefs.h"
 #include "gslam/data_spot.h"
+#include "gslam/image_matcher.h"
 #include "gslam/slam_utils.h"
 // #include "gslam/dataspot_matcher.h"
 
@@ -21,8 +22,12 @@ public:
 
     customtype::TransformSE3 estimateTransform(DataSpot3D::DataSpot3DPtr data_spot_src, DataSpot3D::DataSpot3DPtr data_spot_target, double& variance, int& correspondences, double & prop_match, bool & converge_status, bool repeat_loop_match);
 
+    customtype::TransformSE3 estimateTransformUsingOpticalFlow(DataSpot3D::DataSpot3DPtr data_spot_src, DataSpot3D::DataSpot3DPtr data_spot_target,
+                                                               double& variance, int& correspondences, double& prop_matches, 
+                                                               bool& converge_status, bool repeat_loop_match);
+
 private:
-    slam_utils::DataSpotMatcher spot_matcher_;
+    slam_utils::ImageMatcher spot_matcher_;
     int repeat_match_counter_, max_repeat_match_counter_;
 
 }; // class TransformEstimator
