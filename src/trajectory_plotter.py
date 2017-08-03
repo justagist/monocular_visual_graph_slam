@@ -5,14 +5,24 @@ from mpl_toolkits.mplot3d import Axes3D
 
 # USAGE: rosrun graph_slam trajectory plotter <trajectory_file.txt>
 
-def main(argv):
+def main(arguments):
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
-    with open(str(argv[0])) as f:
+    plot1= []
+
+    with open(str(arguments[0])) as f:
         lines = f.readlines()
-        x = [float(line.split()[1]) for line in lines]
-        y = [float(line.split()[2]) for line in lines]
-        z = [float(line.split()[3]) for line in lines]
+        for i in range(len(lines)):
+            if lines[i].split()[0] != 'SLAM':
+                plot1.append(lines[i])
+            else:
+                for line in range(i,len(lines)):
+                    print lines[line]
+                break
+
+        x = [float(point.split()[1]) for point in plot1]
+        y = [float(point.split()[2]) for point in plot1]
+        z = [float(point.split()[3]) for point in plot1]
         # print x
     ax.plot(x, y, z,label = 'curve')
     ax.scatter(x[0],y[0],z[0],c='g',marker='x',s=500)
