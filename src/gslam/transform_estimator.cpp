@@ -160,7 +160,9 @@ namespace gSlam
 
         // TODO: IF FAILS, TRY CREATING A OPTICAL FLOW PYRAMID OF THE FIRST IMAGE USING BUILDOPTICALFLOWPYRAMID FUNCTION AND PASS TO THE CALCOPTICALFLOWPYRLK FUNCTION INSTEAD OF THE INPUT IMAGE 1
 
-        // calculate optical flow from tgt img to src img, and obtain filtered keypoints in the src img
+        converge_status = false;
+
+        // ---------------------- calculate optical flow from tgt img to src img, and obtain filtered keypoints in the src img
         cv::Mat tgt_gray, src_gray;
         std::vector<cv::Point2f> tgt_points, tgt_points_new;
         cv::KeyPoint::convert(data_spot_target->getImagePoints(), tgt_points);
@@ -173,9 +175,10 @@ namespace gSlam
 
         // imshow("current_frame", tgt_gray);
         // cv::waitKey(1);
-        if (tgt_points.size() > 1000)
+        int max_features = 1000;
+        if (tgt_points.size() > max_features)
         {
-            std::vector<cv::Point2f>::const_iterator first = tgt_points.end() - 1000;
+            std::vector<cv::Point2f>::const_iterator first = tgt_points.end() - max_features;
             std::vector<cv::Point2f>::const_iterator last = tgt_points.end();
             std::vector<cv::Point2f> new_pts(first, last);
             tgt_points_new = new_pts;
@@ -184,9 +187,9 @@ namespace gSlam
 
         cv::calcOpticalFlowPyrLK(tgt_gray, src_gray, tgt_points_new, src_points, status, errors);
 
+        // ------- Removing features that were not matched
         std::vector<cv::Point2f> filtered_src, filtered_tgt;
         customtype::WorldPtsType filtered_src_3D;
-        // std::vector<int> filtered_ids;
         for (int i = 0; i < tgt_points_new.size(); i++) 
         {
             if (status[i] != 0 && errors.at<float>(i) < 12.0f)   // klt ok!
@@ -195,42 +198,66 @@ namespace gSlam
                 filtered_src.push_back(src_points[i]);
                 filtered_tgt.push_back(tgt_points[i]);
                 filtered_src_3D.push_back(data_spot_target->getWorldPoints()[i]);
-
-                // Meaning: f is visible in this frame
             }
         }
 
+        // -------------------------------------------------------------------
+
         std::cout << tgt_points_new.size() << " = tgt_pts size; " << filtered_src.size() << " = filtered_src size" << std::endl;
-        if (filtered_src.size() > 100)
+
+        // ------------------ Estimating Projection matrix and pose if enough features are matched across the loop closure
+        if (filtered_src.size() > 50 || filtered_src.size()>0.5*tgt_points_new.size())
         {
+
+            cv::Mat projMat = slam_utils::calcProjMatrix(filtered_src, filtered_src_3D, data_spot_src->getCamParams().intrinsics_, data_spot_src->getCamParams().distortion_);
+            std::cout << "Projection Matrix:\n" << projMat << std::endl;
+
+            // -------------- Testing if the returned projection matrix is Identity, i.e. estimation failed 
+            cv::Mat eye = cv::Mat::eye(3,4, CV_64FC1);
+            cv::Mat dst;
+            cv::bitwise_xor(projMat, eye, dst);        
+            if(cv::countNonZero(dst) <= 0)
+            {
+                std::cout << "^^^^^^^^^^^^^ Projection Matrix could not be estimated. Ignoring Loop Closure ^^^^^^^^^^" <<std::endl;
+                return customtype::TransformSE3();
+            }
+            // ----------------------
+
+            customtype::TransformSE3 pose_estimate = slam_utils::estimatePoseFromProjection(projMat);
+            std::cout << "Estimated Pose in Loop Closure Frame: \n" << pose_estimate.matrix() << std::endl;
+
+            correspondences = filtered_src.size();
+            prop_matches = correspondences/tgt_points_new.size();
+            variance = 1/prop_matches;
+            converge_status = true;
+
+            // ----------- Relative transform estimate if the projection estimate is obtained
+            customtype::TransformSE3 relative_transformation = data_spot_target->getPose().inverse()*pose_estimate;
+            std::cout << "Estimated Relative Transform: \n" << relative_transformation.matrix() << std::endl;
+
+            // ========================== DEBUG
             customtype::KeyPoints kp1, kp2;
             cv::Mat out1, out2;
             cv::KeyPoint::convert(filtered_tgt, kp1);
             cv::KeyPoint::convert(filtered_src, kp2);
-            // cv::drawKeypoints(data_spot_target->getImageColor(), kp1, out1);
-            // cv::drawKeypoints(data_spot_src->getImageColor(), kp2, out2);
-            // cv::imshow("matching_tgt", out1);
-            // cv::imshow("matching_src", out2);
-            // cv::waitKey(1);
+            cv::drawKeypoints(data_spot_target->getImageColor(), kp1, out1);
+            cv::drawKeypoints(data_spot_src->getImageColor(), kp2, out2);
+            cv::imshow("matching_tgt", out1);
+            cv::imshow("matching_src", out2);
+            cv::waitKey(0);
+            // ==========================
+
+            return relative_transformation;
 
         }
 
-        cv::Mat projMat = slam_utils::calcProjMatrix(filtered_src, filtered_src_3D, data_spot_src->getCamParams().intrinsics_, data_spot_src->getCamParams().distortion_);
-
-        // TEMPORARY ========== 
-
-        variance = 1;
-        correspondences = filtered_src.size();
-        prop_matches = correspondences/tgt_points_new.size();
-        converge_status = false;
-
         // ====================
 
-        customtype::TransformSE3 relative_transformation;
+        // customtype::TransformSE3 relative_transformation;
 
 
 
-        return relative_transformation;
+        return customtype::TransformSE3();
 
 
     }

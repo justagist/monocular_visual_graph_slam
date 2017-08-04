@@ -646,15 +646,26 @@ namespace slam_utils
         assert(points2d.size() == points3d.size());
 
         cv::Mat guess_r, guess_t;
+        customtype::WorldPtsType points3d_new = points3d;
+        std::vector<cv::Point2f> points2d_new = points2d;
 
-        std::vector<cv::Point2f>::const_iterator first = points2d.end() - 100;
-        std::vector<cv::Point2f>::const_iterator last = points2d.end();
-        std::vector<cv::Point2f> points2d_new(first, last);
+        // std::cout << "end " << points2d.end();
+        int max_size = 100;
+        if (points2d.size() > 100)
+        {
+            std::vector<cv::Point2f>::const_iterator first = points2d.end() - max_size;
+            std::vector<cv::Point2f>::const_iterator last = points2d.end();
+            std::vector<cv::Point2f> new_2d(first, last);
+            points2d_new = new_2d;
 
-        std::vector<cv::Point3f>::const_iterator first3 = points3d.end() - 100;
-        std::vector<cv::Point3f>::const_iterator last3 = points3d.end();
-        std::vector<cv::Point3f> points3d_new(first3, last3);
+            std::vector<cv::Point3f>::const_iterator first3 = points3d.end() - max_size;
+            std::vector<cv::Point3f>::const_iterator last3 = points3d.end();
+            std::vector<cv::Point3f> new_3d(first3, last3);
+            points3d_new = new_3d;
+        }
 
+
+        // std::cout << points3d_new.size() << " here size " << std::endl;
         // std::cout << " vectors 2d : \n" << points3d_new << std::endl; 
 
         //        bool cv::solvePnPRansac   (   InputArray  objectPoints,
@@ -685,10 +696,38 @@ namespace slam_utils
         tvec.copyTo(Pose(cv::Rect(3, 0, 1, 3)));
         cv::Mat projMatrix = Pose;
 
+        // std::cout << R << std::endl << tvec << std::endl << Pose << std::endl;
+
 
     //    printProjMatrix();
 
         return projMatrix;
+    }
+
+    customtype::TransformSE3 estimatePoseFromProjection(cv::Mat projmat)
+    {
+        cv::Mat R1 = projmat(cv::Range::all(), cv::Range(0, 3));
+        cv::Mat T1 = projmat(cv::Range::all(), cv::Range(3, 4));
+
+        cv::Mat Pose(3, 4, CV_64FC1);
+        cv::Mat pos, R;
+        R = R1.inv();
+        pos = (-R) * T1;
+
+        R.copyTo(Pose(cv::Rect(0, 0, 3, 3)));
+        pos.copyTo(Pose(cv::Rect(3, 0, 1, 3)));
+        cv::Mat row = (cv::Mat_<double>(1,4) << 0, 0, 0, 1);
+        Pose.push_back(row);
+
+        // std::cout << Pose << std::endl;
+
+        customtype::TransformSE3 eigen_pose;
+        cv::cv2eigen(Pose, eigen_pose.matrix());
+
+        // std::cout << eigen_pose.matrix() << std::endl;
+
+        return eigen_pose;
+
     }
 
 

@@ -95,6 +95,8 @@ namespace slam_utils
 
     cv::Mat calcProjMatrix(std::vector<cv::Point2f> points2d, customtype::WorldPtsType points3d, cv::Mat intrinsics, cv::Mat distortion);
 
+    customtype::TransformSE3 estimatePoseFromProjection(cv::Mat projmat);
+
 } // namespace slam_utils
 
 } // namespace gSlam
