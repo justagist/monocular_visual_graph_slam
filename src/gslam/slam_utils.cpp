@@ -665,27 +665,7 @@ namespace slam_utils
         }
 
 
-        // std::cout << points3d_new.size() << " here size " << std::endl;
-        // std::cout << " vectors 2d : \n" << points3d_new << std::endl; 
-
-        //        bool cv::solvePnPRansac   (   InputArray  objectPoints,
-        //        InputArray    imagePoints,
-        //        InputArray    cameraMatrix,
-        //        InputArray    distCoeffs,
-        //        OutputArray   rvec,
-        //        OutputArray   tvec,
-        //        bool  useExtrinsicGuess = false,
-        //        int   iterationsCount = 100,
-        //        float     reprojectionError = 8.0,
-        //        double    confidence = 0.99,
-        //        OutputArray   inliers = noArray(),
-        //        int   flags = SOLVEPNP_ITERATIVE
-        //        )
-
-        // curr3dPts_ = points3d_new;
-        // curr2dPts_ = points2d_new;
-        //LOG("Number of Points %d\n", points3d_new.size());
-
+        // ---------- Estimate Projection Matrix (rotation and translation vectors) by solving the PnP problem with ransac
         cv::solvePnPRansac(points3d_new, points2d_new, intrinsics, distortion, guess_r, guess_t, false, 100, 5.0, 0.99);
         cv::Mat rvec = guess_r, tvec = guess_t;
         cv::Mat R(3, 3, CV_64FC1);
@@ -709,11 +689,13 @@ namespace slam_utils
         cv::Mat R1 = projmat(cv::Range::all(), cv::Range(0, 3));
         cv::Mat T1 = projmat(cv::Range::all(), cv::Range(3, 4));
 
+        // ----- Estimating Camera Pose
         cv::Mat Pose(3, 4, CV_64FC1);
         cv::Mat pos, R;
         R = R1.inv();
         pos = (-R) * T1;
 
+        // ----- Creating pose matrix 
         R.copyTo(Pose(cv::Rect(0, 0, 3, 3)));
         pos.copyTo(Pose(cv::Rect(3, 0, 1, 3)));
         cv::Mat row = (cv::Mat_<double>(1,4) << 0, 0, 0, 1);
@@ -721,6 +703,7 @@ namespace slam_utils
 
         // std::cout << Pose << std::endl;
 
+        // ----- Converting pose from cv::Mat to Eigen::Transform()
         customtype::TransformSE3 eigen_pose;
         cv::cv2eigen(Pose, eigen_pose.matrix());
 
