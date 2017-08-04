@@ -153,8 +153,8 @@ namespace gSlam
     // tgt: current image
     // src: loop closure match image
     customtype::TransformSE3 TransformEstimator::estimateTransformUsingOpticalFlow(DataSpot3D::DataSpot3DPtr data_spot_src, 
-                                                                                   DataSpot3D::DataSpot3DPtr data_spot_target,
-                                                                                   double& variance, int& correspondences, double& prop_matches, 
+                                                                                   DataSpot3D::DataSpot3DPtr data_spot_target, 
+                                                                                   int& correspondences, int& max_correspondences, 
                                                                                    bool& converge_status)
     {
 
@@ -227,8 +227,8 @@ namespace gSlam
             std::cout << "Estimated Pose in Loop Closure Frame: \n" << pose_estimate.matrix() << std::endl;
 
             correspondences = filtered_src.size();
-            prop_matches = correspondences/tgt_points_new.size();
-            variance = 1/prop_matches;
+            max_correspondences = tgt_points_new.size();
+            // variance = 1/prop_matches;
             converge_status = true;
 
             // ----------- Relative transform estimate if the projection estimate is obtained
@@ -236,15 +236,19 @@ namespace gSlam
             std::cout << "Estimated Relative Transform: \n" << relative_transformation.matrix() << std::endl;
 
             // ========================== DEBUG
-            customtype::KeyPoints kp1, kp2;
-            cv::Mat out1, out2;
-            cv::KeyPoint::convert(filtered_tgt, kp1);
-            cv::KeyPoint::convert(filtered_src, kp2);
-            cv::drawKeypoints(data_spot_target->getImageColor(), kp1, out1);
-            cv::drawKeypoints(data_spot_src->getImageColor(), kp2, out2);
-            cv::imshow("matching_tgt", out1);
-            cv::imshow("matching_src", out2);
-            cv::waitKey(0);
+            bool show_optflow_matches = false;
+            if (show_optflow_matches)
+            {
+                customtype::KeyPoints kp1, kp2;
+                cv::Mat out1, out2;
+                cv::KeyPoint::convert(filtered_tgt, kp1);
+                cv::KeyPoint::convert(filtered_src, kp2);
+                cv::drawKeypoints(data_spot_target->getImageColor(), kp1, out1);
+                cv::drawKeypoints(data_spot_src->getImageColor(), kp2, out2);
+                cv::imshow("matching_tgt", out1);
+                cv::imshow("matching_src", out2);
+                cv::waitKey(0);
+            }
             // ==========================
 
             return relative_transformation;

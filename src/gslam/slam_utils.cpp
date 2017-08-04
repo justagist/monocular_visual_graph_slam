@@ -6,7 +6,7 @@ namespace gSlam
 
 namespace slam_utils
 {
-    // gives transformation of image 2 to image 1 (tgt_prj to src_prj)
+    // gives transformation of image 2 to image 1 (tgt_prj to src_prj). Gives same result as tgt->pose.inverse()*src->pose
     customtype::TransformSE3 estimateRelativeTransformBtwnProjections(customtype::ProjMatType src_prj, customtype::ProjMatType tgt_prj)
     {
         Eigen::Matrix3d R_src = src_prj.block(0,0,3,3);
@@ -403,97 +403,6 @@ namespace slam_utils
         return Eigen::Matrix4d();
     }
 
-    // // return transform from source to target (All points must be finite!!!)
-    // Eigen::Matrix4d icp2D(const customtype::PointCloudPtr & cloud_source,
-    //                       const customtype::PointCloudPtr & cloud_target, //TODO: Should be ConstPtr
-    //                       double maxCorrespondenceDistance,
-    //                       int maximumIterations,
-    //                       bool * hasConvergedOut,
-    //                       double * variance,
-    //                       int * correspondencesOut)
-    // {
-    //     pcl::IterativeClosestPoint<customtype::CloudPoint, customtype::CloudPoint, double> icp;
-    //     // Set the input source and target
-    //     icp.setInputTarget (cloud_target);
-    //     icp.setInputSource (cloud_source);
-
-    //     pcl::registration::TransformationEstimation2D<customtype::CloudPoint, customtype::CloudPoint, double>::Ptr est;
-    //     est.reset(new pcl::registration::TransformationEstimation2D<customtype::CloudPoint, customtype::CloudPoint, double>);
-    //     icp.setTransformationEstimation(est);
-
-    //     // Set the max correspondence distance to 5cm (e.g., correspondences with higher distances will be ignored)
-    //     icp.setMaxCorrespondenceDistance (maxCorrespondenceDistance);
-    //     // Set the maximum number of iterations (criterion 1)
-    //     icp.setMaximumIterations (maximumIterations);
-    //     // Set the transformation epsilon (criterion 2)
-    //     //icp.setTransformationEpsilon (transformationEpsilon);
-    //     // Set the euclidean distance difference epsilon (criterion 3)
-    //     //icp.setEuclideanFitnessEpsilon (1);
-    //     //icp.setRANSACOutlierRejectionThreshold(maxCorrespondenceDistance);
-
-    //     // Perform the alignment
-    //     customtype::PointCloudPtr cloud_source_registered(new customtype::PointCloud());
-    //     icp.align (*cloud_source_registered);
-    //     bool hasConverged = icp.hasConverged();
-
-    //     // compute variance
-    //     if((correspondencesOut || variance) && hasConverged)
-    //     {
-    //         pcl::registration::CorrespondenceEstimation<customtype::CloudPoint, customtype::CloudPoint, double>::Ptr est;
-    //         est.reset(new pcl::registration::CorrespondenceEstimation<customtype::CloudPoint, customtype::CloudPoint, double>);
-    //         est->setInputTarget(cloud_target);
-    //         est->setInputSource(cloud_source_registered);
-    //         pcl::Correspondences correspondences;
-    //         est->determineCorrespondences(correspondences, maxCorrespondenceDistance);
-    //         if(variance)
-    //         {
-    //             if(correspondences.size()>=3)
-    //             {
-    //                 std::vector<double> distances(correspondences.size());
-    //                 for(unsigned int i=0; i<correspondences.size(); ++i)
-    //                 {
-    //                     distances[i] = correspondences[i].distance;
-    //                 }
-
-    //                 //variance
-    //                 std::sort(distances.begin (), distances.end ());
-    //                 double median_error_sqr = distances[distances.size () >> 1];
-    //                 *variance = (2.1981 * median_error_sqr);
-    //             }
-    //             else
-    //             {
-    //                 hasConverged = false;
-    //                 *variance = -1.0;
-    //             }
-    //         }
-
-    //         if(correspondencesOut)
-    //         {
-    //             *correspondencesOut = (int)correspondences.size();
-    //         }
-    //     }
-    //     else
-    //     {
-    //         if(correspondencesOut)
-    //         {
-    //             *correspondencesOut = 0;
-    //         }
-    //         if(variance)
-    //         {
-    //             *variance = -1;
-    //         }
-    //     }
-
-    //     if(hasConvergedOut)
-    //     {
-    //         *hasConvergedOut = hasConverged;
-    //     }
-
-    //     Eigen::Matrix4d m = icp.getFinalTransformation();
-    //     //customtype::TransformSE3 rel_transform = icp.getFinalTransformation().matrix();
-    //     return m;
-    // }
-
     customtype::PointCloudPtr convert3dPointsToCloud(customtype::WorldPtsType wrldpts)
     {
 
@@ -643,6 +552,8 @@ namespace slam_utils
     cv::Mat calcProjMatrix(std::vector<cv::Point2f> points2d, customtype::WorldPtsType points3d, cv::Mat intrinsics, cv::Mat distortion) 
     {
 
+        // ESTIMATING PROJECTION MATRIX USING PNP-RANSAC. ADAPTED AND MODIFIED FROM STAM.
+
         assert(points2d.size() == points3d.size());
 
         cv::Mat guess_r, guess_t;
@@ -689,7 +600,7 @@ namespace slam_utils
         cv::Mat R1 = projmat(cv::Range::all(), cv::Range(0, 3));
         cv::Mat T1 = projmat(cv::Range::all(), cv::Range(3, 4));
 
-        // ----- Estimating Camera Pose
+        // ----- Estimating Camera Pose (Pose from projection)
         cv::Mat Pose(3, 4, CV_64FC1);
         cv::Mat pos, R;
         R = R1.inv();

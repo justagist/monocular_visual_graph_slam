@@ -59,7 +59,7 @@ private:
     int repeat_match_count_;
     int min_required_repeat_, max_repeat_allowed_;
 
-    bool require_optimization_flag_;
+    bool require_optimization_flag_, loop_match_success_;
 
     float odom_drift_, drift_rate_;
 

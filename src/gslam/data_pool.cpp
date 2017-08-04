@@ -6,7 +6,7 @@ namespace gSlam
 {
 
 
-DataPool::DataPool() : loop_count_far_(0), loop_count_near_(0), repeat_match_count_ (0), min_required_repeat_(8), prev_loop_id_(-2), odom_drift_(0.01), drift_rate_(0.01), max_repeat_allowed_(100)
+DataPool::DataPool() : loop_count_far_(0), loop_count_near_(0), repeat_match_count_ (0), min_required_repeat_(8), prev_loop_id_(-2), odom_drift_(0.01), drift_rate_(0.01), max_repeat_allowed_(100), loop_match_success_(false)
 {
     SlamParameters::info->matcher_min_repetition_ = min_required_repeat_;
     SlamParameters::info->matcher_max_repetition_ = max_repeat_allowed_;
@@ -40,7 +40,7 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
 
 
     // checking if fabmap detects same frame as loop closure continuously. If detected more times than some threshold, it is probably a true loop closure.
-    if (loop_id == -1 || prev_loop_id_ != loop_id || repeat_match_count_ > max_repeat_allowed_)
+    if (loop_id == -1 || prev_loop_id_ != loop_id || repeat_match_count_ > max_repeat_allowed_ || loop_match_success_ == true)
     {
         repeat_match_count_  = 0;
     }
@@ -51,13 +51,13 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
     }
 
     prev_loop_id_ = loop_id; 
-    float loop_info_numer = 1;
+    float loop_info_numer = 100;
     float loop_info_denom = 1;
     if( repeat_match_count_ > min_required_repeat_) 
     {
         std::cout << "Possible loop closure : " << new_id << "->" << loop_id << std::endl;
-        double variance, prop_matches;
-        int correspondences;
+        double variance;
+        int correspondences, max_correspondence;
         bool status_good = false;
         DataLink3D::DataLinkPtr link( new DataLink3D() );
         link->inf_matrix_ = customtype::InformationMatrix3D::Identity();
@@ -68,33 +68,29 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
         link->to_id_ = data_spot_ptr->getId();
         
         std::cout << " Estimating Loop Closure Transform " <<std::endl;
+
+        // ======= USE ANY ONE METHOD:
+        // 1)----- Estimate loop closure constraint transformation using mathing cloud point alignment method. Also checks if loop closure is good by feature matching.
         // link->transform_ = transform_est_.estimateTransform(spot_src, data_spot_ptr, variance, correspondences, prop_matches, status_good);
-        // if ()
-        link->transform_ = transform_est_.estimateTransformUsingOpticalFlow(spot_src, data_spot_ptr, variance, correspondences, prop_matches, status_good);
-
-
-        // link->transform_ = data_spot_ptr->getPose().inverse()*spot_src->getPose();
-        // --- Enforce 2D ---
-        // float x,y,z,r,p,yaw;
-        // slam_x_slam_utils::getTranslationAndEulerAngles(link->transform_, x, y, z, r, p , yaw);
-        // link->transform_ = slam_utils::getTransformation(x, y, 0, 0, 0, yaw);
-
+        //-------------------
+        
+        // 2)----- Estimate loop closure constraint transformation from projection matrix, estimated using optical flow and pnp-ransac. Also checks if the loop closure is good.
+        link->transform_ = transform_est_.estimateTransformUsingOpticalFlow(spot_src, data_spot_ptr, correspondences, max_correspondence, status_good);
+        // [variance = 1/prop_matches]
+        variance = max_correspondence/correspondences;
+        std::cout << "variance here " << variance << std::endl;
         if (variance == 0)
             variance = 1.0;
-        double info = (1*loop_info_numer)/(variance*loop_info_denom); // before 1.0/(variance*100);
-
-        // info before was 100
-        // if( info > 0 && info < 1000000) link->inf_matrix_ *= info*1;
-        // else link->inf_matrix_ *= 1;//0.5*(1+prop_matches)*2;
+        double info = (1*loop_info_numer)/(variance*loop_info_denom); 
 
         link->inf_matrix_ *= info; 
-
+        std::cout << "Loop Closure Status: " << std::boolalpha << status_good << std::noboolalpha << std::endl;
         // std::cout << "info matrix loop closure \n" << link->inf_matrix_ << std::endl;
         link->active = true;
         link->type = DataLink3D::LoopClosureConstraint;
-        std::cout << "Loop Closure Status: " << std::boolalpha << status_good << std::noboolalpha << ";  LOOP: corr " <<  correspondences << "  variance:  " << variance << "  infor : " << info << std::endl;
         if( status_good )
         {
+            std::cout << "Loop Closure Status: " << std::boolalpha << status_good << std::noboolalpha << ";  LOOP: corr " <<  correspondences << "out of " << max_correspondence << ";  variance:  " << variance << "  infor : " << info << std::endl;
 
             // std::cout << link->transform_.matrix() << std::endl;
             // std::cin.get();
@@ -117,15 +113,16 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
 
 
             // if (dist > 500)
-            char key = cv::waitKey(0);
+            char key = 'y';//cv::waitKey(0);
             // char key = 'y';
             if (key == 'y')
             {
-                spot_src->addLink(link); // =======================
-                require_optimization_flag_ = true; // ==================== // TODO: add some condition to check if optimization is required.
+                spot_src->addLink(link); 
+                require_optimization_flag_ = true; // TODO: add some condition to check if optimization is required.
+                // loop_match_success_ = true; // ======================
+                std::cout << " LOOP ADDED ! NFar " << loop_count_far_ << " NNear " << loop_count_near_ << std::endl;
             }
 
-            std::cout << " LOOP ADDED ! NFar " << loop_count_far_ << " NNear " << loop_count_near_ << std::endl;
 
             // std::cout << "Press Return to continue\n " << std::endl;
             // std::cin.get();
@@ -153,6 +150,7 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
         double info = (1*odom_info_numer)/(odom_drift_*odom_info_denom); //+ 2.0/data_spot_ptr->getId(); // before 1.0/(odom_variance*100);
 
 
+        std::cout << "relative odometry transformation: \n" << rel_transform.matrix() << std::endl;
 
         // Force 2D?
         // float x,y,z,r,p,yaw;
