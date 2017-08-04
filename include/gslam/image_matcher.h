@@ -67,8 +67,7 @@ namespace slam_utils
                                      customtype::WorldPtsType wrldpts2,
                                      customtype::WorldPtsType& out_1,
                                      customtype::WorldPtsType& out_2,
-                                     bool& good_match,
-                                     int repeat_match_count = 0);
+                                     bool& good_match);
 
         void findMatches(DataSpot3D::DataSpot3DPtr spot_src, DataSpot3D::DataSpot3DPtr spot_target, std::vector<cv::DMatch>& matches);
 

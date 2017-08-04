@@ -55,7 +55,9 @@ private:
     int new_count_loop_near_; // near in time
 
     int prev_loop_id_;
-    bool repeat_match_;
+    // bool repeat_match_;
+    int repeat_match_count_;
+    int min_required_repeat_, max_repeat_allowed_;
 
     bool require_optimization_flag_;
 

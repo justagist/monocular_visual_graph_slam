@@ -6,7 +6,11 @@ namespace gSlam
 {
 
 
-DataPool::DataPool() : loop_count_far_(0), loop_count_near_(0), repeat_match_ (false), prev_loop_id_(-2), odom_drift_(0.01), drift_rate_(0.01){}
+DataPool::DataPool() : loop_count_far_(0), loop_count_near_(0), repeat_match_count_ (0), min_required_repeat_(8), prev_loop_id_(-2), odom_drift_(0.01), drift_rate_(0.01), max_repeat_allowed_(100)
+{
+    SlamParameters::info->matcher_min_repetition_ = min_required_repeat_;
+    SlamParameters::info->matcher_max_repetition_ = max_repeat_allowed_;
+}
 
 void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
 
@@ -36,18 +40,20 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
 
 
     // checking if fabmap detects same frame as loop closure continuously. If detected more times than some threshold, it is probably a true loop closure.
-    if (prev_loop_id_ == loop_id)
+    if (loop_id == -1 || prev_loop_id_ != loop_id || repeat_match_count_ > max_repeat_allowed_)
     {
-        repeat_match_ = true;
-        // std::cout << "prev_loop_id_ = loop_id ************"<<repeat_match_<<"************************\n";
+        repeat_match_count_  = 0;
     }
-    else repeat_match_ = false;
-
+    else 
+    {
+        repeat_match_count_ ++;
+        std::cout << "match count  ************    x"<<repeat_match_count_<<"  ************************\n";
+    }
 
     prev_loop_id_ = loop_id; 
     float loop_info_numer = 1;
     float loop_info_denom = 1;
-    if( loop_id >= 0 && new_id > 0 && (new_id - loop_id) > 50) 
+    if( repeat_match_count_ > min_required_repeat_) 
     {
         std::cout << "Possible loop closure : " << new_id << "->" << loop_id << std::endl;
         double variance, prop_matches;
@@ -62,9 +68,9 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
         link->to_id_ = data_spot_ptr->getId();
         
         std::cout << " Estimating Loop Closure Transform " <<std::endl;
-        link->transform_ = transform_est_.estimateTransform(spot_src, data_spot_ptr, variance, correspondences, prop_matches, status_good, repeat_match_);
+        // link->transform_ = transform_est_.estimateTransform(spot_src, data_spot_ptr, variance, correspondences, prop_matches, status_good);
         // if ()
-        // link->transform_ = transform_est_.estimateTransformUsingOpticalFlow(spot_src, data_spot_ptr, variance, correspondences, prop_matches, status_good);
+        link->transform_ = transform_est_.estimateTransformUsingOpticalFlow(spot_src, data_spot_ptr, variance, correspondences, prop_matches, status_good);
 
 
         // link->transform_ = data_spot_ptr->getPose().inverse()*spot_src->getPose();

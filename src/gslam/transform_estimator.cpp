@@ -3,7 +3,7 @@
 namespace gSlam
 {
     customtype::TransformSE3 TransformEstimator::estimateTransform(DataSpot3D::DataSpot3DPtr data_spot_src, DataSpot3D::DataSpot3DPtr data_spot_target,
-                                                   double& variance, int& correspondences, double& prop_matches, bool& converge_status, bool repeat_loop_match) 
+                                                   double& variance, int& correspondences, double& prop_matches, bool& converge_status) 
     {
         // CameraParameters src_cam = data_spot_src->getCamParams();
         // CameraParameters tgt_cam = data_spot_target->getCamParams();
@@ -15,7 +15,7 @@ namespace gSlam
 
         static bool icp_parameters_defined = false;
 
-        std::cout << "Repeat status " << repeat_loop_match << std::endl;
+        // std::cout << "Repeat status " << repeat_loop_match << std::endl;
         size_t tmp = std::max(data_spot_src->getImagePoints().size(), data_spot_target->getImagePoints().size());
         
         double max_points = (double)std::max(tmp,(size_t)1);
@@ -39,12 +39,12 @@ namespace gSlam
         customtype::WorldPtsType src_wrldpts;
         customtype::WorldPtsType tgt_wrldpts;
 
-        if (repeat_match_counter_>max_repeat_match_counter_)
-            repeat_match_counter_ = 0;
+        // if (repeat_match_counter_>max_repeat_match_counter_)
+        //     repeat_match_counter_ = 0;
 
-        if (repeat_loop_match)
-            repeat_match_counter_++;
-        else repeat_match_counter_ = 0;
+        // if (repeat_loop_match)
+        //     repeat_match_counter_++;
+        // else repeat_match_counter_ = 0;
 
 
 
@@ -58,7 +58,7 @@ namespace gSlam
 
 
         // using undistorted image
-        spot_matcher_.findMatchingWorldpoints(data_spot_src->getImageColor(), data_spot_target->getImageColor(), data_spot_src->getImagePoints(), data_spot_target->getImagePoints(), data_spot_src->getWorldPoints(), data_spot_target->getWorldPoints(), src_wrldpts, tgt_wrldpts, good_match_status, repeat_match_counter_);//, data_spot_src->getWorldPoints(), data_spot_target->getWorldPoints())
+        spot_matcher_.findMatchingWorldpoints(data_spot_src->getImageColor(), data_spot_target->getImageColor(), data_spot_src->getImagePoints(), data_spot_target->getImagePoints(), data_spot_src->getWorldPoints(), data_spot_target->getWorldPoints(), src_wrldpts, tgt_wrldpts, good_match_status);//, data_spot_src->getWorldPoints(), data_spot_target->getWorldPoints())
 
         // REMOVE ++++++++++++++++++++++++++_+===================
         // return customtype::TransformSE3();
@@ -174,28 +174,41 @@ namespace gSlam
 
         cv::calcOpticalFlowPyrLK(tgt_gray, src_gray, tgt_points, src_points, status, errors);
 
-        std::vector<cv::Point2f> filtered_p2D;
-        customtype::WorldPtsType filtered_p3D;
+        std::vector<cv::Point2f> filtered_src, filtered_tgt;
+        customtype::WorldPtsType filtered_src_3D;
         // std::vector<int> filtered_ids;
         for (int i = 0; i < tgt_points.size(); i++) 
         {
             if (status[i] != 0 && errors.at<float>(i) < 12.0f)   // klt ok!
             {
 
-                filtered_p2D.push_back(src_points[i]);
-                filtered_p3D.push_back(data_spot_target->getWorldPoints()[i]);
+                filtered_src.push_back(src_points[i]);
+                filtered_tgt.push_back(tgt_points[i]);
+                filtered_src_3D.push_back(data_spot_target->getWorldPoints()[i]);
 
                 // Meaning: f is visible in this frame
             }
         }
 
-        std::cout << tgt_points.size() << " = tgt_pts size; " << filtered_p2D.size() << " = filtered_p2D size" << std::endl;
+        std::cout << tgt_points.size() << " = tgt_pts size; " << filtered_src.size() << " = filtered_src size" << std::endl;
+        if (filtered_src.size() > 50)
+        {
+            customtype::KeyPoints kp1, kp2;
+            cv::Mat out1, out2;
+            cv::KeyPoint::convert(filtered_tgt, kp1);
+            cv::KeyPoint::convert(filtered_src, kp2);
+            cv::drawKeypoints(data_spot_target->getImageColor(), kp1, out1);
+            cv::drawKeypoints(data_spot_src->getImageColor(), kp2, out2);
+            cv::imshow("matching_tgt", out1);
+            cv::imshow("matching_src", out2);
+            cv::waitKey(0);
 
+        }
 
         // TEMPORARY ========== 
 
         variance = 1;
-        correspondences = filtered_p2D.size();
+        correspondences = filtered_src.size();
         prop_matches = correspondences/tgt_points.size();
         converge_status = false;
 

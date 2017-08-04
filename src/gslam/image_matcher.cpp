@@ -271,8 +271,7 @@ namespace slam_utils
                                                  customtype::WorldPtsType wrldpts2,
                                                  customtype::WorldPtsType& out_1,
                                                  customtype::WorldPtsType& out_2,
-                                                 bool& good_match,
-                                                 int repeat_match_count)
+                                                 bool& good_match)
     {
 
         cv::cvtColor(image1, image1, CV_BGR2GRAY);
@@ -296,8 +295,8 @@ namespace slam_utils
 
         good_match = false;
 
-        if (repeat_match_count > 0)
-            std::cout << "--------------------------------------------------repeating match x"<<repeat_match_count << std::endl;
+        // if (repeat_match_count > 0)
+        //     std::cout << "--------------------------------------------------repeating match x"<<repeat_match_count << std::endl;
 
         cv::Mat descriptors1, descriptors2;
         extractor_->compute(image1,imgpts1,descriptors1);
@@ -364,8 +363,8 @@ namespace slam_utils
         cv::Mat out_match;
         if (
             ((final_matches.size()>(0.18*float(imgpts1.size())) && final_matches.size()>(0.18*float(imgpts2.size()))) && (imgpts1.size()>200 && imgpts2.size()>200))
-            // ||final_matches.size() > 100 
-            || (repeat_match_count >= min_repeat_match_count_)// && final_matches.size()>50)
+            ||final_matches.size() > 80 
+            // || (repeat_match_count >= min_repeat_match_count_)// && final_matches.size()>50)
             // || (final_matches.size()>50 && (final_matches.size()>(0.2*float(imgpts1.size()))||(final_matches.size()>(0.2*float(imgpts1.size())) ) ))
            )
         {

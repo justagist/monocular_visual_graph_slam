@@ -630,7 +630,7 @@ namespace slam_utils
         std::string icp = "Loop Closure Transformation ICP Parameters:-";
         if (info->transform_est_icp_.parameters_defined_)
             icp += "\n  --Inlier Threshold: "+std::to_string(info->transform_est_icp_.inlier_threshold_)+"; Max Iterations: " + std::to_string(info->transform_est_icp_.max_iterations_)+ "; Refinement Sigma: " + std::to_string(info->transform_est_icp_.refine_sigma_)+ "; Max Refinement Iterations: " + std::to_string(info->transform_est_icp_.refine_max_iterations_);
-        else icp += " No Loop Closures were detected.";
+        else icp += " ICP was not used";
 
         std::string fabmap = "FabMap Modifiers:- First Image Frame: " + std::to_string(info->fabmap.first_bow_img_) + "; Frames Skipped: " + std::to_string(info->fabmap.skip_);
 

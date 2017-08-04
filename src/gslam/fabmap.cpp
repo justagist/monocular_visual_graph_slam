@@ -120,8 +120,8 @@ namespace gSlam
     nextImageID = 0;
     storage_retrival_counter_ = 0;
     min_fabmap_baseline_ = 0;
-    first_bow_img_ = 200;
-    skip = 200;
+    first_bow_img_ = 120;
+    skip = 250;
     valid = true;   
 
     // Recording parameters in info object
