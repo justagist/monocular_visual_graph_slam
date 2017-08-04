@@ -199,6 +199,32 @@ int main(int argc, char** argv)
 
             gSlam::customtype::KeyPoints key_points;
             cv::KeyPoint::convert(vOdom.getCurrent2dKeyPoints(), key_points);
+
+            // cv::Mat out1, out2;
+            // cv::drawKeypoints(frame, key_points, out1);
+
+            // std::vector<cv::Point2f> testpoints = vOdom.getCurrent2dKeyPoints();
+            // std::cout << vOdom.getCurrent2dKeyPoints() << std::endl;
+            // cv::TermCriteria crit(cv::TermCriteria::COUNT|cv::TermCriteria::EPS,20,0.03);
+            // cv::Mat grayframe;
+            // cv::cvtColor(frame, grayframe, CV_BGR2GRAY);
+            // cv::cornerSubPix(grayframe, testpoints, cv::Size(31,31), cv::Size(-1,-1), crit);
+            // gSlam::customtype::KeyPoints kp2;
+
+            // cv::KeyPoint::convert(testpoints, kp2);
+            // cv::drawKeypoints(frame, kp2, out2);
+
+            // cv::imshow("prev", out1);
+            // cv::imshow("new", out2);
+            // cv::waitKey(0);
+
+            // std::cout << "now" << std::endl << testpoints << std::endl;
+
+            // std::cout << vOdom.getCurrent2dKeyPoints() << std::endl;
+
+            // std::vector<cv::Point2f> testpoints;
+            // cv::KeyPoint::convert(key_points, testpoints);
+            // std::cout << "compare\n"  << testpoints << std::endl;
             // std::cout <<"2: " << key_points.size() << std::endl;
 
             // for (int i = 0; i < key_points.size(); ++i)

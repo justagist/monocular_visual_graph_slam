@@ -24,7 +24,7 @@ public:
 
     customtype::TransformSE3 estimateTransformUsingOpticalFlow(DataSpot3D::DataSpot3DPtr data_spot_src, DataSpot3D::DataSpot3DPtr data_spot_target,
                                                                double& variance, int& correspondences, double& prop_matches, 
-                                                               bool& converge_status, bool repeat_loop_match);
+                                                               bool& converge_status);
 
 private:
     slam_utils::ImageMatcher spot_matcher_;

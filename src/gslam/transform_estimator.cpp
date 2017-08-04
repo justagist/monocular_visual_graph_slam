@@ -145,11 +145,68 @@ namespace gSlam
 
     }
 
+    // TODO: estimate relative transform as follows: obtain the pose at the 'loop closure image' using tracking similar to STAM, by calculating optical flow from the current image, and then calculating its projection matrix. The relative pose between this pose and the 'actual' pose of the loop image should be the loop closure constraint.
+
+    // ******** Tracking from tgt --> src **********
+    // tgt: current image
+    // src: loop closure match image
     customtype::TransformSE3 TransformEstimator::estimateTransformUsingOpticalFlow(DataSpot3D::DataSpot3DPtr data_spot_src, 
                                                                                    DataSpot3D::DataSpot3DPtr data_spot_target,
                                                                                    double& variance, int& correspondences, double& prop_matches, 
-                                                                                   bool& converge_status, bool repeat_loop_match)
+                                                                                   bool& converge_status)
     {
+
+        // TODO: IF FAILS, TRY CREATING A OPTICAL FLOW PYRAMID OF THE FIRST IMAGE USING BUILDOPTICALFLOWPYRAMID FUNCTION AND PASS TO THE CALCOPTICALFLOWPYRLK FUNCTION INSTEAD OF THE INPUT IMAGE 1
+
+        // calculate optical flow from tgt img to src img, and obtain filtered keypoints in the src img
+        cv::Mat tgt_gray, src_gray;
+        std::vector<cv::Point2f> tgt_points;
+        cv::KeyPoint::convert(data_spot_target->getImagePoints(), tgt_points);
+        cv::cvtColor(data_spot_target->getImageColor(), tgt_gray, CV_BGR2GRAY);
+
+        std::vector<cv::Point2f> src_points;
+        cv::cvtColor(data_spot_src->getImageColor(), src_gray, CV_BGR2GRAY);
+        std::vector<uchar> status;
+        cv::Mat errors;
+
+        // imshow("current_frame", tgt_gray);
+        // cv::waitKey(1);
+
+        cv::calcOpticalFlowPyrLK(tgt_gray, src_gray, tgt_points, src_points, status, errors);
+
+        std::vector<cv::Point2f> filtered_p2D;
+        customtype::WorldPtsType filtered_p3D;
+        // std::vector<int> filtered_ids;
+        for (int i = 0; i < tgt_points.size(); i++) 
+        {
+            if (status[i] != 0 && errors.at<float>(i) < 12.0f)   // klt ok!
+            {
+
+                filtered_p2D.push_back(src_points[i]);
+                filtered_p3D.push_back(data_spot_target->getWorldPoints()[i]);
+
+                // Meaning: f is visible in this frame
+            }
+        }
+
+        std::cout << tgt_points.size() << " = tgt_pts size; " << filtered_p2D.size() << " = filtered_p2D size" << std::endl;
+
+
+        // TEMPORARY ========== 
+
+        variance = 1;
+        correspondences = filtered_p2D.size();
+        prop_matches = correspondences/tgt_points.size();
+        converge_status = false;
+
+        // ====================
+
+        customtype::TransformSE3 relative_transformation;
+
+
+
+        return relative_transformation;
+
 
     }
 

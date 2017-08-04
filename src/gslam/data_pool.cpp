@@ -63,6 +63,8 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
         
         std::cout << " Estimating Loop Closure Transform " <<std::endl;
         link->transform_ = transform_est_.estimateTransform(spot_src, data_spot_ptr, variance, correspondences, prop_matches, status_good, repeat_match_);
+        // if ()
+        // link->transform_ = transform_est_.estimateTransformUsingOpticalFlow(spot_src, data_spot_ptr, variance, correspondences, prop_matches, status_good);
 
 
         // link->transform_ = data_spot_ptr->getPose().inverse()*spot_src->getPose();
