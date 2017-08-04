@@ -640,6 +640,57 @@ namespace slam_utils
         return ret_val;
     }
 
+    cv::Mat calcProjMatrix(std::vector<cv::Point2f> points2d, customtype::WorldPtsType points3d, cv::Mat intrinsics, cv::Mat distortion) 
+    {
+
+        assert(points2d.size() == points3d.size());
+
+        cv::Mat guess_r, guess_t;
+
+        std::vector<cv::Point2f>::const_iterator first = points2d.end() - 100;
+        std::vector<cv::Point2f>::const_iterator last = points2d.end();
+        std::vector<cv::Point2f> points2d_new(first, last);
+
+        std::vector<cv::Point3f>::const_iterator first3 = points3d.end() - 100;
+        std::vector<cv::Point3f>::const_iterator last3 = points3d.end();
+        std::vector<cv::Point3f> points3d_new(first3, last3);
+
+        // std::cout << " vectors 2d : \n" << points3d_new << std::endl; 
+
+        //        bool cv::solvePnPRansac   (   InputArray  objectPoints,
+        //        InputArray    imagePoints,
+        //        InputArray    cameraMatrix,
+        //        InputArray    distCoeffs,
+        //        OutputArray   rvec,
+        //        OutputArray   tvec,
+        //        bool  useExtrinsicGuess = false,
+        //        int   iterationsCount = 100,
+        //        float     reprojectionError = 8.0,
+        //        double    confidence = 0.99,
+        //        OutputArray   inliers = noArray(),
+        //        int   flags = SOLVEPNP_ITERATIVE
+        //        )
+
+        // curr3dPts_ = points3d_new;
+        // curr2dPts_ = points2d_new;
+        //LOG("Number of Points %d\n", points3d_new.size());
+
+        cv::solvePnPRansac(points3d_new, points2d_new, intrinsics, distortion, guess_r, guess_t, false, 100, 5.0, 0.99);
+        cv::Mat rvec = guess_r, tvec = guess_t;
+        cv::Mat R(3, 3, CV_64FC1);
+        cv::Rodrigues(rvec, R);
+
+        cv::Mat Pose(3,4, R.type());
+        R.copyTo(Pose(cv::Rect(0, 0, 3, 3)));
+        tvec.copyTo(Pose(cv::Rect(3, 0, 1, 3)));
+        cv::Mat projMatrix = Pose;
+
+
+    //    printProjMatrix();
+
+        return projMatrix;
+    }
+
 
 } // namespace slam_utils
 } // namespace gSlam

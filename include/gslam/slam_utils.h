@@ -93,6 +93,8 @@ namespace slam_utils
 
     std::string getSlamParameterInfo(SlamParameters::SLAMinfo::SLAMinfoPtr info);
 
+    cv::Mat calcProjMatrix(std::vector<cv::Point2f> points2d, customtype::WorldPtsType points3d, cv::Mat intrinsics, cv::Mat distortion);
+
 } // namespace slam_utils
 
 } // namespace gSlam

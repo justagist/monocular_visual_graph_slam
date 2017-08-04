@@ -2,6 +2,8 @@
 
 namespace gSlam
 {
+
+    // TransformEstimator::TransformEstimator():
     customtype::TransformSE3 TransformEstimator::estimateTransform(DataSpot3D::DataSpot3DPtr data_spot_src, DataSpot3D::DataSpot3DPtr data_spot_target,
                                                    double& variance, int& correspondences, double& prop_matches, bool& converge_status) 
     {
@@ -160,7 +162,7 @@ namespace gSlam
 
         // calculate optical flow from tgt img to src img, and obtain filtered keypoints in the src img
         cv::Mat tgt_gray, src_gray;
-        std::vector<cv::Point2f> tgt_points;
+        std::vector<cv::Point2f> tgt_points, tgt_points_new;
         cv::KeyPoint::convert(data_spot_target->getImagePoints(), tgt_points);
         cv::cvtColor(data_spot_target->getImageColor(), tgt_gray, CV_BGR2GRAY);
 
@@ -171,13 +173,21 @@ namespace gSlam
 
         // imshow("current_frame", tgt_gray);
         // cv::waitKey(1);
+        if (tgt_points.size() > 1000)
+        {
+            std::vector<cv::Point2f>::const_iterator first = tgt_points.end() - 1000;
+            std::vector<cv::Point2f>::const_iterator last = tgt_points.end();
+            std::vector<cv::Point2f> new_pts(first, last);
+            tgt_points_new = new_pts;
+        }
+        else tgt_points_new = tgt_points;
 
-        cv::calcOpticalFlowPyrLK(tgt_gray, src_gray, tgt_points, src_points, status, errors);
+        cv::calcOpticalFlowPyrLK(tgt_gray, src_gray, tgt_points_new, src_points, status, errors);
 
         std::vector<cv::Point2f> filtered_src, filtered_tgt;
         customtype::WorldPtsType filtered_src_3D;
         // std::vector<int> filtered_ids;
-        for (int i = 0; i < tgt_points.size(); i++) 
+        for (int i = 0; i < tgt_points_new.size(); i++) 
         {
             if (status[i] != 0 && errors.at<float>(i) < 12.0f)   // klt ok!
             {
@@ -190,26 +200,28 @@ namespace gSlam
             }
         }
 
-        std::cout << tgt_points.size() << " = tgt_pts size; " << filtered_src.size() << " = filtered_src size" << std::endl;
-        if (filtered_src.size() > 50)
+        std::cout << tgt_points_new.size() << " = tgt_pts size; " << filtered_src.size() << " = filtered_src size" << std::endl;
+        if (filtered_src.size() > 100)
         {
             customtype::KeyPoints kp1, kp2;
             cv::Mat out1, out2;
             cv::KeyPoint::convert(filtered_tgt, kp1);
             cv::KeyPoint::convert(filtered_src, kp2);
-            cv::drawKeypoints(data_spot_target->getImageColor(), kp1, out1);
-            cv::drawKeypoints(data_spot_src->getImageColor(), kp2, out2);
-            cv::imshow("matching_tgt", out1);
-            cv::imshow("matching_src", out2);
-            cv::waitKey(0);
+            // cv::drawKeypoints(data_spot_target->getImageColor(), kp1, out1);
+            // cv::drawKeypoints(data_spot_src->getImageColor(), kp2, out2);
+            // cv::imshow("matching_tgt", out1);
+            // cv::imshow("matching_src", out2);
+            // cv::waitKey(1);
 
         }
+
+        cv::Mat projMat = slam_utils::calcProjMatrix(filtered_src, filtered_src_3D, data_spot_src->getCamParams().intrinsics_, data_spot_src->getCamParams().distortion_);
 
         // TEMPORARY ========== 
 
         variance = 1;
         correspondences = filtered_src.size();
-        prop_matches = correspondences/tgt_points.size();
+        prop_matches = correspondences/tgt_points_new.size();
         converge_status = false;
 
         // ====================

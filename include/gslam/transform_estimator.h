@@ -28,6 +28,7 @@ public:
 
 private:
     slam_utils::ImageMatcher spot_matcher_;
+    // cv::Mat::intrinsics_, distortion_;
     // int repeat_match_counter_, max_repeat_match_counter_;
 
 }; // class TransformEstimator
