@@ -7,6 +7,7 @@
 #include "gslam/typedefs.h"
 #include <visualization_msgs/Marker.h>
 #include <nav_msgs/Path.h>
+#include "gslam/data_pool.h"
 
 namespace gSlam
 {
@@ -17,9 +18,9 @@ namespace gSlam
 
         geometry_msgs::TransformStamped setFrameCorrection();
 
-        visualization_msgs::Marker createPointMsg(std::vector<cv::Point3f> world_points);
+        void createPointMsg(customtype::WorldPtsType world_points, visualization_msgs::Marker& world_visualizer);
 
-        nav_msgs::Path createPathMsg();
+        nav_msgs::Path createPathMsg(DataSpot3D::DataSpotMap posemap);
 
     } // ros_utils
 }// gSlam

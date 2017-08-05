@@ -80,19 +80,23 @@ int main(int argc, char** argv)
 
     ros::init(argc, argv, "odometry_publisher");
     ros::NodeHandle rosNode;
-    // ros::Publisher pose_pub = rosNode.advertise<geometry_msgs::PoseStamped>("vis_odom", 1000); // for publishing camera pose as posestamped msg
-    tf::TransformBroadcaster odom_broadcaster;
-    // tf::TransformBroadcaster frame_corrector; // coordinate frame orientation correction for ISMAR dataset
-    ros::Publisher world_point_pub = rosNode.advertise<visualization_msgs::Marker>("worldpoints", 10);
-    
     ros::Time current_time, last_time;
     current_time = ros::Time::now();
     last_time = ros::Time::now();
     ros::Rate r(1000);
 
+    // ros::Publisher pose_pub = rosNode.advertise<geometry_msgs::PoseStamped>("vis_odom", 1000); // for publishing camera pose as posestamped msg
+    tf::TransformBroadcaster odom_broadcaster;
+    // tf::TransformBroadcaster frame_corrector; // coordinate frame orientation correction for ISMAR dataset
+
+    ros::Publisher world_point_publisher = rosNode.advertise<visualization_msgs::Marker>("worldpoints", 10);
     visualization_msgs::Marker world_visualizer;
     world_visualizer.header.frame_id = "world_frame";
     world_visualizer.type = visualization_msgs::Marker::POINTS;
+
+    ros::Publisher trajectory_publisher = rosNode.advertise<nav_msgs::Path>("trajectory",1000);
+    nav_msgs::Path path_msg;
+    // path_msg.header.frame_id = "world_frame";
 
     // ==============================================================================================================
 
@@ -239,8 +243,6 @@ int main(int argc, char** argv)
             // }
             // std::cout << key_points.size() << " " << world_points.size() << std::endl;
             // std::cout << key_points << std::endl << world_points << std::endl;
-            if (world_points.size()>0)
-                world_visualizer = gSlam::ros_utils::createPointMsg(world_points);
 
             // get current camera pose from STAM
             gSlam::customtype::TransformSE3 posemat; 
@@ -276,17 +278,22 @@ int main(int argc, char** argv)
             
 
             
-            geometry_msgs::TransformStamped odom_trans = gSlam::ros_utils::createOdomMsg(posemat);
 
             // geometry_msgs::TransformStamped coordinate_correction = gSlam::ros_utils::setFrameCorrection(); // coordinate frame orientation correction for ISMAR dataset
             if (ros_flag)
             {
-            //publish the transform and world points
-            odom_broadcaster.sendTransform(odom_trans);
-            world_point_pub.publish(world_visualizer);
-            // frame_corrector.sendTransform(coordinate_correction); // coordinate frame orientation correction for ISMAR dataset
-            }
+                if (world_points.size()>0)
+                    gSlam::ros_utils::createPointMsg(world_points, world_visualizer);
+                
+                geometry_msgs::TransformStamped odom_trans = gSlam::ros_utils::createOdomMsg(posemat);
+                path_msg = gSlam::ros_utils::createPathMsg(slam->getDataPool().getDataSpots());
 
+                //publish the transform and world points
+                odom_broadcaster.sendTransform(odom_trans);
+                world_point_publisher.publish(world_visualizer);
+                trajectory_publisher.publish(path_msg);
+                // frame_corrector.sendTransform(coordinate_correction); // coordinate frame orientation correction for ISMAR dataset
+            }
 
             last_time = current_time;
             r.sleep();

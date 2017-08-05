@@ -75,10 +75,10 @@ namespace gSlam
             return transf;
         }
 
-        visualization_msgs::Marker createPointMsg(customtype::WorldPtsType world_points)
+        void createPointMsg(customtype::WorldPtsType world_points, visualization_msgs::Marker& world_visualizer)
         {
             // visualization_msgs::Marker world_visualizer;
-            visualization_msgs::Marker world_visualizer;
+            // visualization_msgs::Marker world_visualizer;
             world_visualizer.header.stamp = ros::Time::now();
             world_visualizer.action = visualization_msgs::Marker::ADD;
             world_visualizer.ns = "3D Keypoints";
@@ -99,11 +99,32 @@ namespace gSlam
                 // --------------------
                 world_visualizer.points.push_back (gm_p);
             }
-
-            return world_visualizer;
         }
 
-        
+        nav_msgs::Path createPathMsg(DataSpot3D::DataSpotMap posemap)
+        {
+            nav_msgs::Path path_msg;
+            path_msg.header.frame_id = "world_frame";
+            path_msg.header.stamp = ros::Time::now();
+
+            // path_msg.poses.header.frame_id = "world_frame";
+            // path_msg.poses.header.frame_id = ""
+            std::vector<geometry_msgs::PoseStamped> poses(posemap.size());
+
+            for (auto it = posemap.begin(); it != posemap.end(); it++)
+            {
+                Eigen::Vector3d t = it->second->getPose().translation();
+                poses.at(it->first).pose.position.x = t.x();
+                poses.at(it->first).pose.position.y = t.y();
+                poses.at(it->first).pose.position.z = t.z();
+                poses.at(it->first).header.frame_id = "world_frame";
+                poses.at(it->first).header.stamp = ros::Time::now();
+            }
+
+            path_msg.poses = poses;
+            // path_msg.poses.header.frame_id = "world_frame";
+            return path_msg;
+        }
 
     } // ros_utils
 }// gSlam

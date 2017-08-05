@@ -80,7 +80,8 @@ void GrSLAM::processData(const customtype::TransformSE3& odom_pose,
 
 }
 
-void GrSLAM::optimizeGraph(bool optimize_near, bool optimize_far){
+void GrSLAM::optimizeGraph(bool optimize_near, bool optimize_far)
+{
 
     {
         customtype::Lock lk(mutex_graph_);
@@ -90,16 +91,15 @@ void GrSLAM::optimizeGraph(bool optimize_near, bool optimize_far){
         // Manual unlocking is done before notifying, to avoid waking up
         // the waiting thread only to block again (see notify_one for details)
         lk.unlock();
-
     }
 
     cond_var_.notify_one();
 
-
 }
 
 
-void GrSLAM::saveTrajectory(const std::string& filename){
+void GrSLAM::saveTrajectory(const std::string& filename)
+{
     //Lock graph
     customtype::Lock* lock = NULL;
     lock = new customtype::Lock(this->getMutex());
@@ -116,8 +116,6 @@ void GrSLAM::saveTrajectory(const std::string& filename){
         Eigen::Quaternion<double> q(pose.rotation());
         // Format: timestamp tx ty tx qx qy qz qw
         output << it->second->getId() << " " << t.x() << " " <<  t.y() << " " << t.z() << " " << q.x() << " " << q.y() << " " << q.z() << " " << q.w() <<  std::endl;
-
-
     }
 
     // output << "info:: " << 
@@ -132,9 +130,11 @@ void GrSLAM::saveTrajectory(const std::string& filename){
     delete lock;
 }
 
-void GrSLAM::optmizeGraphThread(){
+void GrSLAM::optmizeGraphThread()
+{
 
-    while(keep_opt_thread_alive_){
+    while(keep_opt_thread_alive_)
+    {
 
 
         // Wait until main() sends data
