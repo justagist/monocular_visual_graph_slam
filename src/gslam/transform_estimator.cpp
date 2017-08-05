@@ -190,8 +190,8 @@ namespace gSlam
         cv::calcOpticalFlowPyrLK(tgt_gray, src_gray, tgt_points_new, src_points, status, errors);
 
         // ------- Defining optical flow thresholds
-        float opt_flow_err_tol = 10.0; // was 12.0
-        int opt_flow_min_match_reqd = 40; // was 50;
+        float opt_flow_err_tol = 12.0; // was 12.0
+        int opt_flow_min_match_reqd = 50; // was 50;
 
         // ------- recording parameters to SlamParameters 
         if (!opt_flow_parameters_defined)
@@ -267,7 +267,7 @@ namespace gSlam
                 cv::drawKeypoints(data_spot_src->getImageColor(), kp2, out2);
                 cv::imshow("matching_tgt", out1);
                 cv::imshow("matching_src", out2);
-                cv::waitKey(0);
+                // cv::waitKey(0);
             }
             // ==========================
 

@@ -120,7 +120,7 @@ namespace gSlam
     nextImageID = 0;
     storage_retrival_counter_ = 0;
     min_fabmap_baseline_ = 0;
-    first_bow_img_ = 170;
+    first_bow_img_ = 120;
     skip = 250;
     valid = true;   
 
@@ -190,7 +190,7 @@ void FabMap::compareAndAdd(const cv::Mat& keyFrameImage, int& out_newID, int& ou
     //     // std::cout << bow_storage_[storage_retrival_counter_-1]<< std::endl << fabMap->getTestImgDescriptors()[storage_retrival_counter_-1] << std::endl;
     // }
 
-    if ((nextImageID - first_bow_img_)%skip == 0 && nextImageID != 0 && (nextImageID - first_bow_img_) >= 0)// && nextImageID != 0)
+    if ((nextImageID - first_bow_img_)%skip == 0 && (nextImageID - first_bow_img_) >= 0)// && nextImageID != 0)
     {   
         std::cout << "                -------------------------------- here now ! " << std::endl;
         if (!prev_bow_.empty())

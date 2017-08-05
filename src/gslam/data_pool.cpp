@@ -55,7 +55,6 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
     float loop_info_denom = 1;
     if( repeat_match_count_ > min_required_repeat_) 
     {
-        std::cout << "Possible loop closure : " << new_id << "->" << loop_id << std::endl;
         double variance;
         int correspondences, max_correspondence;
         bool status_good = false;
@@ -67,6 +66,7 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
         link->from_id_ = spot_src->getId();
         link->to_id_ = data_spot_ptr->getId();
         
+        std::cout << "Possible loop closure : " << link->from_id_ << "->" << link->to_id_ << std::endl;
         std::cout << " Estimating Loop Closure Transform " <<std::endl;
 
         // ======= USE ANY ONE METHOD:
@@ -106,14 +106,14 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
                 new_count_loop_near_++;
             }
 
-            Eigen::Vector3d t0 = (spot_src->getPose()*link->transform_).translation();
+            Eigen::Vector3d t0 = (spot_src->getPose()*link->transform_).translation(); // =============== ???
             Eigen::Vector3d t1 = data_spot_ptr->getPose().translation();
             float dist = (t1-t0).norm();
             std::cout <<"               DISTANCE:    " <<dist << std::endl;
 
 
             // if (dist > 500)
-            char key = 'y';//cv::waitKey(0);
+            char key = cv::waitKey(0);
             // char key = 'y';
             if (key == 'y')
             {
