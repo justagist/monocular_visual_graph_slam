@@ -31,6 +31,13 @@ namespace SlamParameters
             int max_iterations_, refine_max_iterations_;
             bool parameters_defined_ = false;
         };
+
+        struct opticalFlowThresholds
+        {
+            float max_correspondence_error_;
+            int min_correspondences_required_;
+            bool parameters_defined_ = false;
+        };
         
 
     public:
@@ -54,7 +61,9 @@ namespace SlamParameters
         
         FabmapConstants fabmap;
 
-        icpParameters transform_est_icp_;
+        icpParameters transform_est_icp;
+
+        opticalFlowThresholds lk_parameters;
 
     }; // class SLAMinfo
 

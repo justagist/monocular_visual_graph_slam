@@ -100,11 +100,11 @@ namespace gSlam
 
             if (!icp_parameters_defined)
             {
-                SlamParameters::info->transform_est_icp_.inlier_threshold_ = inlierThreshold;
-                SlamParameters::info->transform_est_icp_.max_iterations_ = iterations;
-                SlamParameters::info->transform_est_icp_.refine_sigma_ = refineModelSigma;
-                SlamParameters::info->transform_est_icp_.refine_max_iterations_ = refineModelIterations;
-                SlamParameters::info->transform_est_icp_.parameters_defined_ = true;
+                SlamParameters::info->transform_est_icp.inlier_threshold_ = inlierThreshold;
+                SlamParameters::info->transform_est_icp.max_iterations_ = iterations;
+                SlamParameters::info->transform_est_icp.refine_sigma_ = refineModelSigma;
+                SlamParameters::info->transform_est_icp.refine_max_iterations_ = refineModelIterations;
+                SlamParameters::info->transform_est_icp.parameters_defined_ = true;
                 icp_parameters_defined = true;
             }
             // converge_status = true;
@@ -158,6 +158,8 @@ namespace gSlam
                                                                                    bool& converge_status)
     {
 
+        static bool opt_flow_parameters_defined = false;
+
         // TODO: IF FAILS, TRY CREATING A OPTICAL FLOW PYRAMID OF THE FIRST IMAGE USING BUILDOPTICALFLOWPYRAMID FUNCTION AND PASS TO THE CALCOPTICALFLOWPYRLK FUNCTION INSTEAD OF THE INPUT IMAGE 1
 
         converge_status = false;
@@ -187,12 +189,25 @@ namespace gSlam
 
         cv::calcOpticalFlowPyrLK(tgt_gray, src_gray, tgt_points_new, src_points, status, errors);
 
+        // ------- Defining optical flow thresholds
+        float opt_flow_err_tol = 10.0; // was 12.0
+        int opt_flow_min_match_reqd = 40; // was 50;
+
+        // ------- recording parameters to SlamParameters 
+        if (!opt_flow_parameters_defined)
+        {
+            SlamParameters::info->lk_parameters.max_correspondence_error_ = opt_flow_err_tol;
+            SlamParameters::info->lk_parameters.min_correspondences_required_ = opt_flow_min_match_reqd;
+            SlamParameters::info->lk_parameters.parameters_defined_ = true;
+            opt_flow_parameters_defined = true;
+        }
+
         // ------- Removing features that were not matched
         std::vector<cv::Point2f> filtered_src, filtered_tgt;
         customtype::WorldPtsType filtered_src_3D;
         for (int i = 0; i < tgt_points_new.size(); i++) 
         {
-            if (status[i] != 0 && errors.at<float>(i) < 12.0f)   // klt ok!
+            if (status[i] != 0 && errors.at<float>(i) < opt_flow_err_tol)   // klt ok!
             {
 
                 filtered_src.push_back(src_points[i]);
@@ -206,7 +221,7 @@ namespace gSlam
         std::cout << tgt_points_new.size() << " = tgt_pts size; " << filtered_src.size() << " = filtered_src size" << std::endl;
 
         // ------------------ Estimating Projection matrix and pose if enough features are matched across the loop closure
-        if (filtered_src.size() > 50 || filtered_src.size()>0.5*tgt_points_new.size())
+        if (filtered_src.size() >= opt_flow_min_match_reqd || filtered_src.size()>0.5*tgt_points_new.size())
         {
 
             cv::Mat projMat = slam_utils::calcProjMatrix(filtered_src, filtered_src_3D, data_spot_src->getCamParams().intrinsics_, data_spot_src->getCamParams().distortion_);
@@ -231,12 +246,17 @@ namespace gSlam
             // variance = 1/prop_matches;
             converge_status = true;
 
+            std::cout << "data_spot_src actual pose \n " << data_spot_src->getPose().matrix() << std::endl;
+            std::cout << "data_spot_target actual pose \n " << data_spot_target->getPose().matrix() << std::endl;
+            customtype::TransformSE3 inv =  data_spot_target->getPose().inverse();
+            std::cout << inv.matrix() << std::endl;
+
             // ----------- Relative transform estimate if the projection estimate is obtained
             customtype::TransformSE3 relative_transformation = data_spot_target->getPose().inverse()*pose_estimate;
             std::cout << "Estimated Relative Transform: \n" << relative_transformation.matrix() << std::endl;
 
             // ========================== DEBUG
-            bool show_optflow_matches = false;
+            bool show_optflow_matches = true;
             if (show_optflow_matches)
             {
                 customtype::KeyPoints kp1, kp2;

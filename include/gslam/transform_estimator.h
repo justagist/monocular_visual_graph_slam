@@ -15,7 +15,7 @@ class TransformEstimator
 
 public:
 
-    // TransformEstimator()
+    // TransformEstimator();
     // {
     //     SlamParameters::info->matcher_max_repetition_ = max_repeat_match_counter_;
     // }
@@ -27,6 +27,8 @@ public:
 
 private:
     slam_utils::ImageMatcher spot_matcher_;
+    // float opt_flow_err_tol_;
+    // int opt_flow_min_match_reqd_;
     // cv::Mat::intrinsics_, distortion_;
     // int repeat_match_counter_, max_repeat_match_counter_;
 

@@ -537,14 +537,19 @@ namespace slam_utils
         std::string matcher = "Repeated Matches Required: min " + std::to_string(info->matcher_min_repetition_)+ ", max " + std::to_string(info->matcher_max_repetition_);
 
         std::string icp = "Loop Closure Transformation ICP Parameters:-";
-        if (info->transform_est_icp_.parameters_defined_)
-            icp += "\n  --Inlier Threshold: "+std::to_string(info->transform_est_icp_.inlier_threshold_)+"; Max Iterations: " + std::to_string(info->transform_est_icp_.max_iterations_)+ "; Refinement Sigma: " + std::to_string(info->transform_est_icp_.refine_sigma_)+ "; Max Refinement Iterations: " + std::to_string(info->transform_est_icp_.refine_max_iterations_);
+        if (info->transform_est_icp.parameters_defined_)
+            icp += "\n  --Inlier Threshold: "+std::to_string(info->transform_est_icp.inlier_threshold_)+"; Max Iterations: " + std::to_string(info->transform_est_icp.max_iterations_)+ "; Refinement Sigma: " + std::to_string(info->transform_est_icp.refine_sigma_)+ "; Max Refinement Iterations: " + std::to_string(info->transform_est_icp.refine_max_iterations_);
         else icp += " ICP was not used";
+
+        std::string optical_flow = "LK Optical Flow Parameters:-";
+        if (info->lk_parameters.parameters_defined_)
+            optical_flow += " Error Tolerence: " + std::to_string(info->lk_parameters.max_correspondence_error_)+"; Min Matches Required: " + std::to_string(info->lk_parameters.min_correspondences_required_);
+        else optical_flow += " Optical Flow was not used";
 
         std::string fabmap = "FabMap Modifiers:- First Image Frame: " + std::to_string(info->fabmap.first_bow_img_) + "; Frames Skipped: " + std::to_string(info->fabmap.skip_);
 
         // std::cout << optimisation << std::endl;
-        std::string ret_val = "-"+scene_info + "; " + "; " + frames + "; " + exit_status + "\n" + "-"+ baseline + "; Graph Optimization: " +  optimisation + "\n" + "-"+ loop_closure_info + "\n" + "-"+ odometry_constraint_info + "\n" + "-"+ fabmap + "\n" + "-"+ matcher + "\n" + "-"+ icp;
+        std::string ret_val = "-"+scene_info + "; " + "; " + frames + "; " + exit_status + "\n" + "-"+ baseline + "; Graph Optimization: " +  optimisation + "\n" + "-"+ loop_closure_info + "\n" + "-"+ odometry_constraint_info + "\n" + "-"+ fabmap + "\n" + "-"+ matcher + "\n" + "-"+ icp + "\n" + "-"+ optical_flow;
 
         return ret_val;
     }
