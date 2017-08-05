@@ -90,11 +90,17 @@ int main(int argc, char** argv)
     // tf::TransformBroadcaster frame_corrector; // coordinate frame orientation correction for ISMAR dataset
 
     // ros::Publisher marker_pub = rosNode.advertise<visualization_msgs::Marker>("worldpoints", 10);
-    ros::Publisher marker_pub = rosNode.advertise<visualization_msgs::Marker>("worldpoints_and_optimised_trajectory", 10);
-    visualization_msgs::Marker world_visualizer, optimised_trajectory_msg;
+    ros::Publisher marker_pub = rosNode.advertise<visualization_msgs::Marker>("markers", 10);
+    visualization_msgs::Marker world_visualizer, optimised_trajectory_msg; // optimised_trajectory_msg is used only if marker message is used for publishing trajectory
     world_visualizer.header.frame_id = "world_frame";
     world_visualizer.type = visualization_msgs::Marker::POINTS;
     world_visualizer.id = 0;
+
+    // ----- Use any 1 message type for publishing trajectory - path or marker
+    ros::Publisher trajectory_publisher = rosNode.advertise<nav_msgs::Path>("trajectory",1000);
+    nav_msgs::Path path_msg;
+    // ------------
+
 
     // ==============================================================================================================
 
@@ -284,14 +290,19 @@ int main(int argc, char** argv)
                     gSlam::ros_utils::createPointMsg(world_points, world_visualizer);
                 
                 geometry_msgs::TransformStamped odom_trans = gSlam::ros_utils::createOdomMsg(posemat);
-                optimised_trajectory_msg = gSlam::ros_utils::createOptimisedTrajectoryMsg(slam->getDataPool().getDataSpots());
 
-                //publish the transform and world points
+                //// ------ Use 1 of the following trajectory message types
+                // optimised_trajectory_msg = gSlam::ros_utils::createOptimisedTrajectoryMsg(slam->getDataPool().getDataSpots());
+                path_msg = gSlam::ros_utils::createPathMsg(slam->getDataPool().getDataSpots());
+                //// --------------------------------------------
+
+                // -------- publish the transform and world points
                 odom_broadcaster.sendTransform(odom_trans);
                 marker_pub.publish(world_visualizer);
-                marker_pub.publish(optimised_trajectory_msg);
-                // marker_pub.publish(path_msg);
-                // frame_corrector.sendTransform(coordinate_correction); // coordinate frame orientation correction for ISMAR dataset
+
+                //// ------ Use only if publishing path message and not marker message for trajectory
+                trajectory_publisher.publish(path_msg);
+                //// ----------------------------
             }
 
             last_time = current_time;

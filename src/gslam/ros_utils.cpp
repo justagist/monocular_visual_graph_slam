@@ -97,6 +97,8 @@ namespace gSlam
             }
         }
 
+
+        // ---------- Create path using marker message
         visualization_msgs::Marker createOptimisedTrajectoryMsg(DataSpot3D::DataSpotMap posemap)
         {
             visualization_msgs::Marker optimised_trajectory_msg;
@@ -124,6 +126,32 @@ namespace gSlam
             }
 
             return optimised_trajectory_msg;
+        }
+
+        // --------- Create trajectory using path message
+        nav_msgs::Path createPathMsg(DataSpot3D::DataSpotMap posemap)
+        {
+            nav_msgs::Path path_msg;
+            path_msg.header.frame_id = "world_frame";
+            path_msg.header.stamp = ros::Time::now();
+
+            // path_msg.poses.header.frame_id = "world_frame";
+            // path_msg.poses.header.frame_id = ""
+            std::vector<geometry_msgs::PoseStamped> poses(posemap.size());
+
+            for (auto it = posemap.begin(); it != posemap.end(); it++)
+            {
+                Eigen::Vector3d t = it->second->getPose().translation();
+                poses.at(it->first).pose.position.x = t.x()/visualization_scale_;
+                poses.at(it->first).pose.position.y = t.y()/visualization_scale_;
+                poses.at(it->first).pose.position.z = t.z()/visualization_scale_;
+                poses.at(it->first).header.frame_id = "world_frame";
+                poses.at(it->first).header.stamp = ros::Time::now();
+            }
+
+            path_msg.poses = poses;
+            // path_msg.poses.header.frame_id = "world_frame";
+            return path_msg;
         }
 
     } // ros_utils

@@ -7,6 +7,7 @@
 #include "gslam/typedefs.h"
 #include <visualization_msgs/Marker.h>
 #include "gslam/data_pool.h"
+#include <nav_msgs/Path.h>
 
 namespace gSlam
 {
@@ -19,7 +20,9 @@ namespace gSlam
 
         void createPointMsg(customtype::WorldPtsType world_points, visualization_msgs::Marker& world_visualizer);
 
+        // Either of the 2 following methods can be used for visualising trajectory
         visualization_msgs::Marker createOptimisedTrajectoryMsg(DataSpot3D::DataSpotMap posemap);
+        nav_msgs::Path createPathMsg(DataSpot3D::DataSpotMap posemap);
 
     } // ros_utils
 }// gSlam
