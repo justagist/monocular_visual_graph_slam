@@ -6,6 +6,7 @@
 #include <pcl_ros/point_cloud.h>
 #include "gslam/typedefs.h"
 #include <visualization_msgs/Marker.h>
+#include <nav_msgs/Path.h>
 
 namespace gSlam
 {
@@ -16,7 +17,9 @@ namespace gSlam
 
         geometry_msgs::TransformStamped setFrameCorrection();
 
-        void createPointMsg(visualization_msgs::Marker& world_visualizer, std::vector<cv::Point3f> world_points);
+        visualization_msgs::Marker createPointMsg(std::vector<cv::Point3f> world_points);
+
+        nav_msgs::Path createPathMsg();
 
     } // ros_utils
 }// gSlam

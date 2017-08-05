@@ -75,9 +75,10 @@ namespace gSlam
             return transf;
         }
 
-        void createPointMsg(visualization_msgs::Marker& world_visualizer, customtype::WorldPtsType world_points)
+        visualization_msgs::Marker createPointMsg(customtype::WorldPtsType world_points)
         {
             // visualization_msgs::Marker world_visualizer;
+            visualization_msgs::Marker world_visualizer;
             world_visualizer.header.stamp = ros::Time::now();
             world_visualizer.action = visualization_msgs::Marker::ADD;
             world_visualizer.ns = "3D Keypoints";
@@ -86,18 +87,20 @@ namespace gSlam
             world_visualizer.color.g = 1.0f;
             world_visualizer.color.a = 1.0;
             for(auto it = world_points.begin(); it != world_points.end(); it++)
-                {
-                    cv::Point3d point = *it;
-                    geometry_msgs::Point gm_p;
-                    // ismar --------------
-                    // gm_p.x = -point.z/visualization_scale_; gm_p.y = point.x/visualization_scale_; gm_p.z = -point.y/visualization_scale_;
-                    // --------------------
+            {
+                cv::Point3d point = *it;
+                geometry_msgs::Point gm_p;
+                // ismar --------------
+                // gm_p.x = -point.z/visualization_scale_; gm_p.y = point.x/visualization_scale_; gm_p.z = -point.y/visualization_scale_;
+                // --------------------
 
-                    // actual -------------
-                    gm_p.x = point.x/visualization_scale_; gm_p.y = point.y/visualization_scale_; gm_p.z = point.z/visualization_scale_;
-                    // --------------------
-                    world_visualizer.points.push_back (gm_p);
-                }
+                // actual -------------
+                gm_p.x = point.x/visualization_scale_; gm_p.y = point.y/visualization_scale_; gm_p.z = point.z/visualization_scale_;
+                // --------------------
+                world_visualizer.points.push_back (gm_p);
+            }
+
+            return world_visualizer;
         }
 
         

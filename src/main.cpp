@@ -240,7 +240,7 @@ int main(int argc, char** argv)
             // std::cout << key_points.size() << " " << world_points.size() << std::endl;
             // std::cout << key_points << std::endl << world_points << std::endl;
             if (world_points.size()>0)
-                gSlam::ros_utils::createPointMsg(world_visualizer, world_points);
+                world_visualizer = gSlam::ros_utils::createPointMsg(world_points);
 
             // get current camera pose from STAM
             gSlam::customtype::TransformSE3 posemat; 

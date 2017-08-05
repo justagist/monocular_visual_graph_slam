@@ -15,7 +15,7 @@ class TransformEstimator
 
 public:
 
-    // TransformEstimator();
+    TransformEstimator(){}
     // {
     //     SlamParameters::info->matcher_max_repetition_ = max_repeat_match_counter_;
     // }

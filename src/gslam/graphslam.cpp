@@ -1,5 +1,3 @@
-
-
 #include "gslam/graphslam.h"
 
 namespace gSlam
@@ -7,9 +5,8 @@ namespace gSlam
 
 GrSLAM::GrSLAM() : map_correction_(customtype::TransformSE3::Identity()), optimize_now_(false), keep_opt_thread_alive_(true), optimize_near_(false), optimize_far_(false) {}
 
-GrSLAM::~GrSLAM(){
-
-
+GrSLAM::~GrSLAM()
+{
     // Quit optimization thread
 
     {
@@ -20,10 +17,6 @@ GrSLAM::~GrSLAM(){
     }
 
     cond_var_.notify_all();//*
-
-
-
-
 }
 
 void GrSLAM::init(){ 
