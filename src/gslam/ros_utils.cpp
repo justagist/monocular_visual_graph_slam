@@ -1,4 +1,5 @@
 #include "gslam/ros_utils.h"
+#include <math.h>
 
 
 namespace gSlam
@@ -46,11 +47,6 @@ namespace gSlam
 
             // --------------------------
 
-            // std::cout << "trans " << << std::endl;
-            // std::cout << "trans " << posemat.translation()[1]<< std::endl;
-            // std::cout << "trans " << posemat.translation()[2]<< std::endl;
-            // std::cout << "trans " << posemat.translation()<< std::endl;
-            // std::cout << "Mat" << posemat.matrix() << std::endl;
             odom_trans.transform.rotation.x = q1;
             odom_trans.transform.rotation.y = q2;
             odom_trans.transform.rotation.z = q3;
@@ -101,29 +97,33 @@ namespace gSlam
             }
         }
 
-        nav_msgs::Path createPathMsg(DataSpot3D::DataSpotMap posemap)
+        visualization_msgs::Marker createOptimisedTrajectoryMsg(DataSpot3D::DataSpotMap posemap)
         {
-            nav_msgs::Path path_msg;
-            path_msg.header.frame_id = "world_frame";
-            path_msg.header.stamp = ros::Time::now();
-
-            // path_msg.poses.header.frame_id = "world_frame";
-            // path_msg.poses.header.frame_id = ""
-            std::vector<geometry_msgs::PoseStamped> poses(posemap.size());
+            visualization_msgs::Marker optimised_trajectory_msg;
+            optimised_trajectory_msg.header.frame_id = "world_frame";
+            optimised_trajectory_msg.type = visualization_msgs::Marker::LINE_STRIP;
+            optimised_trajectory_msg.id = 1;
+            optimised_trajectory_msg.header.stamp = ros::Time::now();
+            optimised_trajectory_msg.ns = "trajectory";
+            optimised_trajectory_msg.action = visualization_msgs::Marker::ADD;
+            optimised_trajectory_msg.scale.x = 0.005;
+            optimised_trajectory_msg.color.a = 1.0; 
+            optimised_trajectory_msg.color.r = 0.0f;
+            optimised_trajectory_msg.color.g = 0.0;
+            optimised_trajectory_msg.color.b = 0.0f;
 
             for (auto it = posemap.begin(); it != posemap.end(); it++)
             {
                 Eigen::Vector3d t = it->second->getPose().translation();
-                poses.at(it->first).pose.position.x = t.x();
-                poses.at(it->first).pose.position.y = t.y();
-                poses.at(it->first).pose.position.z = t.z();
-                poses.at(it->first).header.frame_id = "world_frame";
-                poses.at(it->first).header.stamp = ros::Time::now();
+                geometry_msgs::Point pose_pt;
+                pose_pt.x = t.x()/visualization_scale_;
+                pose_pt.y = t.y()/visualization_scale_;
+                pose_pt.z = t.z()/visualization_scale_;
+                optimised_trajectory_msg.points.push_back(pose_pt);
+
             }
 
-            path_msg.poses = poses;
-            // path_msg.poses.header.frame_id = "world_frame";
-            return path_msg;
+            return optimised_trajectory_msg;
         }
 
     } // ros_utils

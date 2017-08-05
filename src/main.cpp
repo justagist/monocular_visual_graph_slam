@@ -89,14 +89,12 @@ int main(int argc, char** argv)
     tf::TransformBroadcaster odom_broadcaster;
     // tf::TransformBroadcaster frame_corrector; // coordinate frame orientation correction for ISMAR dataset
 
-    ros::Publisher world_point_publisher = rosNode.advertise<visualization_msgs::Marker>("worldpoints", 10);
-    visualization_msgs::Marker world_visualizer;
+    // ros::Publisher marker_pub = rosNode.advertise<visualization_msgs::Marker>("worldpoints", 10);
+    ros::Publisher marker_pub = rosNode.advertise<visualization_msgs::Marker>("worldpoints_and_optimised_trajectory", 10);
+    visualization_msgs::Marker world_visualizer, optimised_trajectory_msg;
     world_visualizer.header.frame_id = "world_frame";
     world_visualizer.type = visualization_msgs::Marker::POINTS;
-
-    ros::Publisher trajectory_publisher = rosNode.advertise<nav_msgs::Path>("trajectory",1000);
-    nav_msgs::Path path_msg;
-    // path_msg.header.frame_id = "world_frame";
+    world_visualizer.id = 0;
 
     // ==============================================================================================================
 
@@ -286,12 +284,13 @@ int main(int argc, char** argv)
                     gSlam::ros_utils::createPointMsg(world_points, world_visualizer);
                 
                 geometry_msgs::TransformStamped odom_trans = gSlam::ros_utils::createOdomMsg(posemat);
-                path_msg = gSlam::ros_utils::createPathMsg(slam->getDataPool().getDataSpots());
+                optimised_trajectory_msg = gSlam::ros_utils::createOptimisedTrajectoryMsg(slam->getDataPool().getDataSpots());
 
                 //publish the transform and world points
                 odom_broadcaster.sendTransform(odom_trans);
-                world_point_publisher.publish(world_visualizer);
-                trajectory_publisher.publish(path_msg);
+                marker_pub.publish(world_visualizer);
+                marker_pub.publish(optimised_trajectory_msg);
+                // marker_pub.publish(path_msg);
                 // frame_corrector.sendTransform(coordinate_correction); // coordinate frame orientation correction for ISMAR dataset
             }
 

@@ -203,6 +203,9 @@ add_executable(vis_odo_node src/vis_odo_node.cpp)
 add_executable(test_node src/test.cpp)
 add_executable(main_slam_node src/main.cpp)
 
+add_executable(points_and_lines src/test_pub.cpp)
+target_link_libraries(points_and_lines ${catkin_LIBRARIES})
+
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
