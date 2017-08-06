@@ -219,7 +219,7 @@ int main(int argc, char** argv)
 
             // ------- Align pose (in camera frame) with body frame of drone
             posemat = posemat*gSlam::SlamParameters::pose_aligner_;
-            std::cout << posemat.matrix() << std::endl;
+            // std::cout << posemat.matrix() << std::endl;
             // std::cout << "Translation vector: " << posemat.translation().z() << std::endl;// << posemat(3,3) << std::endl << posemat(2,3) << std::endl;
 
             gSlam::customtype::ProjMatType projectionMatrix;

@@ -51,8 +51,8 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
     }
 
     prev_loop_id_ = loop_id; 
-    float loop_info_numer = 100;
-    float loop_info_denom = 1;
+    float loop_info_numer = 1;
+    float loop_info_denom = 100;
     if( repeat_match_count_ > min_required_repeat_) 
     {
         double variance;
@@ -77,8 +77,8 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
         // 2)----- Estimate loop closure constraint transformation from projection matrix, estimated using optical flow and pnp-ransac. Also checks if the loop closure is good.
         link->transform_ = transform_est_.estimateTransformUsingOpticalFlow(spot_src, data_spot_ptr, correspondences, max_correspondence, status_good);
         // [variance = 1/prop_matches]
-        variance = max_correspondence/correspondences;
-        std::cout << "variance here " << variance << std::endl;
+        variance = double(max_correspondence)/double(correspondences);
+        std::cout << "variance " << variance << std::endl;
         if (variance == 0)
             variance = 1.0;
         double info = (1*loop_info_numer)/(variance*loop_info_denom); 
@@ -150,13 +150,7 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
         double info = (1*odom_info_numer)/(odom_drift_*odom_info_denom); //+ 2.0/data_spot_ptr->getId(); // before 1.0/(odom_variance*100);
 
 
-        std::cout << "relative odometry transformation: \n" << rel_transform.matrix() << std::endl;
-
-        // Force 2D?
-        // float x,y,z,r,p,yaw;
-        //                     transform.getTranslationAndEulerAngles(x,y,z, r,p,yaw);
-        //                     transform = Transform(x,y,0, 0, 0, yaw);
-        //                     pcl::getTranslationAndEulerAngles(toEigen3f(), x, y, z, roll, pitch, yaw);
+        // std::cout << "relative odometry transformation: \n" << rel_transform.matrix() << std::endl;
 
         std::cout << "ODOM: corr " <<  odom_correspondences << " info " << info << std::endl;
 
@@ -204,7 +198,7 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
         parameters_defined = true;
     }
 
-    std::cout << "HERE " << gSlam::SlamParameters::info->dataset_id_ << " " << gSlam::SlamParameters::info->optimisation_thread_on_ << std::endl;
+    // std::cout << "HERE " << gSlam::SlamParameters::info->dataset_id_ << " " << gSlam::SlamParameters::info->optimisation_thread_on_ << std::endl;
 
 
     data_spots_.insert(data_spots_.end(), std::make_pair(data_spot_ptr->getId(),data_spot_ptr));

@@ -177,7 +177,7 @@ namespace gSlam
 
         // imshow("current_frame", tgt_gray);
         // cv::waitKey(1);
-        int max_features = 1000;
+        int max_features = 2000; // was 1000
         if (tgt_points.size() > max_features)
         {
             std::vector<cv::Point2f>::const_iterator first = tgt_points.end() - max_features;
@@ -191,7 +191,7 @@ namespace gSlam
 
         // ------- Defining optical flow thresholds
         float opt_flow_err_tol = 12.0; // was 12.0
-        int opt_flow_min_match_reqd = 50; // was 50;
+        int opt_flow_min_match_reqd = 100; // was 50;
 
         // ------- recording parameters to SlamParameters 
         if (!opt_flow_parameters_defined)
@@ -239,10 +239,11 @@ namespace gSlam
             // ----------------------
 
             customtype::TransformSE3 pose_estimate = slam_utils::estimatePoseFromProjection(projMat);
+            std::cout << "Estimated Pose in Loop Closure Frame before alignment: \n" << pose_estimate.matrix() << std::endl;
             // ----- Use frame transform to align camera frame to ardrone body frame =================== requiredonly while using the drone datasets
             pose_estimate = pose_estimate * SlamParameters::pose_aligner_;
-            
-            std::cout << "Estimated Pose in Loop Closure Frame: \n" << pose_estimate.matrix() << std::endl;
+
+            std::cout << "Estimated Pose in Loop Closure Frame after frame alignment: \n" << pose_estimate.matrix() << std::endl;
             // std::cout << "Translation vector: " << pose_estimate.translation().z() << " " << pose_estimate(3,3) << std::endl << pose_estimate(2,3) << std::endl; 
 
             correspondences = filtered_src.size();
@@ -252,11 +253,15 @@ namespace gSlam
 
             std::cout << "data_spot_src actual pose \n " << data_spot_src->getPose().matrix() << std::endl;
             std::cout << "data_spot_target actual pose \n " << data_spot_target->getPose().matrix() << std::endl;
-            customtype::TransformSE3 inv =  data_spot_target->getPose().inverse();
-            std::cout << inv.matrix() << std::endl;
+            // customtype::TransformSE3 inv =  data_spot_target->getPose().inverse();
+            // std::cout << inv.matrix() << std::endl;
 
-            // ----------- Relative transform estimate if the projection estimate is obtained
+            // // ----------- Relative transform estimate if the projection estimate is obtained
             customtype::TransformSE3 relative_transformation = data_spot_target->getPose().inverse()*pose_estimate;
+
+            // ============================================================================================
+            // customtype::TransformSE3 inv = pose_estimate.inverse();
+            // customtype::TransformSE3 relative_transformation = pose_estimate.inverse()*data_spot_target->getPose();
             std::cout << "Estimated Relative Transform: \n" << relative_transformation.matrix() << std::endl;
 
             // ========================== DEBUG
