@@ -58,6 +58,7 @@ namespace slam_utils
 
     }
 
+    // ----- Aligns the camera frame of the ArDrone to the body frame as tracked by the mocap system
     customtype::TransformSE3 getFrameAligner()
     {
         customtype::TransformSE3 ground_truth = getTransformation(395.2285, 598.4764, 960.3633, -0.020576022865, 0.662864768588, -0.0584081485361, 0.746173840335);

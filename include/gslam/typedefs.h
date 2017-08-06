@@ -10,7 +10,7 @@
 #include <condition_variable>
 #include "STAM.h"
 #include <assert.h>
-#include "gslam/parameters.h"
+#include "gslam/slam_parameters.h"
 
 // #include <iostream>
 

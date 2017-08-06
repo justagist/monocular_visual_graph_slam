@@ -239,7 +239,11 @@ namespace gSlam
             // ----------------------
 
             customtype::TransformSE3 pose_estimate = slam_utils::estimatePoseFromProjection(projMat);
+            // ----- Use frame transform to align camera frame to ardrone body frame =================== requiredonly while using the drone datasets
+            pose_estimate = pose_estimate * SlamParameters::pose_aligner_;
+            
             std::cout << "Estimated Pose in Loop Closure Frame: \n" << pose_estimate.matrix() << std::endl;
+            // std::cout << "Translation vector: " << pose_estimate.translation().z() << " " << pose_estimate(3,3) << std::endl << pose_estimate(2,3) << std::endl; 
 
             correspondences = filtered_src.size();
             max_correspondences = tgt_points_new.size();

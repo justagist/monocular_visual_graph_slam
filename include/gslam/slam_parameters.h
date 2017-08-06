@@ -1,7 +1,9 @@
 #ifndef __SLAM_PARAMS__
 #define __SLAM_PARAMS__
 
+#include "STAM.h"
 // #include "gslam/typedefs.h"
+// #include "gslam/slam_utils.h"
 
 namespace gSlam
 {
@@ -72,6 +74,9 @@ namespace SlamParameters
     // static gSlam::Parameters::SLAMinfo::SLAMinfoPtr info(new gSlam::Parameters::SLAMinfo());
     // static gSlam::Parameters::SLAMinfo info;
     extern SLAMinfo::SLAMinfoPtr info;
+
+    // ----- Frame Alignement Transformation to align camera frame of the Ardrone to its body frame
+    extern const Eigen::Affine3d pose_aligner_;
 
 } // namespace Constants
 

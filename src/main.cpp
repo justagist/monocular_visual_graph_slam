@@ -3,7 +3,7 @@
 #include <fstream>
 #include "gslam/ros_utils.h"
 #include "gslam/graphslam.h"
-// #include "gslam/parameters.h"
+// #include "gslam/slam_parameters.h"
 // #include <Eigen/Geometry>
 // #include <Eigen/Dense>
 // #include <opencv2/core/eigen.hpp>
@@ -16,7 +16,11 @@ int ismar_baselines[] = {175, 50, 80, 100, 100, 100, 75, 75, 175 /*150*/,100 /*1
 bool write_file = false;
 bool optimise_graph = false;
 
-namespace gSlam{ namespace SlamParameters { SLAMinfo::SLAMinfoPtr info(new SLAMinfo); } }
+
+namespace gSlam{ namespace SlamParameters 
+    { SLAMinfo::SLAMinfoPtr info(new SLAMinfo); 
+      const customtype::TransformSE3 pose_aligner_ = slam_utils::getFrameAligner(); // if no frame alignment required, use customtype::TransformSE3::Identity()
+    } }
 
 
 int main(int argc, char** argv)
@@ -167,7 +171,6 @@ int main(int argc, char** argv)
     bool exit_safe = true;
 
     while( !(frame = video_source.readNextFrame(next_frame_format[SCENE-1])).empty() && rosNode.ok())
-
     {
         try
         {
@@ -193,9 +196,11 @@ int main(int argc, char** argv)
 
             // -----------------------------------------------------------------------------------------------------------
 
-            // get 3D worldpoints for visualization in ROS
-            gSlam::customtype::WorldPtsType world_points = vOdom.getCurrent3dPoints2();
+            // ----- get 3D worldpoints for visualization in ROS. Only gets points when new features are tracked.
+            gSlam::customtype::WorldPtsType world_points = vOdom.getNew3dPoints();
+            // ----- gets 3D world points that are visible in each frame.
             gSlam::customtype::WorldPtsType points3d = vOdom.getCurrent3dPoints();
+
             // std::cout << world_points.size() << std::endl;
             // std::cout << points3d.size() << std::endl;
             // std::cout <<"wpts" << world_points.size() << std::endl;
@@ -208,52 +213,14 @@ int main(int argc, char** argv)
             gSlam::customtype::KeyPoints key_points;
             cv::KeyPoint::convert(vOdom.getCurrent2dKeyPoints(), key_points);
 
-            // cv::Mat out1, out2;
-            // cv::drawKeypoints(frame, key_points, out1);
-
-            // std::vector<cv::Point2f> testpoints = vOdom.getCurrent2dKeyPoints();
-            // std::cout << vOdom.getCurrent2dKeyPoints() << std::endl;
-            // cv::TermCriteria crit(cv::TermCriteria::COUNT|cv::TermCriteria::EPS,20,0.03);
-            // cv::Mat grayframe;
-            // cv::cvtColor(frame, grayframe, CV_BGR2GRAY);
-            // cv::cornerSubPix(grayframe, testpoints, cv::Size(31,31), cv::Size(-1,-1), crit);
-            // gSlam::customtype::KeyPoints kp2;
-
-            // cv::KeyPoint::convert(testpoints, kp2);
-            // cv::drawKeypoints(frame, kp2, out2);
-
-            // cv::imshow("prev", out1);
-            // cv::imshow("new", out2);
-            // cv::waitKey(0);
-
-            // std::cout << "now" << std::endl << testpoints << std::endl;
-
-            // std::cout << vOdom.getCurrent2dKeyPoints() << std::endl;
-
-            // std::vector<cv::Point2f> testpoints;
-            // cv::KeyPoint::convert(key_points, testpoints);
-            // std::cout << "compare\n"  << testpoints << std::endl;
-            // std::cout <<"2: " << key_points.size() << std::endl;
-
-            // for (int i = 0; i < key_points.size(); ++i)
-            // {
-            //     std::cout << world_points[i].x << " " << world_points[i].y << " "<< world_points[i].z << std::endl;
-            //     std::cout << key_points[i].pt.x << " " << key_points[i].pt.y << std::endl;
-            // }
-            // std::cout << "here size " << key_points.size() << std::endl;
-            // for (int i = 0; i < key_points.size(); ++i)
-            // {
-            //     std::cout << key_points.at(i).pt.x << "  " << key_points.at(i).pt.y << std::endl;
-            // }
-            // std::cout << key_points.size() << " " << world_points.size() << std::endl;
-            // std::cout << key_points << std::endl << world_points << std::endl;
-
             // get current camera pose from STAM
-            gSlam::customtype::TransformSE3 posemat; 
+            gSlam::customtype::TransformSE3 posemat;
             cv::cv2eigen(current_odom_frame->getCurrentPose(),posemat.matrix()); // conversion of cv::Mat to Eigen for quaternion calculation and further slam process
 
-            // align with body frame of drone
-            posemat = posemat*frame_aligner;
+            // ------- Align pose (in camera frame) with body frame of drone
+            posemat = posemat*gSlam::SlamParameters::pose_aligner_;
+            std::cout << posemat.matrix() << std::endl;
+            // std::cout << "Translation vector: " << posemat.translation().z() << std::endl;// << posemat(3,3) << std::endl << posemat(2,3) << std::endl;
 
             gSlam::customtype::ProjMatType projectionMatrix;
             cv::cv2eigen(current_odom_frame->projMatrix,projectionMatrix);
@@ -267,7 +234,7 @@ int main(int argc, char** argv)
             // **
             // if( SCENE > 1 && i%100 == 0 )
             //     vOdom.optimise();
-            
+
 
             slam->processData(posemat, cam_params, frame, projectionMatrix, points3d, key_points);
             i++;
@@ -284,8 +251,11 @@ int main(int argc, char** argv)
             
 
             // geometry_msgs::TransformStamped coordinate_correction = gSlam::ros_utils::setFrameCorrection(); // coordinate frame orientation correction for ISMAR dataset
+
+            // ===== Creating and Publishing ROS Messages ===============================================================================
             if (ros_flag)
             {
+                // -------- update world_visualizer only when new world points are observed by STAM
                 if (world_points.size()>0)
                     gSlam::ros_utils::createPointMsg(world_points, world_visualizer);
                 
@@ -304,6 +274,7 @@ int main(int argc, char** argv)
                 trajectory_publisher.publish(path_msg);
                 //// ----------------------------
             }
+            // ==========================================================================================================================
 
             last_time = current_time;
             r.sleep();
@@ -318,7 +289,6 @@ int main(int argc, char** argv)
             exit_safe = false;
             break;
         }
-
     } // while
 
     // vOdom.optimise();
