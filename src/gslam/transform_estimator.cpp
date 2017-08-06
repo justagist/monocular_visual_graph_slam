@@ -191,7 +191,7 @@ namespace gSlam
 
         // ------- Defining optical flow thresholds
         float opt_flow_err_tol = 12.0; // was 12.0
-        int opt_flow_min_match_reqd = 100; // was 50;
+        int opt_flow_min_match_reqd = 200; // was 50 with max_features 1000;
 
         // ------- recording parameters to SlamParameters 
         if (!opt_flow_parameters_defined)
@@ -265,7 +265,7 @@ namespace gSlam
             std::cout << "Estimated Relative Transform: \n" << relative_transformation.matrix() << std::endl;
 
             // ========================== DEBUG
-            bool show_optflow_matches = true;
+            bool show_optflow_matches = false;
             if (show_optflow_matches)
             {
                 customtype::KeyPoints kp1, kp2;

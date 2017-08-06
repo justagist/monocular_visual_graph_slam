@@ -52,7 +52,7 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
 
     prev_loop_id_ = loop_id; 
     float loop_info_numer = 1;
-    float loop_info_denom = 100;
+    float loop_info_denom = 10000;
     if( repeat_match_count_ > min_required_repeat_) 
     {
         double variance;
@@ -113,8 +113,8 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
 
 
             // if (dist > 500)
-            char key = cv::waitKey(0);
-            // char key = 'y';
+            // char key = cv::waitKey(0);
+            char key = 'y';
             if (key == 'y')
             {
                 spot_src->addLink(link); 
