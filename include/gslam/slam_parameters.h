@@ -38,6 +38,7 @@ namespace SlamParameters
         {
             float max_correspondence_error_;
             int min_correspondences_required_;
+            int max_correspondence_used_;
             bool parameters_defined_ = false;
         };
         

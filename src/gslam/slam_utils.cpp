@@ -544,7 +544,7 @@ namespace slam_utils
 
         std::string optical_flow = "LK Optical Flow Parameters:-";
         if (info->lk_parameters.parameters_defined_)
-            optical_flow += " Error Tolerence: " + std::to_string(info->lk_parameters.max_correspondence_error_)+"; Min Matches Required: " + std::to_string(info->lk_parameters.min_correspondences_required_);
+            optical_flow += " Error Tolerence: " + std::to_string(info->lk_parameters.max_correspondence_error_)+"; Min Matches Required: " + std::to_string(info->lk_parameters.min_correspondences_required_) +"; Max Features Used: " + std::to_string(info->lk_parameters.max_correspondence_used_);
         else optical_flow += " Optical Flow was not used";
 
         std::string fabmap = "FabMap Modifiers:- First Image Frame: " + std::to_string(info->fabmap.first_bow_img_) + "; Frames Skipped: " + std::to_string(info->fabmap.skip_);

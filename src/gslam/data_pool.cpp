@@ -51,8 +51,8 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
     }
 
     prev_loop_id_ = loop_id; 
-    float loop_info_numer = 1;
-    float loop_info_denom = 10000;
+    float loop_info_numer = 0;
+    float loop_info_denom = 100;
     if( repeat_match_count_ > min_required_repeat_) 
     {
         double variance;

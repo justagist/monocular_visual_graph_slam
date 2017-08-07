@@ -199,6 +199,7 @@ namespace gSlam
             SlamParameters::info->lk_parameters.max_correspondence_error_ = opt_flow_err_tol;
             SlamParameters::info->lk_parameters.min_correspondences_required_ = opt_flow_min_match_reqd;
             SlamParameters::info->lk_parameters.parameters_defined_ = true;
+            SlamParameters::info->lk_parameters.max_correspondence_used_ = max_features;
             opt_flow_parameters_defined = true;
         }
 
