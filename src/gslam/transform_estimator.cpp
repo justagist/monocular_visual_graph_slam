@@ -191,7 +191,7 @@ namespace gSlam
 
         // ------- Defining optical flow thresholds
         float opt_flow_err_tol = 12.0; // was 12.0
-        int opt_flow_min_match_reqd = 200; // was 50 with max_features 1000;
+        int opt_flow_min_match_reqd = 80; // was 50 with max_features 1000;
 
         // ------- recording parameters to SlamParameters 
         if (!opt_flow_parameters_defined)
@@ -222,7 +222,7 @@ namespace gSlam
         std::cout << tgt_points_new.size() << " = tgt_pts size; " << filtered_src.size() << " = filtered_src size" << std::endl;
 
         // ------------------ Estimating Projection matrix and pose if enough features are matched across the loop closure
-        if (filtered_src.size() >= opt_flow_min_match_reqd || filtered_src.size()>0.5*tgt_points_new.size())
+        if (filtered_src.size() >= opt_flow_min_match_reqd && tgt_points_new.size() > 1000)//|| filtered_src.size()>0.5*tgt_points_new.size())
         {
 
             cv::Mat projMat = slam_utils::calcProjMatrix(filtered_src, filtered_src_3D, data_spot_src->getCamParams().intrinsics_, data_spot_src->getCamParams().distortion_);
@@ -259,6 +259,8 @@ namespace gSlam
 
             // // ----------- Relative transform estimate if the projection estimate is obtained
             customtype::TransformSE3 relative_transformation = data_spot_target->getPose().inverse()*pose_estimate;
+            customtype::TransformSE3 pose_correct = customtype::TransformSE3::Identity();
+            pose_correct.translation() = relative_transformation.translation();
 
             // ============================================================================================
             // customtype::TransformSE3 inv = pose_estimate.inverse();
@@ -282,6 +284,7 @@ namespace gSlam
             // ==========================
 
             return relative_transformation;
+            // return pose_correct;
 
         }
 

@@ -43,6 +43,7 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
     if (loop_id == -1 || prev_loop_id_ != loop_id || repeat_match_count_ > max_repeat_allowed_ || loop_match_success_ == true)
     {
         repeat_match_count_  = 0;
+        loop_match_success_ = false;
     }
     else 
     {
@@ -51,8 +52,9 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
     }
 
     prev_loop_id_ = loop_id; 
-    float loop_info_numer = 0;
+    float loop_info_numer = 0.5;
     float loop_info_denom = 100;
+    static int prev_loop = -1, curr_loop = -1;
     if( repeat_match_count_ > min_required_repeat_) 
     {
         double variance;
@@ -90,24 +92,24 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
         link->type = DataLink3D::LoopClosureConstraint;
         if( status_good )
         {
-            std::cout << "Loop Closure Status: " << std::boolalpha << status_good << std::noboolalpha << ";  LOOP: corr " <<  correspondences << "out of " << max_correspondence << ";  variance:  " << variance << "  infor : " << info << std::endl;
+            std::cout << "Loop Closure Status: " << std::boolalpha << status_good << std::noboolalpha << ";  LOOP: corr " <<  correspondences << " out of " << max_correspondence << ";  variance:  " << variance << "  infor : " << info << std::endl;
 
             // std::cout << link->transform_.matrix() << std::endl;
             // std::cin.get();
             // bool valid = true;
-            if( (new_id - loop_id) > 400 ) // FAR LOOP
-            {
-                loop_count_far_++;
-                new_count_loop_far_++;
-            }
-            else 
-            { 
-                loop_count_near_++;
-                new_count_loop_near_++;
-            }
+            // if( (new_id - loop_id) > 400 ) // FAR LOOP
+            // {
+            //     loop_count_far_++;
+            //     new_count_loop_far_++;
+            // }
+            // else 
+            // { 
+            //     loop_count_near_++;
+            //     new_count_loop_near_++;
+            // }
 
-            Eigen::Vector3d t0 = (spot_src->getPose()*link->transform_).translation(); // =============== ???
-            Eigen::Vector3d t1 = data_spot_ptr->getPose().translation();
+            Eigen::Vector3d t0 = (data_spot_ptr->getPose()*link->transform_).translation(); // =============== ???
+            Eigen::Vector3d t1 = spot_src->getPose().translation();
             float dist = (t1-t0).norm();
             std::cout <<"               DISTANCE:    " <<dist << std::endl;
 
@@ -117,10 +119,15 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
             char key = 'y';
             if (key == 'y')
             {
+                curr_loop = link->from_id_;
                 spot_src->addLink(link); 
-                require_optimization_flag_ = true; // TODO: add some condition to check if optimization is required.
-                // loop_match_success_ = true; // ======================
-                std::cout << " LOOP ADDED ! NFar " << loop_count_far_ << " NNear " << loop_count_near_ << std::endl;
+                if (prev_loop != curr_loop)
+                    require_optimization_flag_ = true; // TODO: add some condition to check if optimization is required.
+                else printf("Not optimising since detected loop closure is same as previous: %i\n",curr_loop );
+
+                loop_match_success_ = true; // ======================
+                // std::cout << " LOOP ADDED ! NFar " << loop_count_far_ << " NNear " << loop_count_near_ << std::endl;
+                prev_loop = curr_loop;
             }
 
 
