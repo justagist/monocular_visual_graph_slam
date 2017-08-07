@@ -1,12 +1,7 @@
-
 #include "VideoSource.h"
 #include <fstream>
 #include "gslam/ros_utils.h"
 #include "gslam/graphslam.h"
-// #include "gslam/slam_parameters.h"
-// #include <Eigen/Geometry>
-// #include <Eigen/Dense>
-// #include <opencv2/core/eigen.hpp>
 
 namespace vo = visual_odometry;
 bool visualize_flag = false;
