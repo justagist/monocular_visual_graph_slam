@@ -52,8 +52,8 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
     }
 
     prev_loop_id_ = loop_id; 
-    float loop_info_numer = 0.5;
-    float loop_info_denom = 100;
+    float loop_info_numer = 1.0;
+    float loop_info_denom = 10;
     static int prev_loop = -1, curr_loop = -1;
     if( repeat_match_count_ > min_required_repeat_) 
     {
@@ -121,13 +121,16 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
             {
                 curr_loop = link->from_id_;
                 spot_src->addLink(link); 
-                if (prev_loop != curr_loop)
+                if (prev_loop == curr_loop)
+                    curr_loop = -2;
+                if (prev_loop != -2)
                     require_optimization_flag_ = true; // TODO: add some condition to check if optimization is required.
-                else printf("Not optimising since detected loop closure is same as previous: %i\n",curr_loop );
+                // else printf("Not optimising since detected loop closure is same as previous: %i\n",curr_loop );
 
                 loop_match_success_ = true; // ======================
                 // std::cout << " LOOP ADDED ! NFar " << loop_count_far_ << " NNear " << loop_count_near_ << std::endl;
-                prev_loop = curr_loop;
+                if (prev_loop != -2 || curr_loop != -2)
+                    prev_loop = curr_loop;
             }
 
 

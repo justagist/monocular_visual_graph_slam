@@ -550,7 +550,7 @@ namespace slam_utils
         std::string fabmap = "FabMap Modifiers:- First Image Frame: " + std::to_string(info->fabmap.first_bow_img_) + "; Frames Skipped: " + std::to_string(info->fabmap.skip_);
 
         // std::cout << optimisation << std::endl;
-        std::string ret_val = "-"+scene_info + "; " + "; " + frames + "; " + exit_status + "\n" + "-"+ baseline + "; Graph Optimization: " +  optimisation + "\n" + "-"+ loop_closure_info + "\n" + "-"+ odometry_constraint_info + "\n" + "-"+ fabmap + "\n" + "-"+ matcher + "\n" + "-"+ icp + "\n" + "-"+ optical_flow;
+        std::string ret_val = "-"+scene_info + "; "  + frames + "; " + exit_status + "\n" + "-"+ baseline + "; Graph Optimization: " +  optimisation + "\n" + "-"+ loop_closure_info + "\n" + "-"+ odometry_constraint_info + "\n" + "-"+ fabmap + "\n" + "-"+ matcher + "\n" + "-"+ icp + "\n" + "-"+ optical_flow;
 
         return ret_val;
     }
