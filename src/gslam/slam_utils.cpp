@@ -58,18 +58,12 @@ namespace slam_utils
 
     }
 
-    // ----- Aligns the camera frame of the ArDrone to the body frame as tracked by the mocap system
+    // ----- Aligns the camera frame of the ArDrone to the body frame as tracked by the mocap system (data from dataset 10)
     customtype::TransformSE3 getFrameAligner()
     {
         customtype::TransformSE3 ground_truth = getTransformation(395.2285, 598.4764, 960.3633, -0.020576022865, 0.662864768588, -0.0584081485361, 0.746173840335);
         customtype::TransformSE3 cam_frame = getTransformation(335.484, 633.562, 725.732, -0.686232, 0.716337, -0.115044, 0.0520781);
         return cam_frame.inverse()*ground_truth;
-
-        // 1500727324 678121089 3990 0.3952285 0.5984764 0.9603633 0.020576022865 -0.662864768588 0.0584081485361 0.746173840335
-        // 0 335.484 633.562 725.732 -0.686232 0.716337 -0.115044 0.0520781
-
-        // 0.7620954 0.751126 1.207522 -0.0201935529872 -0.668273782067 0.0372556846314 0.742707462599
-        // 684.025 761.131 952.153 -0.673607 0.730574 -0.0861964 0.0713069
 
     }
 

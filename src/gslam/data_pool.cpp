@@ -16,19 +16,7 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
 
 {
     static bool parameters_defined = false;
-    // std::cout << " Adding data spot " << std::endl;
 
-    // std::cout << " checking loop closure " << std::endl;
-
-    //Loop closure constraints
-    // if (data_spot_ptr->getId() == 201)
-    // {
-    //     cv::Mat out_img;
-    //     cv::drawKeypoints(data_spot_ptr->getImageColor(), data_spot_ptr->getImagePoints(), out_img);
-    //     cv::imshow("gslam_window", out_img);
-    //     cv::waitKey(0);
-    // }
-    // std::cout << data_spot_ptr->getCamParams().intrinsics_ << std::endl;
     require_optimization_flag_ = false;
     int new_id, loop_id;
     fabmap_.compareAndAdd(data_spot_ptr, new_id, loop_id);

@@ -11,10 +11,10 @@ int ismar_baselines[] = {175, 50, 80, 100, 100, 100, 75, 75, 175 /*150*/,100 /*1
 bool write_file = false;
 bool optimise_graph = false;
 
-
+// Creating object for storing all parameters that can be tuned. (Used for writing all the paramters used while writing trajectory to file)
 namespace gSlam{ namespace SlamParameters 
     { SLAMinfo::SLAMinfoPtr info(new SLAMinfo); 
-      const customtype::TransformSE3 pose_aligner_ = slam_utils::getFrameAligner(); // if no frame alignment required, use customtype::TransformSE3::Identity()
+      const customtype::TransformSE3 pose_aligner_ = slam_utils::getFrameAligner(); // if no frame alignment required, use Identity
     } }
 
 
@@ -22,31 +22,28 @@ int main(int argc, char** argv)
 {
 
     if( argc < 2 ){
-        printf(" usage: rosrun visual_odom <node_name> <scene_number> [visualize? (0/1)] [publish rostopics? (0/1)] [save trajectory to txt file? (0/1)] [run graph optimisation thread? (0/1)] [baseline for visual odometry]\n where <scene_number> = 1 - 8\n\n");
+        printf(" usage: rosrun visual_odom <node_name> <scene_number> [visualize? (0/1)] [publish rostopics? (0/1)] [save trajectory to txt file? (0/1)] [run graph optimisation thread? (0/1)] [baseline for visual odometry]\n where <scene_number> = 1 - 11\n\n");
         exit(1);
     }
     else{
         SCENE = atoi(argv[1]);
         if( SCENE > 11 || SCENE < 1 )
         {
-             printf(" usage: rosrun visual_odom <node_name> <scene_number> [visualize? (0/1)] [publish rostopics? (0/1)] [save trajectory to txt file? (0/1)] [baseline for visual odometry]\n where <scene_number> = 1 - 8\n\n");
+             printf(" usage: rosrun visual_odom <node_name> <scene_number> [visualize? (0/1)] [publish rostopics? (0/1)] [save trajectory to txt file? (0/1)] [baseline for visual odometry]\n where <scene_number> = 1 - 11\n\n");
              exit(1);
         }
-        // if (SCENE > 0 && SCENE < 9)
-        // {
+
         if (ismar_baselines[SCENE-1])
             vis_odo_baseline = ismar_baselines[SCENE-1];
         // }
 
         if ( argc > 2 )
         {
-            // int flag = atoi(argv[2]);
             visualize_flag = (atoi(argv[2]) == 1); 
             std::cout << " visualizing " << std::endl;
         }
         if (argc > 3)
         {
-            // int tmp = atoi(argv[3]);
             ros_flag = (atoi(argv[3]) == 1);
         }
         if (argc > 4)
@@ -56,7 +53,6 @@ int main(int argc, char** argv)
         if (argc > 5)
         {
             optimise_graph = (atoi(argv[5]) == 1);
-            // vis_odo_baseline = atoi(argv[5]);
         }
         if (argc > 6)
         {
@@ -73,8 +69,11 @@ int main(int argc, char** argv)
     std::string next_frame_format[] = {"/home/saif/msc_workspace/slam_test_bag_dataset/ismar/S01_INPUT/S01L03_VGA/S01L03_VGA_%04d.png", "/home/saif/msc_workspace/slam_test_bag_dataset/ismar/S02_INPUT/S02L03_VGA/S02L03_VGA_%04d.png", "/home/saif/msc_workspace/slam_test_bag_dataset/ismar/S03_INPUT/S03L03_VGA/S03L03_VGA_%04d.png", "/home/saif/msc_workspace/slam_test_bag_dataset/datasets_12_07_17/frontb1/data/image_%04d.png", "/home/saif/msc_workspace/slam_test_bag_dataset/datasets_12_07_17/frontb2/data/image_%04d.png", "/home/saif/msc_workspace/slam_test_bag_dataset/datasets_17_07_17/ardrone_front_square1/data/image_%04d.png", "/home/saif/msc_workspace/slam_test_bag_dataset/datasets_17_07_17/ardrone_front_square2/data/image_%04d.png", "/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_line_19_07_17/data/image_%04d.png", "/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_checkerboard_22_07_17/ardrone_checkerboard_1/data/image_%04d.png", "/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_checkerboard_22_07_17/ardrone_checkerboard_2/data/image_%04d.png", "/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_checkerboard_22_07_17/ardrone_checkerboard_3/data/image_%04d.png"};
     std::string intrinsics_file[] = {"/home/saif/msc_workspace/slam_test_bag_dataset/ismar/S01_INPUT/intrinsicsS01.xml", "/home/saif/msc_workspace/slam_test_bag_dataset/ismar/S02_INPUT/intrinsicsS02.xml", "/home/saif/msc_workspace/slam_test_bag_dataset/ismar/S03_INPUT/intrinsicsS03.xml", "/home/saif/msc_workspace/slam_test_bag_dataset/datasets_12_07_17/frontb1/intrinsics.xml", "/home/saif/msc_workspace/slam_test_bag_dataset/datasets_12_07_17/frontb2/intrinsics.xml", "/home/saif/msc_workspace/slam_test_bag_dataset/datasets_17_07_17/ardrone_front_square1/intrinsics.xml", "/home/saif/msc_workspace/slam_test_bag_dataset/datasets_17_07_17/ardrone_front_square2/intrinsics.xml","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_line_19_07_17/intrinsics.xml","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_checkerboard_22_07_17/ardrone_checkerboard_1/intrinsics.xml","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_checkerboard_22_07_17/ardrone_checkerboard_2/intrinsics.xml","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_checkerboard_22_07_17/ardrone_checkerboard_3/intrinsics.xml"};
     std::string points3d_init_file[] = {"/home/saif/msc_workspace/slam_test_bag_dataset/ismar/S01_INPUT/S01_3Ddata_dst_init.csv", "/home/saif/msc_workspace/slam_test_bag_dataset/ismar/S02_INPUT/S02_3Ddata_dst_init.csv", "/home/saif/msc_workspace/slam_test_bag_dataset/ismar/S03_INPUT/S03_3Ddata_dst_init.csv","/home/saif/msc_workspace/slam_test_bag_dataset/datasets_12_07_17/frontb1/3dpoints.csv", "/home/saif/msc_workspace/slam_test_bag_dataset/datasets_12_07_17/frontb2/3dpoints.csv","/home/saif/msc_workspace/slam_test_bag_dataset/datasets_17_07_17/ardrone_front_square1/init_3Ddata.csv", "/home/saif/msc_workspace/slam_test_bag_dataset/datasets_17_07_17/ardrone_front_square2/init_3Ddata.csv", "/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_line_19_07_17/init_3Ddata.csv","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_checkerboard_22_07_17/ardrone_checkerboard_1/init_3Ddata.csv","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_checkerboard_22_07_17/ardrone_checkerboard_2/init_3Ddata.csv","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_checkerboard_22_07_17/ardrone_checkerboard_3/init_3Ddata.csv"};
+
+    // ----- If using initWithCheckerboard method in STAM, the corresponding string should be "checkerboard"
     std::string template_file_fmt[] = {"/home/saif/msc_workspace/slam_test_bag_dataset/ismar/S01_INPUT/S01L03_patch/S01L03_VGA_patch_%04d.png", "/home/saif/msc_workspace/slam_test_bag_dataset/ismar/S02_INPUT/S02L03_patch/S02L03_VGA_patch_%04d.png", "/home/saif/msc_workspace/slam_test_bag_dataset/ismar/ S03_INPUT/S03L03_VGA_patch/S03L03_VGA_patch_%04d.png", "/home/saif/msc_workspace/slam_test_bag_dataset/datasets_12_07_17/frontb1/patches/ptch_%04d.png", "/home/saif/msc_workspace/slam_test_bag_dataset/datasets_12_07_17/frontb2/patches/ptch_%04d.png","/home/saif/msc_workspace/slam_test_bag_dataset/datasets_17_07_17/ardrone_front_square1/patches/ptch_%04d.png","/home/saif/msc_workspace/slam_test_bag_dataset/datasets_17_07_17/ardrone_front_square2/patches/ptch_%04d.png", "/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_line_19_07_17/patches/ptch_%04d.png","checkerboard","checkerboard","checkerboard"};
     
+
     // ROS Stuff ====================================================================================================
 
     ros::init(argc, argv, "odometry_publisher");
@@ -84,18 +83,16 @@ int main(int argc, char** argv)
     last_time = ros::Time::now();
     ros::Rate r(1000);
 
-    // ros::Publisher pose_pub = rosNode.advertise<geometry_msgs::PoseStamped>("vis_odom", 1000); // for publishing camera pose as posestamped msg
     tf::TransformBroadcaster odom_broadcaster;
-    // tf::TransformBroadcaster frame_corrector; // coordinate frame orientation correction for ISMAR dataset
+    // tf::TransformBroadcaster frame_corrector; // coordinate frame orientation correction for ISMAR dataset -- NOT DONE CORRECTLY YET.
 
-    // ros::Publisher marker_pub = rosNode.advertise<visualization_msgs::Marker>("worldpoints", 10);
-    ros::Publisher marker_pub = rosNode.advertise<visualization_msgs::Marker>("markers", 10);
-    visualization_msgs::Marker world_visualizer, optimised_trajectory_msg; // optimised_trajectory_msg is used only if marker message is used for publishing trajectory
+    ros::Publisher marker_pub = rosNode.advertise<visualization_msgs::Marker>("markers", 10); // visualizing 3d worldpoints detected by STAM (can also be used for publishing (optimised) trajectory using markers).
+    visualization_msgs::Marker world_visualizer, optimised_trajectory_msg; // 'optimised_trajectory_msg' is used only if marker message is used for publishing trajectory.
     world_visualizer.header.frame_id = "world_frame";
     world_visualizer.type = visualization_msgs::Marker::POINTS;
     world_visualizer.id = 0;
 
-    // ----- Use any 1 message type for publishing trajectory - path or marker
+    // ----- Pulblisher for publishing trajectory as Path message. If using Marker message for publishing trajectory, this is not required.
     ros::Publisher trajectory_publisher = rosNode.advertise<nav_msgs::Path>("trajectory",1000);
     nav_msgs::Path path_msg;
     // ------------
@@ -111,52 +108,32 @@ int main(int argc, char** argv)
     vo::STAM vOdom;
 
     int i = 0;
+
+    // ----- Initialising STAM using checkerboard method (check in stam.cpp)
     if (template_file_fmt[SCENE-1] == "checkerboard")
     {
         std::cout << "Initialising STAM using checkerboard method" << std::endl;
         vOdom.init(video_source.readNextFrame(next_frame_format[SCENE-1]),next_frame_format[SCENE-1], intrinsics_file[SCENE-1], points3d_init_file[SCENE-1], vis_odo_baseline);    
     }
+    // ----- Initialise from template files (image patches whose 3D positions in the world frame are known)
     else vOdom.init(video_source.readNextFrame(next_frame_format[SCENE-1]),next_frame_format[SCENE-1], intrinsics_file[SCENE-1], points3d_init_file[SCENE-1], template_file_fmt[SCENE-1], vis_odo_baseline);
     visual_odometry::Frame::Ptr current_odom_frame;
+
+    // ----- Using camera parameters loaded by STAM
     gSlam::CameraParameters cam_params(vOdom.intrinsics_, vOdom.getDistortion());
 
-    // std::cout << cam_params.intrinsics_ << std::endl << cam_params.distortion_ << std::endl;
-
-    // get transformation between camera frame and drone body frame (tracked by mocap for ground truth)
-    gSlam::customtype::TransformSE3 frame_aligner = gSlam::customtype::TransformSE3::Identity();
-    if (SCENE > 3)
-        frame_aligner = gSlam::slam_utils::getFrameAligner();
-    // frame_aligner = gSlam::customtype::TransformSE3::Identity();
-    // std::cout << frame_aligner.matrix() << std::endl;
     // ==============================================================================================================
+
     gSlam::GrSLAM::Ptr slam(new gSlam::GrSLAM());
 
     if (gSlam::SlamParameters::info)
         std::cout << "RECORDING SLAM PARAMETERS TO info OBJECT" << std::endl;
     else std::cout << "NO DEFINITION" << std::endl;
 
+    // ----- Recording parameters
     gSlam::SlamParameters::info->optimisation_thread_on_ = optimise_graph;
     gSlam::SlamParameters::info->dataset_id_ = SCENE;
     gSlam::SlamParameters::info->visual_odometry_baseline_ = vis_odo_baseline;
-    // {
-    // using namespace gSlam;
-    //     {
-    //     using namespace SlamParameters;
-    //         int SLAMinfo::dataset_id_;// = SCENE;
-    //     };
-
-    // };
-
-    // gSlam::SlamParameters::SLAMinfo::dataset_id_ = SCENE;
-
-    // gSlam::SlamParameters::visual_odometry_baseline_ = vis_odo_baseline;
-    // gSlam::SlamParameters::optimisation_thread_on_ = optimise_graph;
-
-    // std::cout << " baseline " << gSlam::Constants::info.getBaseline() << std::endl;
-    // slam->info.setBaseline(vis_odo_baseline);
-
-    // const int gSlam::Constants::SLAMinfo.baseline = 5;
-    // gSlam::Constants::baseline = 5;
 
     if (optimise_graph)
         slam->init();
@@ -171,79 +148,34 @@ int main(int argc, char** argv)
         {
             // break; // ++++++++++++
 
-            ros::spinOnce();               // check for incoming messages
+            ros::spinOnce(); // check for incoming messages
             current_time = ros::Time::now();
 
-            // perform visual odometry on current frame
+            // ----- perform visual odometry on current frame
             current_odom_frame = vOdom.process(frame,visualize_flag);
-            // std::cout << vOdom.key_frames_.size() << " size of keyframes " << std::endl;
 
-
-            // cv::KeyPoint pt = current_odom_frame->keypoints.at(0);
-            // std::cout <<"kpts" << current_odom_frame->keypoints.size() << std::endl;
-            // std::cout <<"desc" << current_odom_frame->descriptors.size() << std::endl;
-
-            // Available methods from STAM: ------------------------------------------------------------------------------
-
-            // gSlam::customtype::p2d_vec kpts = current_odom_frame->keypoints; // list of 2d keypoints in each frame
-            // cv::Mat descriptors = current_odom_frame->descriptors; // list of descripts, one to each keypoint in the list of keypoints
-            // gSlam::customtype::ProjectionCorrespondences kps = vOdom.getKeypointsInFrame(i); // get correspondence keypoints (3d and 2d) from STAM 
-
-            // -----------------------------------------------------------------------------------------------------------
-
-            // ----- get 3D worldpoints for visualization in ROS. Only gets points when new features are tracked.
+            // ----- get 3D worldpoints for visualization in ROS. Only gets points when new features are tracked. For Visualization.
             gSlam::customtype::WorldPtsType world_points = vOdom.getNew3dPoints();
-            // ----- gets 3D world points that are visible in each frame.
-            gSlam::customtype::WorldPtsType points3d = vOdom.getCurrent3dPoints();
 
-            // std::cout << world_points.size() << std::endl;
-            // std::cout << points3d.size() << std::endl;
-            // std::cout <<"wpts" << world_points.size() << std::endl;
-            // std::cout << "here size " << world_points.size() << std::endl;
-            // for (int i = 0; i<world_points.size(); ++i)
-            // {
-            //     std::cout << world_points.at(i).x << " " << world_points.at(i).y << std::endl;
-            // }
+            // ----- gets 3D world points that are visible in each frame. For SLAM.
+            gSlam::customtype::WorldPtsType points3d = vOdom.getCurrent3dPoints();
 
             gSlam::customtype::KeyPoints key_points;
             cv::KeyPoint::convert(vOdom.getCurrent2dKeyPoints(), key_points);
 
-            // get current camera pose from STAM
+            // ----- get current camera pose from STAM in the required type
             gSlam::customtype::TransformSE3 posemat;
-            cv::cv2eigen(current_odom_frame->getCurrentPose(),posemat.matrix()); // conversion of cv::Mat to Eigen for quaternion calculation and further slam process
+            cv::cv2eigen(current_odom_frame->getCurrentPose(),posemat.matrix()); // conversion of cv::Mat to Eigen for quaternion calculation and further slam processes
 
             // ------- Align pose (in camera frame) with body frame of drone
             posemat = posemat*gSlam::SlamParameters::pose_aligner_;
-            // std::cout << posemat.matrix() << std::endl;
-            // std::cout << "Translation vector: " << posemat.translation().z() << std::endl;// << posemat(3,3) << std::endl << posemat(2,3) << std::endl;
 
             gSlam::customtype::ProjMatType projectionMatrix;
             cv::cv2eigen(current_odom_frame->projMatrix,projectionMatrix);
-            // std::cout << cam_params.intrinsicsMat_*projectionMatrix << std::endl;
 
-            // std::cout << projectionMatrix << std::endl;
-            // std::cout << projectionMatrix.block(0,0,3,3).inverse() << std::endl;
-
-            
-            //  STAM Bundle Adjustment 
-            // **
-            // if( SCENE > 1 && i%100 == 0 )
-            //     vOdom.optimise();
-
-
+            // ----- Main slam processing 
             slam->processData(posemat, cam_params, frame, projectionMatrix, points3d, key_points);
             i++;
-            // cv::Mat p;
-            // std::cout << "eigen: " << cam_params.intrinsicsMat_*prj << std::endl;
-             // writing trajectory to file
-            /**/
-            // cv::Mat pM = vOdom.intrinsics_*current_odom_frame->projMatrix;//.mul(1.0/274759.971);
-            // std::cout << " cv: " << pM << std::endl;
-            // for (int j = 0; j < 3; j++)
-            //     traj_out << pM.at<double>(j, 0) << "," << pM.at<double>(j, 1) << "," << pM.at<double>(j, 2) << "," << pM.at<double>(j, 3) << std::endl;
-            
-
-            
 
             // geometry_msgs::TransformStamped coordinate_correction = gSlam::ros_utils::setFrameCorrection(); // coordinate frame orientation correction for ISMAR dataset
 
@@ -286,9 +218,6 @@ int main(int argc, char** argv)
         }
     } // while
 
-    // vOdom.optimise();
-    // vOdom.dump();
-
     gSlam::SlamParameters::info->frames_processed_ = frame_no;
     gSlam::SlamParameters::info->process_success_ = exit_safe;
 
@@ -312,10 +241,8 @@ int main(int argc, char** argv)
         }
         else std::cout << "No poses were found! Trajectory file not written." << std::endl;
     }
-    // std::cout << gSlam::SlamParameters::info->loopclosure_constraint.const1_ << " " <<gSlam::SlamParameters::info->odometry_constraint.const2_ << " " << gSlam::SlamParameters::info->fabmap.first_bow_img_ << " " << gSlam::SlamParameters::info->matcher_min_repetition_ << " " << gSlam::SlamParameters::info->transform_est_icp_.parameters_defined_ << " " << gSlam::SlamParameters::info->optimisation_thread_on_ <<std::endl;
     
     std::cout << "SLAM PARAMETERS:-\n" << gSlam::slam_utils::getSlamParameterInfo(gSlam::SlamParameters::info) << "\n***\n";
-    // std::cout << gSlam::slam_utils::getSlamParameterInfo(gSlam::SlamParameters::info) << std::endl;
 
     printf("EXITING\n");
 
