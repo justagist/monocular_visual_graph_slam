@@ -28,14 +28,14 @@ int main(int argc, char** argv)
 {
 
     if( argc < 2 ){
-        printf(" usage: rosrun visual_odom <node_name> <scene_number> [visualize? (0/1)] [publish rostopics? (0/1)] [save trajectory to txt file? (0/1)] [run graph optimisation thread? (0/1)] [baseline for visual odometry]\n where <scene_number> = 1 - 13\n\n");
+        printf(" usage: rosrun graph_slam main_slam_node <scene_number> [visualize? (0/1)] [publish rostopics? (0/1)] [save trajectory to txt file? (0/1)] [run graph optimisation thread? (0/1)] [baseline for visual odometry]\n where <scene_number> = 1 - 13\n\n");
         exit(1);
     }
     else{
         SCENE = atoi(argv[1]);
         if( SCENE > 13 || SCENE < 1 )
         {
-             printf(" usage: rosrun visual_odom <node_name> <scene_number> [visualize? (0/1)] [publish rostopics? (0/1)] [save trajectory to txt file? (0/1)] [baseline for visual odometry]\n where <scene_number> = 1 - 13\n\n");
+             printf(" usage: rosrun graph_slam main_slam_node <scene_number> [visualize? (0/1)] [publish rostopics? (0/1)] [save trajectory to txt file? (0/1)] [baseline for visual odometry]\n where <scene_number> = 1 - 13\n\n");
              exit(1);
         }
 

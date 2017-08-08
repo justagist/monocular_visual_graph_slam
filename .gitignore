@@ -1,6 +1,10 @@
 S0*
 *.txt
 !CMakeLists.txt
+rospack_cache
+log
+EXTERNAL/g2o/lib
+EXTERNAL/g2o/bin
 trajectory_scene*
 **/CMakeFiles/
 !ground_truths/*
