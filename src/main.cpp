@@ -12,8 +12,8 @@ int ismar_baselines[] ={175, 50, 80,
                         175, /*150*/
                         100, /*150*/ /*100 is probably better for loop closure*/ /*175*/
                         75, /*135*/ /*150*/
-                        100,
-                        100};
+                        150,
+                        130 /*130 is very good for 2 circles*//*100 works fine for 3 circles, but depth drift is more pronounced*/};
 bool write_file = false;
 bool optimise_graph = false;
 
