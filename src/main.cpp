@@ -17,8 +17,8 @@ int ismar_baselines[] ={175, 50, 80,
 bool write_file = false;
 bool optimise_graph = false;
 
-// Creating object for storing all parameters that can be tuned. (Used for writing all the paramters used while writing trajectory to file)
-namespace gSlam{ namespace SlamParameters 
+// Creating object for storing all parameterss that can be tuned. (Used for writing all the paramters used while writing trajectory to file)
+namespace gSlam{ namespace SlamParameters   
     { SLAMinfo::SLAMinfoPtr info(new SLAMinfo); 
       const customtype::TransformSE3 pose_aligner_ = slam_utils::getFrameAligner(); // if no frame alignment required, use Identity
     } }

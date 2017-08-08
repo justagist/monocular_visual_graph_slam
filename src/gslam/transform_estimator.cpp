@@ -191,7 +191,7 @@ namespace gSlam
 
         // ------- Defining optical flow thresholds
         float opt_flow_err_tol = 12.0; // was 12.0
-        int opt_flow_min_match_reqd = 80; // was 50 with max_features 1000;
+        int opt_flow_min_match_reqd = 500; // was 50 with max_features 1000;
 
         // ------- recording parameters to SlamParameters 
         if (!opt_flow_parameters_defined)
@@ -242,7 +242,7 @@ namespace gSlam
             customtype::TransformSE3 pose_estimate = slam_utils::estimatePoseFromProjection(projMat);
             std::cout << "Estimated Pose in Loop Closure Frame before alignment: \n" << pose_estimate.matrix() << std::endl;
             // ----- Use frame transform to align camera frame to ardrone body frame =================== requiredonly while using the drone datasets
-            pose_estimate = pose_estimate * SlamParameters::pose_aligner_;
+            pose_estimate = pose_estimate * SlamParameters::pose_aligner_; // not using gives better result -- ???
 
             std::cout << "Estimated Pose in Loop Closure Frame after frame alignment: \n" << pose_estimate.matrix() << std::endl;
             // std::cout << "Translation vector: " << pose_estimate.translation().z() << " " << pose_estimate(3,3) << std::endl << pose_estimate(2,3) << std::endl; 

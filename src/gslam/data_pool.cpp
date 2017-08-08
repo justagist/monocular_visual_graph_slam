@@ -41,9 +41,10 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
 
     prev_loop_id_ = loop_id; 
     float loop_info_numer = 1.0;
-    float loop_info_denom = 10;
+    float loop_info_denom = 1000;
     static int prev_loop = -1, curr_loop = -1;
-    if( repeat_match_count_ > min_required_repeat_) 
+
+    if( repeat_match_count_ > min_required_repeat_ && loop_id != prev_loop) 
     {
         double variance;
         int correspondences, max_correspondence;
@@ -109,15 +110,15 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
             {
                 curr_loop = link->from_id_;
                 spot_src->addLink(link); 
-                if (prev_loop == curr_loop)
-                    curr_loop = -2;
-                if (prev_loop != -2)
+                // if (prev_loop == curr_loop)
+                //     curr_loop = -2;
+                // if (prev_loop != -2)
                     require_optimization_flag_ = true; // TODO: add some condition to check if optimization is required.
                 // else printf("Not optimising since detected loop closure is same as previous: %i\n",curr_loop );
 
                 loop_match_success_ = true; // ======================
                 // std::cout << " LOOP ADDED ! NFar " << loop_count_far_ << " NNear " << loop_count_near_ << std::endl;
-                if (prev_loop != -2 || curr_loop != -2)
+                // if (prev_loop != -2 || curr_loop != -2)
                     prev_loop = curr_loop;
             }
 
@@ -130,7 +131,7 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
     // std::cout << " Adding odometry " << std::endl;
     // Odometry constraint
     float odom_info_numer = 1000.00;
-    float odom_info_denom = 15;
+    float odom_info_denom = 1;
     if( last_spot_.get() )
     {
         customtype::TransformSE3 rel_transform = last_spot_->getPose().inverse()*data_spot_ptr->getPose();
