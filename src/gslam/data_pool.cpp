@@ -41,7 +41,7 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
 
     prev_loop_id_ = loop_id; 
     float loop_info_numer = 1.0;
-    float loop_info_denom = 1000;
+    float loop_info_denom = 10000; // 100000
     static int prev_loop = -1, curr_loop = -1;
 
     if( repeat_match_count_ > min_required_repeat_ && loop_id != prev_loop) 
@@ -130,7 +130,7 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
 
     // std::cout << " Adding odometry " << std::endl;
     // Odometry constraint
-    float odom_info_numer = 1000.00;
+    float odom_info_numer = 10000.00;
     float odom_info_denom = 1;
     if( last_spot_.get() )
     {
