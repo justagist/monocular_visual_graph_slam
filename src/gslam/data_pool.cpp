@@ -41,7 +41,7 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
 
     prev_loop_id_ = loop_id; 
     float loop_info_numer = 1.0;
-    float loop_info_denom = 10000; // 100000
+    float loop_info_denom = 100000; // 100000
     static int prev_loop = -1, curr_loop = -1;
 
     if( repeat_match_count_ > min_required_repeat_ && loop_id != prev_loop) 
@@ -54,8 +54,8 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
 
         DataSpot3D::DataSpot3DPtr spot_src = data_spots_.find(loop_id)->second;
 
-        link->from_id_ = spot_src->getId();
-        link->to_id_ = data_spot_ptr->getId();
+        link->from_id_ = data_spot_ptr->getId(); // ?????
+        link->to_id_ = spot_src->getId(); // ?????
         
         std::cout << "Possible loop closure : " << link->from_id_ << "->" << link->to_id_ << std::endl;
         std::cout << " Estimating Loop Closure Transform " <<std::endl;
@@ -109,7 +109,7 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
             if (key == 'y')
             {
                 curr_loop = link->from_id_;
-                spot_src->addLink(link); 
+                data_spot_ptr->addLink(link);  // ?????
                 // if (prev_loop == curr_loop)
                 //     curr_loop = -2;
                 // if (prev_loop != -2)
