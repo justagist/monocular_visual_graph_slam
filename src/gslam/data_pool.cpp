@@ -46,7 +46,7 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
 
     if( repeat_match_count_ > min_required_repeat_ && loop_id != prev_loop) 
     {
-        double variance;
+        double variance, avg_error;
         int correspondences, max_correspondence;
         bool status_good = false;
         DataLink3D::DataLinkPtr link( new DataLink3D() );
@@ -66,9 +66,9 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
         //-------------------
         
         // 2)----- Estimate loop closure constraint transformation from projection matrix, estimated using optical flow and pnp-ransac. Also checks if the loop closure is good.
-        link->transform_ = transform_est_.estimateTransformUsingOpticalFlow(spot_src, data_spot_ptr, correspondences, max_correspondence, status_good);
+        link->transform_ = transform_est_.estimateTransformUsingOpticalFlow(spot_src, data_spot_ptr, correspondences, max_correspondence, avg_error, status_good);
         // [variance = 1/prop_matches]
-        variance = double(max_correspondence)/double(correspondences);
+        variance = avg_error*double(max_correspondence)/double(correspondences);
         std::cout << "variance " << variance << std::endl;
         if (variance == 0)
             variance = 1.0;

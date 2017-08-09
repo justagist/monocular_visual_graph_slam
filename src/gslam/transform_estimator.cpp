@@ -155,7 +155,7 @@ namespace gSlam
     customtype::TransformSE3 TransformEstimator::estimateTransformUsingOpticalFlow(DataSpot3D::DataSpot3DPtr data_spot_src, 
                                                                                    DataSpot3D::DataSpot3DPtr data_spot_target, 
                                                                                    int& correspondences, int& max_correspondences, 
-                                                                                   bool& converge_status)
+                                                                                   double& avg_error, bool& converge_status)
     {
 
         static bool opt_flow_parameters_defined = false;
@@ -191,7 +191,7 @@ namespace gSlam
 
         // ------- Defining optical flow thresholds
         float opt_flow_err_tol = 12.0; // was 12.0
-        int opt_flow_min_match_reqd = 500; // was 50 with max_features 1000;
+        int opt_flow_min_match_reqd = 200; // was 50 with max_features 1000;
 
         // ------- recording parameters to SlamParameters 
         if (!opt_flow_parameters_defined)
@@ -202,6 +202,9 @@ namespace gSlam
             SlamParameters::info->lk_parameters.max_correspondence_used_ = max_features;
             opt_flow_parameters_defined = true;
         }
+
+        // ------- Calculating average error for variance estimation
+        double accumulated_error = 0;
 
         // ------- Removing features that were not matched
         std::vector<cv::Point2f> filtered_src, filtered_tgt;
@@ -214,12 +217,14 @@ namespace gSlam
                 filtered_src.push_back(src_points[i]);
                 filtered_tgt.push_back(tgt_points[i]);
                 filtered_src_3D.push_back(data_spot_target->getWorldPoints()[i]);
+                accumulated_error += errors.at<float>(i);
             }
         }
 
+        avg_error = accumulated_error/filtered_src.size();
         // -------------------------------------------------------------------
 
-        std::cout << tgt_points_new.size() << " = tgt_pts size; " << filtered_src.size() << " = filtered_src size" << std::endl;
+        std::cout << tgt_points_new.size() << " = tgt_pts size; " << filtered_src.size() << " = filtered_src size; " << avg_error << " = average error"<<std::endl;
 
         // ------------------ Estimating Projection matrix and pose if enough features are matched across the loop closure
         if (filtered_src.size() >= opt_flow_min_match_reqd && tgt_points_new.size() > 1000)//|| filtered_src.size()>0.5*tgt_points_new.size())
