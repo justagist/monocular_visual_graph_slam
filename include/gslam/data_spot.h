@@ -103,7 +103,7 @@ public:
 
     DataSpot3D();
 
-    DataSpot3D(const customtype::TransformSE3& pose, const CameraParameters& camParams, const cv::Mat& image_color, const customtype::ProjMatType& projectionMatrix, const customtype::WorldPtsType& world_pts, const customtype::KeyPoints& img_pts); // Timestamp?
+    DataSpot3D(const customtype::TransformSE3& pose, const CameraParameters& camParams, const cv::Mat& image_color,const customtype::WorldPtsType& world_pts, const customtype::KeyPoints& img_pts); // Timestamp?
 
     customtype::Identifier getId() const { return id_; }
     void setId(customtype::Identifier id) { id_ = id; }
@@ -154,18 +154,6 @@ public:
         return camParams_;
     }
 
-    customtype::ProjMatType getProjMat()
-    {
-        return projectionMat_;
-    }
-    // const TimeStamp& getTimeStamp() {
-    //     return stamp_;
-    // }
-
-    // void setTimeStamp(const TimeStamp& stamp){
-    //     stamp_ = stamp;
-    // }
-
 private:
 
     static customtype::Identifier next_id_s;
@@ -186,9 +174,6 @@ private:
     customtype::KeyPoints image_pts_; // corresponding 2d points from STAM
 
     customtype::KeyPoints keypoints_; // keypoints for fabmap
-
-    customtype::ProjMatType projectionMat_;
-
 }; // class DataSpot3D
 
 } // namespace gSlam

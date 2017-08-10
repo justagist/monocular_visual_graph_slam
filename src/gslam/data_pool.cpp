@@ -40,7 +40,7 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
     }
 
     prev_loop_id_ = loop_id; 
-    float loop_info_numer = 1.0;
+    float loop_info_numer = 100000.0;
     float loop_info_denom = 1; // 100000
     static int prev_loop = -1, curr_loop = -1;
 
@@ -74,7 +74,7 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
             variance = 1.0;
         double info = (1*loop_info_numer)/(variance*loop_info_denom); 
 
-        // link->inf_matrix_ *= info; // ++++++++++++++
+        link->inf_matrix_ *= info; // ++++++++++++++
         std::cout << "Loop Closure Status: " << std::boolalpha << status_good << std::noboolalpha << std::endl;
         // std::cout << "info matrix loop closure \n" << link->inf_matrix_ << std::endl;
         link->active = true;
@@ -130,7 +130,7 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
 
     // std::cout << " Adding odometry " << std::endl;
     // Odometry constraint
-    float odom_info_numer = 10000.00;
+    float odom_info_numer = 10000.00; // high value gives more importance to odometry links, thereby propogating map correction longer back in path history
     float odom_info_denom = 1;
     if( last_spot_.get() )
     {

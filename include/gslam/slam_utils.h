@@ -16,16 +16,6 @@ namespace gSlam
 
 namespace slam_utils
 {
-    
-    customtype::TransformSE3 estimateRelativeTransformBtwnProjections(customtype::ProjMatType src_prj, customtype::ProjMatType tgt_prj);
-
-    // Eigen::Matrix4d icp2D(const customtype::PointCloudPtr & cloud_source,
-    //                       const customtype::PointCloudPtr & cloud_target, //TODO: Should be ConstPtr
-    //                       double maxCorrespondenceDistance,
-    //                       int maximumIterations,
-    //                       bool * hasConvergedOut,
-    //                       double * variance,
-    //                       int * correspondencesOut){};
 
     void getTranslationAndEulerAngles (const customtype::TransformSE3& t,
                                    float& x, float& y, float& z,

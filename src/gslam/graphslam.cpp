@@ -30,7 +30,6 @@ void GrSLAM::init(){
 void GrSLAM::processData(const customtype::TransformSE3& odom_pose,
                          const CameraParameters& cam_params,
                          const cv::Mat& image_color,
-                         const customtype::ProjMatType& projectionMatrix,
                          const customtype::WorldPtsType& world_pts,
                          const customtype::KeyPoints& img_pts) // TIMESTAMP?!
 {
@@ -38,6 +37,8 @@ void GrSLAM::processData(const customtype::TransformSE3& odom_pose,
     mutex_graph_.lock();
     customtype::TransformSE3 corrected_pose = odom_pose*map_correction_;
     mutex_graph_.unlock();
+
+    presently_optimised_ = false;
     // std::cout << "here!" << std::endl;  
     // std::cout << "here size " << world_pts.size() << std::endl;
     // std::cout << "here size " << img_pts.size() << std::endl;
@@ -47,7 +48,7 @@ void GrSLAM::processData(const customtype::TransformSE3& odom_pose,
     // cv::undistort(image_color, undistorted_frame, cam_params.intrinsics_, cam_params.distortion_);
     
         // current_odom_frame = vOdom.process(undistorted_frame,visualize_flag);
-    DataSpot3D::DataSpot3DPtr data_spot_new( new DataSpot3D(corrected_pose, cam_params, image_color, projectionMatrix, world_pts, img_pts));// tstamp));
+    DataSpot3D::DataSpot3DPtr data_spot_new( new DataSpot3D(corrected_pose, cam_params, image_color, world_pts, img_pts));// tstamp));
 
     // std::cout << data_spot_new->getCamParams().distortion_ << std::endl;
     bool need_optimization = false;
@@ -181,7 +182,7 @@ void GrSLAM::optmizeGraphThread()
         optimized_pose = data_pool_.getLastSpot()->getPose(); // the new optimized pose
 
         std::cout << " optimized Pose " << " ------------------------------------ -------------------------\n" << optimized_pose.matrix() << std::endl;
-        map_correction_ = (old_pose.inverse()*optimized_pose)*map_correction_;
+        map_correction_ = map_correction_*(old_pose.inverse()*optimized_pose);
         std::cout << "Map Correction: \n" << map_correction_.matrix() << std:: endl;
         // map_correction_.rotation() = customtype::TransformSE3::Identity();
         // customtype::TransformSE3 temp_corr = customtype::TransformSE3::Identity();
@@ -192,6 +193,7 @@ void GrSLAM::optmizeGraphThread()
 
         // Send data back to main()
         //processed = true;
+        presently_optimised_ = true;
         std::cout << "Worker thread signals data processing completed\n";//  \nPress return to continue\n";
 
         // std::cin.get();

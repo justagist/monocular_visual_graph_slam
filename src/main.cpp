@@ -176,11 +176,11 @@ int main(int argc, char** argv)
             // ------- Align pose (in camera frame) with body frame of drone
             posemat = posemat*gSlam::SlamParameters::pose_aligner_;
 
-            gSlam::customtype::ProjMatType projectionMatrix;
-            cv::cv2eigen(current_odom_frame->projMatrix,projectionMatrix);
+            // gSlam::customtype::ProjMatType projectionMatrix;
+            // cv::cv2eigen(current_odom_frame->projMatrix,projectionMatrix);
 
             // ----- Main slam processing 
-            slam->processData(posemat, cam_params, frame, projectionMatrix, points3d, key_points);
+            slam->processData(posemat, cam_params, frame, points3d, key_points);
             i++;
 
             // geometry_msgs::TransformStamped coordinate_correction = gSlam::ros_utils::setFrameCorrection(); // coordinate frame orientation correction for ISMAR dataset

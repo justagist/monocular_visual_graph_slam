@@ -22,7 +22,6 @@ public:
     void processData(const customtype::TransformSE3& odom_pose,
                      const CameraParameters& cam_params,
                      const cv::Mat& image_color,
-                     const customtype::ProjMatType& projectionMatrix,
                      const customtype::WorldPtsType& world_pts,
                      const customtype::KeyPoints& img_pts);
                      // const cv::Mat& image_depth,
@@ -35,6 +34,8 @@ public:
     void saveTrajectory(const std::string& filename);
     customtype::Mutex& getMutex() { return mutex_graph_; }
     DataPool& getDataPool() { return data_pool_; }
+
+    bool graphJustOptimised(){ return presently_optimised_ ; }
 
     // customtype::SLAMinfo& getInfo(){return details_;}
     // Gets map correction atomically
@@ -59,6 +60,8 @@ private:
     DataPool data_pool_;
 
     GraphOptimizer pose_graph_;
+
+    bool presently_optimised_;
 
     std::thread optimize_graph_thread_;
 
