@@ -36,7 +36,7 @@ void GrSLAM::processData(const customtype::TransformSE3& odom_pose,
 {
 
     mutex_graph_.lock();
-    customtype::TransformSE3 corrected_pose = map_correction_*odom_pose;
+    customtype::TransformSE3 corrected_pose = odom_pose*map_correction_;
     mutex_graph_.unlock();
     // std::cout << "here!" << std::endl;  
     // std::cout << "here size " << world_pts.size() << std::endl;
@@ -180,10 +180,15 @@ void GrSLAM::optmizeGraphThread()
 
         optimized_pose = data_pool_.getLastSpot()->getPose(); // the new optimized pose
 
-        std::cout << " new Pose " << " ------------------------------------ -------------------------\n" << optimized_pose.matrix() << std::endl;
-        map_correction_ = (optimized_pose*old_pose.inverse())*map_correction_;
-
+        std::cout << " optimized Pose " << " ------------------------------------ -------------------------\n" << optimized_pose.matrix() << std::endl;
+        map_correction_ = (old_pose.inverse()*optimized_pose)*map_correction_;
         std::cout << "Map Correction: \n" << map_correction_.matrix() << std:: endl;
+        // map_correction_.rotation() = customtype::TransformSE3::Identity();
+        // customtype::TransformSE3 temp_corr = customtype::TransformSE3::Identity();
+        // temp_corr.translation() = map_correction_.translation();
+        // map_correction_ = temp_corr;
+
+        // std::cout << "Map Correction: \n" << map_correction_.matrix() << std:: endl;
 
         // Send data back to main()
         //processed = true;

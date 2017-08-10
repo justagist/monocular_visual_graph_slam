@@ -41,7 +41,7 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
 
     prev_loop_id_ = loop_id; 
     float loop_info_numer = 1.0;
-    float loop_info_denom = 100000; // 100000
+    float loop_info_denom = 1; // 100000
     static int prev_loop = -1, curr_loop = -1;
 
     if( repeat_match_count_ > min_required_repeat_ && loop_id != prev_loop) 
@@ -74,7 +74,7 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
             variance = 1.0;
         double info = (1*loop_info_numer)/(variance*loop_info_denom); 
 
-        link->inf_matrix_ *= info; 
+        // link->inf_matrix_ *= info; // ++++++++++++++
         std::cout << "Loop Closure Status: " << std::boolalpha << status_good << std::noboolalpha << std::endl;
         // std::cout << "info matrix loop closure \n" << link->inf_matrix_ << std::endl;
         link->active = true;
@@ -108,7 +108,7 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
             char key = 'y';
             if (key == 'y')
             {
-                curr_loop = link->from_id_;
+                curr_loop = link->to_id_; // ?????
                 data_spot_ptr->addLink(link);  // ?????
                 // if (prev_loop == curr_loop)
                 //     curr_loop = -2;
@@ -134,7 +134,9 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
     float odom_info_denom = 1;
     if( last_spot_.get() )
     {
+        // std::cout << "Odometry last spot: \n" << last_spot_->getPose().matrix() << std::endl; 
         customtype::TransformSE3 rel_transform = last_spot_->getPose().inverse()*data_spot_ptr->getPose();
+        // std::cout << "Odometry current spot: \n" << data_spot_ptr->getPose().matrix() << std::endl;
         // customtype::PointCloudPtr cloud_src = slam_utils::convert3dPointsToCloud(last_spot_->getWorldPoints());
 
         // customtype::PointCloudPtr cloud_tgt = slam_utils::convert3dPointsToCloud(data_spot_ptr->getWorldPoints());
