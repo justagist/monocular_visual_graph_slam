@@ -95,6 +95,7 @@ int main(int argc, char** argv)
     ros::Publisher marker_pub = rosNode.advertise<visualization_msgs::Marker>("markers", 10); // visualizing 3d worldpoints detected by STAM (can also be used for publishing (optimised) trajectory using markers).
     visualization_msgs::Marker world_visualizer, optimised_trajectory_msg; // 'optimised_trajectory_msg' is used only if marker message is used for publishing trajectory.
     world_visualizer.header.frame_id = "world_frame";
+    world_visualizer.ns = "3D Keypoints";
     world_visualizer.type = visualization_msgs::Marker::POINTS;
     world_visualizer.id = 0;
 
@@ -190,7 +191,12 @@ int main(int argc, char** argv)
             {
                 // -------- update world_visualizer only when new world points are observed by STAM
                 if (world_points.size()>0)
+                {
                     gSlam::ros_utils::createPointMsg(world_points, world_visualizer);
+                    if (optimise_graph)
+                        gSlam::ros_utils::storeTruePose(frame_no, posemat);
+                        gSlam::ros_utils::checkMapUpdateAndCreateNewPointMsg(slam->getDataPool().getDataSpots());
+                }
                 
                 geometry_msgs::TransformStamped odom_trans = gSlam::ros_utils::createOdomMsg(posemat);
 

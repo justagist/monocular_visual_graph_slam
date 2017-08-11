@@ -27,7 +27,7 @@ void GrSLAM::init(){
 
 // TODO: DEFINE DESTRUCTOR
 
-void GrSLAM::processData(const customtype::TransformSE3& odom_pose,
+void GrSLAM::processData(const customtype::TransformSE3 odom_pose,
                          const CameraParameters& cam_params,
                          const cv::Mat& image_color,
                          const customtype::WorldPtsType& world_pts,

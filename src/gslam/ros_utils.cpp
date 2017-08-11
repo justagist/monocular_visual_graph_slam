@@ -77,7 +77,6 @@ namespace gSlam
             // visualization_msgs::Marker world_visualizer;
             world_visualizer.header.stamp = ros::Time::now();
             world_visualizer.action = visualization_msgs::Marker::ADD;
-            world_visualizer.ns = "3D Keypoints";
             world_visualizer.scale.x = 0.005;
             world_visualizer.scale.y = 0.005;
             world_visualizer.color.g = 1.0f;
@@ -152,6 +151,46 @@ namespace gSlam
             path_msg.poses = poses;
             // path_msg.poses.header.frame_id = "world_frame";
             return path_msg;
+        }
+
+        void checkMapUpdateAndCreateNewPointMsg(DataSpot3D::DataSpotMap pool)
+        {
+            // std::cout << storage::original_poses_[storage::original_poses_.size()-1][0] << std::endl;
+            // std::cout << storage::original_poses_[storage::original_poses_.size()-1][1] << std::endl;
+            for (auto it = storage::original_poses_.begin(); it != storage::original_poses_.end(); it++)
+            {
+                // std::cout << it->first << "\n" << it->second.matrix() << std::endl;
+                customtype::TransformSE3 original_pose = it->second;
+                DataSpot3D::DataSpot3DPtr spot = pool.find(it->first)->second;
+                customtype::TransformSE3 new_pose = spot->getPose();
+                // std::cout << original_pose.matrix() << "\n" << new_pose.matrix() << "\nHERE!" << std::endl
+                if (!new_pose.isApprox(original_pose))
+                {
+                    customtype::TransformSE3 pose_change = original_pose.inverse()*new_pose;
+                    cv::Mat cv_pose_change;
+                    cv::eigen2cv(pose_change.matrix(),cv_pose_change);
+                    customtype::WorldPtsType world_points = spot->getWorldPoints();
+
+                    // transforming points according to change in poses
+                    customtype::WorldPtsType dstPoints;
+                    for (int i = 0; i < world_points.size(); i++) 
+                    {
+                        // Convert Point3f to 4x1 Mat (in homogeneous coordinates, with 1 as 4th element)
+                        cv::Point3f pt = world_points[i];
+                        cv::Mat ptMat = (cv::Mat_<float>(4,1) << pt.x, pt.y, pt.z, 1);
+
+                        // Perform matrix multiplication and store as Mat_ for easy element access
+                        cv::Mat_<float> dstMat(cv_pose_change.inv() * ptMat); 
+
+                        // Divide first three resulting elements by the 4th (homogenizing 
+                        // the point) and store as Point3f
+                        float scale = dstMat(0,3);
+                        cv::Point3f dst(dstMat(0,0)/scale, dstMat(0,1)/scale, dstMat(0,2)/scale);
+                        dstPoints.push_back(dst);
+                    }
+                }
+            }
+            // std::cout << storage::original_poses_.size() << std::endl;
         }
 
     } // ros_utils

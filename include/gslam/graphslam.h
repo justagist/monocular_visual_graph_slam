@@ -19,7 +19,7 @@ public:
     GrSLAM();
     ~GrSLAM();
 
-    void processData(const customtype::TransformSE3& odom_pose,
+    void processData(const customtype::TransformSE3 odom_pose,
                      const CameraParameters& cam_params,
                      const cv::Mat& image_color,
                      const customtype::WorldPtsType& world_pts,
@@ -37,7 +37,6 @@ public:
 
     bool graphJustOptimised(){ return presently_optimised_ ; }
 
-    // customtype::SLAMinfo& getInfo(){return details_;}
     // Gets map correction atomically
     customtype::TransformSE3 getMapCorrection() {
         mutex_graph_.lock();
@@ -61,7 +60,7 @@ private:
 
     GraphOptimizer pose_graph_;
 
-    bool presently_optimised_;
+    bool presently_optimised_; // set to true only if the dataspot triggered a graph optimisation (used for updating world points for visualisation)
 
     std::thread optimize_graph_thread_;
 

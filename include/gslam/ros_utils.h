@@ -14,6 +14,13 @@ namespace gSlam
     namespace ros_utils
     {
 
+        namespace storage
+        {
+            std::map<customtype::Identifier, customtype::TransformSE3> original_poses_;
+        }
+
+
+
         geometry_msgs::TransformStamped createOdomMsg(customtype::TransformSE3 posemat);
 
         geometry_msgs::TransformStamped setFrameCorrection();
@@ -23,6 +30,17 @@ namespace gSlam
         // Either of the 2 following methods can be used for visualising trajectory
         visualization_msgs::Marker createOptimisedTrajectoryMsg(DataSpot3D::DataSpotMap posemap);
         nav_msgs::Path createPathMsg(DataSpot3D::DataSpotMap posemap);
+
+        void checkMapUpdateAndCreateNewPointMsg(DataSpot3D::DataSpotMap dataspots);
+
+        void storeTruePose(customtype::Identifier i, customtype::TransformSE3 pose)
+        {
+            storage::original_poses_.insert( std::make_pair(i, pose));
+        }
+
+
+
+
 
     } // ros_utils
 }// gSlam
