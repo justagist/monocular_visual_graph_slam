@@ -79,7 +79,6 @@ namespace gSlam
             world_visualizer.action = visualization_msgs::Marker::ADD;
             world_visualizer.scale.x = 0.005;
             world_visualizer.scale.y = 0.005;
-            world_visualizer.color.g = 1.0f;
             world_visualizer.color.a = 1.0;
             for(auto it = world_points.begin(); it != world_points.end(); it++)
             {
@@ -153,10 +152,12 @@ namespace gSlam
             return path_msg;
         }
 
-        void checkMapUpdateAndCreateNewPointMsg(DataSpot3D::DataSpotMap pool)
+        void checkMapUpdateAndCreateNewPointMsg(DataSpot3D::DataSpotMap pool, visualization_msgs::Marker& points_msg)
         {
             // std::cout << storage::original_poses_[storage::original_poses_.size()-1][0] << std::endl;
             // std::cout << storage::original_poses_[storage::original_poses_.size()-1][1] << std::endl;
+            bool changed = false;
+            customtype::WorldPtsType dstPoints;
             for (auto it = storage::original_poses_.begin(); it != storage::original_poses_.end(); it++)
             {
                 // std::cout << it->first << "\n" << it->second.matrix() << std::endl;
@@ -164,23 +165,33 @@ namespace gSlam
                 DataSpot3D::DataSpot3DPtr spot = pool.find(it->first)->second;
                 customtype::TransformSE3 new_pose = spot->getPose();
                 // std::cout << original_pose.matrix() << "\n" << new_pose.matrix() << "\nHERE!" << std::endl
-                if (!new_pose.isApprox(original_pose))
+
+                // checking if the poses have changed
+                // if (!new_pose.isApprox(original_pose))
                 {
+                    changed = true;
                     customtype::TransformSE3 pose_change = original_pose.inverse()*new_pose;
-                    cv::Mat cv_pose_change;
+                    cv::Mat_<float> cv_pose_change;
                     cv::eigen2cv(pose_change.matrix(),cv_pose_change);
                     customtype::WorldPtsType world_points = spot->getWorldPoints();
-
-                    // transforming points according to change in poses
-                    customtype::WorldPtsType dstPoints;
+                    // transforming points according to change in pose
                     for (int i = 0; i < world_points.size(); i++) 
                     {
                         // Convert Point3f to 4x1 Mat (in homogeneous coordinates, with 1 as 4th element)
+                    // std::cout << "HERE" << std::endl;
                         cv::Point3f pt = world_points[i];
                         cv::Mat ptMat = (cv::Mat_<float>(4,1) << pt.x, pt.y, pt.z, 1);
+                        // std::cout << type2str(cv_pose_change.type()) << std::endl;
+                        // std::cout << type2str(ptMat.type()) << std::endl;
+                        // std::cout << "type " << cv_pose_change.channels() << std::endl << ptMat.channels() << std::endl;
+                        std::cout <<( cv_pose_change.type()==ptMat.type() && (cv_pose_change.type() == CV_32FC1 || cv_pose_change.type() == CV_64FC1 || cv_pose_change.type() == CV_32FC2 || cv_pose_change.type() == CV_64FC2))<< std::endl;
+                        std::cout << cv_pose_change << std::endl;
+                        std::cout << ptMat << std::endl;
+                        std::cout << ptMat.type() << std::endl << CV_32FC1 << std::endl;
+                        std::cout << cv_pose_change * ptMat << std::endl;
 
                         // Perform matrix multiplication and store as Mat_ for easy element access
-                        cv::Mat_<float> dstMat(cv_pose_change.inv() * ptMat); 
+                        cv::Mat_<float> dstMat = (cv_pose_change * ptMat/*.t()*/); 
 
                         // Divide first three resulting elements by the 4th (homogenizing 
                         // the point) and store as Point3f
@@ -190,7 +201,40 @@ namespace gSlam
                     }
                 }
             }
+
+            if (changed)
+            {
+                createPointMsg(dstPoints, points_msg);
+                // points_msg.color.g = 0.0f;
+                // points_msg.color.r = 1.0f;
+                
+            }
+            // else updated_cloud_msg = prev_cloud;
             // std::cout << storage::original_poses_.size() << std::endl;
+        }
+
+        std::string type2str(int type) 
+        {
+            std::string r;
+
+            uchar depth = type & CV_MAT_DEPTH_MASK;
+            uchar chans = 1 + (type >> CV_CN_SHIFT);
+
+            switch ( depth ) {
+            case CV_8U:  r = "8U"; break;
+            case CV_8S:  r = "8S"; break;
+            case CV_16U: r = "16U"; break;
+            case CV_16S: r = "16S"; break;
+            case CV_32S: r = "32S"; break;
+            case CV_32F: r = "32F"; break;
+            case CV_64F: r = "64F"; break;
+            default:     r = "User"; break;
+            }
+
+            r += "C";
+            r += (chans+'0');
+
+            return r;
         }
 
     } // ros_utils

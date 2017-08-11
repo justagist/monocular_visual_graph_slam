@@ -31,12 +31,14 @@ namespace gSlam
         visualization_msgs::Marker createOptimisedTrajectoryMsg(DataSpot3D::DataSpotMap posemap);
         nav_msgs::Path createPathMsg(DataSpot3D::DataSpotMap posemap);
 
-        void checkMapUpdateAndCreateNewPointMsg(DataSpot3D::DataSpotMap dataspots);
+        void checkMapUpdateAndCreateNewPointMsg(DataSpot3D::DataSpotMap dataspots, visualization_msgs::Marker& points_msg);
 
         void storeTruePose(customtype::Identifier i, customtype::TransformSE3 pose)
         {
             storage::original_poses_.insert( std::make_pair(i, pose));
         }
+
+        std::string type2str(int type);
 
 
 

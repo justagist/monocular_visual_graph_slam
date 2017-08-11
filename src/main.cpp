@@ -93,11 +93,18 @@ int main(int argc, char** argv)
     // tf::TransformBroadcaster frame_corrector; // coordinate frame orientation correction for ISMAR dataset -- NOT DONE CORRECTLY YET.
 
     ros::Publisher marker_pub = rosNode.advertise<visualization_msgs::Marker>("markers", 10); // visualizing 3d worldpoints detected by STAM (can also be used for publishing (optimised) trajectory using markers).
-    visualization_msgs::Marker world_visualizer, optimised_trajectory_msg; // 'optimised_trajectory_msg' is used only if marker message is used for publishing trajectory.
+    visualization_msgs::Marker world_visualizer, optimised_trajectory_msg, updated_worldpts_msg; // 'optimised_trajectory_msg' is used only if marker message is used for publishing trajectory.
     world_visualizer.header.frame_id = "world_frame";
     world_visualizer.ns = "3D Keypoints";
     world_visualizer.type = visualization_msgs::Marker::POINTS;
     world_visualizer.id = 0;
+    world_visualizer.color.g = 1.0f;
+
+    updated_worldpts_msg.header.frame_id = "world_frame";
+    updated_worldpts_msg.ns = "Updated 3D Keypoints";
+    updated_worldpts_msg.type = visualization_msgs::Marker::POINTS;
+    updated_worldpts_msg.id = 2;
+    updated_worldpts_msg.color.r = 1.0f;
 
     // ----- Pulblisher for publishing trajectory as Path message. If using Marker message for publishing trajectory, this is not required.
     ros::Publisher trajectory_publisher = rosNode.advertise<nav_msgs::Path>("trajectory",1000);
@@ -195,7 +202,7 @@ int main(int argc, char** argv)
                     gSlam::ros_utils::createPointMsg(world_points, world_visualizer);
                     if (optimise_graph)
                         gSlam::ros_utils::storeTruePose(frame_no, posemat);
-                        gSlam::ros_utils::checkMapUpdateAndCreateNewPointMsg(slam->getDataPool().getDataSpots());
+                        gSlam::ros_utils::checkMapUpdateAndCreateNewPointMsg(slam->getDataPool().getDataSpots(), updated_worldpts_msg);
                 }
                 
                 geometry_msgs::TransformStamped odom_trans = gSlam::ros_utils::createOdomMsg(posemat);
@@ -208,6 +215,7 @@ int main(int argc, char** argv)
                 // -------- publish the transform and world points
                 odom_broadcaster.sendTransform(odom_trans);
                 marker_pub.publish(world_visualizer);
+                marker_pub.publish(updated_worldpts_msg);
 
                 //// ------ Use only if publishing path message and not marker message for trajectory
                 trajectory_publisher.publish(path_msg);
