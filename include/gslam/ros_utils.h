@@ -14,7 +14,7 @@ namespace gSlam
     namespace ros_utils
     {
 
-        namespace storage
+        namespace storage // Storing stuff that are required only if using ROS (visualizing in rviz)
         {
             std::map<customtype::Identifier, customtype::TransformSE3> original_poses_;
         }
@@ -33,16 +33,10 @@ namespace gSlam
 
         void checkMapUpdateAndCreateNewPointMsg(DataSpot3D::DataSpotMap dataspots, visualization_msgs::Marker& points_msg);
 
-        void storeTruePose(customtype::Identifier i, customtype::TransformSE3 pose)
+        void storeTruePose(customtype::Identifier i, customtype::TransformSE3 pose) // stores true poses for the frames that bring new STAM keypoints
         {
             storage::original_poses_.insert( std::make_pair(i, pose));
         }
-
-        std::string type2str(int type);
-
-
-
-
 
     } // ros_utils
 }// gSlam

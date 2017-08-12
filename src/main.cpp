@@ -94,12 +94,15 @@ int main(int argc, char** argv)
 
     ros::Publisher marker_pub = rosNode.advertise<visualization_msgs::Marker>("markers", 10); // visualizing 3d worldpoints detected by STAM (can also be used for publishing (optimised) trajectory using markers).
     visualization_msgs::Marker world_visualizer, optimised_trajectory_msg, updated_worldpts_msg; // 'optimised_trajectory_msg' is used only if marker message is used for publishing trajectory.
+
+    // ----- world_visualizer: for visualizing the world points as obtained from STAM 
     world_visualizer.header.frame_id = "world_frame";
     world_visualizer.ns = "3D Keypoints";
     world_visualizer.type = visualization_msgs::Marker::POINTS;
     world_visualizer.id = 0;
     world_visualizer.color.g = 1.0f;
 
+    // ----- updated_worldpts_msg: visualizes the updated world points after graph optimisation
     updated_worldpts_msg.header.frame_id = "world_frame";
     updated_worldpts_msg.ns = "Updated 3D Keypoints";
     updated_worldpts_msg.type = visualization_msgs::Marker::POINTS;
@@ -215,7 +218,9 @@ int main(int argc, char** argv)
                 // -------- publish the transform and world points
                 odom_broadcaster.sendTransform(odom_trans);
                 marker_pub.publish(world_visualizer);
-                marker_pub.publish(updated_worldpts_msg);
+                if (optimise_graph)
+                    marker_pub.publish(updated_worldpts_msg);
+                // marker_pub.publish(optimised_trajectory_msg); // for publishing trajectory using markers
 
                 //// ------ Use only if publishing path message and not marker message for trajectory
                 trajectory_publisher.publish(path_msg);
@@ -232,7 +237,7 @@ int main(int argc, char** argv)
         }
         catch (const cv::Exception& e)
         {
-            std::cout << "STAM failed due to correspondence loss. Try reducing triangulation baseline.\n STOPPING SLAM due to Visual Odometry failure... " << std::endl;
+            std::cout << "Graph SLAM failed due to OpenCV Exception. Probably STAM failed due to correspondence loss. Try changing triangulation baseline.\n STOPPING Graph SLAM... " << std::endl;
             exit_safe = false;
             break;
         }
