@@ -202,6 +202,7 @@ add_library(gslam ${GSLAM_SOURCES})
 add_executable(vis_odo_node src/vis_odo_node.cpp)
 add_executable(test_node src/test.cpp)
 add_executable(main_slam_node src/main.cpp)
+add_executable(rename_dataset src/rename_image.cpp)
 
 add_executable(points_and_lines src/test_pub.cpp)
 target_link_libraries(points_and_lines ${catkin_LIBRARIES})
@@ -218,6 +219,10 @@ target_link_libraries(points_and_lines ${catkin_LIBRARIES})
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(vis_odo_node
+   ${catkin_LIBRARIES}
+    ${STAM_LIBRARY} ${OpenCV_LIBS} ${cvsba_LIBS}
+)
+target_link_libraries(rename_dataset
    ${catkin_LIBRARIES}
     ${STAM_LIBRARY} ${OpenCV_LIBS} ${cvsba_LIBS}
 )
