@@ -13,7 +13,8 @@ int ismar_baselines[] ={175, 50, 80,
                         100, /*150*/ /*100 is probably better for loop closure*/ /*175*/
                         75, /*135*/ /*150*/
                         150,
-                        130 /*130 is very good for 2 circles*//*100 works fine for 3 circles, but depth drift is more pronounced*/};
+                        130, /*130 is very good for 2 circles*//*100 works fine for 3 circles, but depth drift is more pronounced*/
+                        175 /* values from 100 to 200 seem to work fine */};
 bool write_file = false;
 bool optimise_graph = false;
 
@@ -205,7 +206,7 @@ int main(int argc, char** argv)
                     gSlam::ros_utils::createPointMsg(world_points, world_visualizer);
                     if (optimise_graph)
                         gSlam::ros_utils::storeTruePose(frame_no, posemat);
-                        gSlam::ros_utils::checkMapUpdateAndCreateNewPointMsg(slam->getDataPool().getDataSpots(), updated_worldpts_msg);
+                        // gSlam::ros_utils::checkMapUpdateAndCreateNewPointMsg(slam->getDataPool().getDataSpots(), updated_worldpts_msg);
                 }
                 
                 geometry_msgs::TransformStamped odom_trans = gSlam::ros_utils::createOdomMsg(posemat);
@@ -223,7 +224,7 @@ int main(int argc, char** argv)
                 // marker_pub.publish(optimised_trajectory_msg); // for publishing trajectory using markers
 
                 //// ------ Use only if publishing path message and not marker message for trajectory
-                trajectory_publisher.publish(path_msg);
+                // trajectory_publisher.publish(path_msg);
                 //// ----------------------------
             }
             // ==========================================================================================================================
