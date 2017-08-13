@@ -17,6 +17,7 @@ GrSLAM::~GrSLAM()
     }
 
     cond_var_.notify_all();//*
+    // optimize_graph_thread_.join();
 }
 
 void GrSLAM::init(){ 

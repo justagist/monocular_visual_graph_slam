@@ -1,7 +1,8 @@
+#include "STAM.h"
 #include "VideoSource.h"
-#include <fstream>
-#include "gslam/ros_utils.h"
 #include "gslam/graphslam.h"
+#include "gslam/ros_visualizer.h"
+#include <fstream>
 
 namespace vo = visual_odometry;
 bool visualize_flag = false;
@@ -93,38 +94,8 @@ int main(int argc, char** argv)
 
     // ROS Stuff ====================================================================================================
 
-    ros::init(argc, argv, "odometry_publisher");
-    ros::NodeHandle rosNode;
-    ros::Time current_time, last_time;
-    current_time = ros::Time::now();
-    last_time = ros::Time::now();
-    ros::Rate r(1000);
-
-    tf::TransformBroadcaster odom_broadcaster;
-    // tf::TransformBroadcaster frame_corrector; // coordinate frame orientation correction for ISMAR dataset -- NOT DONE CORRECTLY YET.
-
-    ros::Publisher marker_pub = rosNode.advertise<visualization_msgs::Marker>("markers", 10); // visualizing 3d worldpoints detected by STAM (can also be used for publishing (optimised) trajectory using markers).
-    visualization_msgs::Marker world_visualizer, optimised_trajectory_msg, updated_worldpts_msg; // 'optimised_trajectory_msg' is used only if marker message is used for publishing trajectory.
-
-    // ----- world_visualizer: for visualizing the world points as obtained from STAM 
-    world_visualizer.header.frame_id = "world_frame";
-    world_visualizer.ns = "3D Keypoints";
-    world_visualizer.type = visualization_msgs::Marker::POINTS;
-    world_visualizer.id = 0;
-    world_visualizer.color.g = 1.0f;
-
-    // ----- updated_worldpts_msg: visualizes the updated world points after graph optimisation
-    updated_worldpts_msg.header.frame_id = "world_frame";
-    updated_worldpts_msg.ns = "Updated 3D Keypoints";
-    updated_worldpts_msg.type = visualization_msgs::Marker::POINTS;
-    updated_worldpts_msg.id = 2;
-    updated_worldpts_msg.color.r = 1.0f;
-
-    // ----- Pulblisher for publishing trajectory as Path message. If using Marker message for publishing trajectory, this is not required.
-    ros::Publisher trajectory_publisher = rosNode.advertise<nav_msgs::Path>("trajectory",1000);
-    nav_msgs::Path path_msg;
-    // ------------
-
+    ros::init(argc, argv, "Graph_Slam_Visualizer");
+    gSlam::RosVisualizer visualizer(optimise_graph);
 
     // ==============================================================================================================
 
@@ -170,14 +141,11 @@ int main(int argc, char** argv)
 
     bool exit_safe = true;
 
-    while( !(frame = video_source.readNextFrame(next_frame_format[SCENE-1])).empty() && rosNode.ok())
+    while( !(frame = video_source.readNextFrame(next_frame_format[SCENE-1])).empty() && ros::ok())
     {
         try
         {
             // break; // ++++++++++++
-
-            ros::spinOnce(); // check for incoming messages
-            current_time = ros::Time::now();
 
             // ----- perform visual odometry on current frame
             current_odom_frame = vOdom.process(frame,visualize_flag);
@@ -185,15 +153,15 @@ int main(int argc, char** argv)
             // ----- get 3D worldpoints for visualization in ROS. Only gets points when new features are tracked. For Visualization.
             gSlam::customtype::WorldPtsType world_points = vOdom.getNew3dPoints();
 
-            // ----- gets 3D world points that are visible in each frame. For SLAM.
+            // ----- gets 3D world points that are visible in each frame from STAM. For SLAM.
             gSlam::customtype::WorldPtsType points3d = vOdom.getCurrent3dPoints();
-
+            // ----- get corresponding 2D image points from STAM.
             gSlam::customtype::KeyPoints key_points;
             cv::KeyPoint::convert(vOdom.getCurrent2dKeyPoints(), key_points);
 
-            // ----- get current camera pose from STAM in the required type
+            // ----- get current camera pose from STAM 
             gSlam::customtype::TransformSE3 posemat;
-            cv::cv2eigen(current_odom_frame->getCurrentPose(),posemat.matrix()); // conversion of cv::Mat to Eigen for quaternion calculation and further slam processes
+            cv::cv2eigen(current_odom_frame->getCurrentPose(),posemat.matrix()); // conversion of cv::Mat to Eigen for quaternion calculation and further slam processing
 
             // ------- Align pose (in camera frame) with body frame of drone
             posemat = posemat*gSlam::SlamParameters::pose_aligner_;
@@ -210,42 +178,14 @@ int main(int argc, char** argv)
             // ===== Creating and Publishing ROS Messages ===============================================================================
             if (ros_flag)
             {
-                // -------- update world_visualizer only when new world points are observed by STAM
-                if (world_points.size()>0)
-                {
-                    gSlam::ros_utils::createPointMsg(world_points, world_visualizer);
-                    if (optimise_graph)
-                        gSlam::ros_utils::storeTruePose(frame_no, posemat);
-                        // gSlam::ros_utils::checkMapUpdateAndCreateNewPointMsg(slam->getDataPool().getDataSpots(), updated_worldpts_msg);
-                }
-                
-                geometry_msgs::TransformStamped odom_trans = gSlam::ros_utils::createOdomMsg(posemat);
-
-                //// ------ Use 1 of the following trajectory message types
-                // optimised_trajectory_msg = gSlam::ros_utils::createOptimisedTrajectoryMsg(slam->getDataPool().getDataSpots());
-                path_msg = gSlam::ros_utils::createPathMsg(slam->getDataPool().getDataSpots());
-                //// --------------------------------------------
-
-                // -------- publish the transform and world points
-                odom_broadcaster.sendTransform(odom_trans);
-                marker_pub.publish(world_visualizer);
-                if (optimise_graph)
-                    marker_pub.publish(updated_worldpts_msg);
-                // marker_pub.publish(optimised_trajectory_msg); // for publishing trajectory using markers
-
-                //// ------ Use only if publishing path message and not marker message for trajectory
-                // trajectory_publisher.publish(path_msg);
-                //// ----------------------------
+             visualizer.updateRosMessagesAndPublish(world_points, slam->getDataPool().getDataSpots(), frame_no, posemat);   
             }
             // ==========================================================================================================================
 
-            last_time = current_time;
-            r.sleep();
-
             frame_no++;
-            // if (i==2)
             // break;
         }
+
         catch (const cv::Exception& e)
         {
             std::cout << "Graph SLAM failed due to OpenCV Exception. Probably STAM failed due to correspondence loss. Try changing triangulation baseline.\n STOPPING Graph SLAM... " << std::endl;
@@ -254,9 +194,12 @@ int main(int argc, char** argv)
         }
     } // while
 
+    // ==================================================================================================================================
+
     gSlam::SlamParameters::info->frames_processed_ = frame_no;
     gSlam::SlamParameters::info->process_success_ = exit_safe;
 
+    // ----- saving trajectory to txt file
     if (write_file)
     {
         std::stringstream traj_file;
@@ -278,9 +221,13 @@ int main(int argc, char** argv)
         else std::cout << "No poses were found! Trajectory file not written." << std::endl;
     }
     
+    printf("EXITING... \n");
+
     std::cout << "SLAM PARAMETERS:-\n" << gSlam::slam_utils::getSlamParameterInfo(gSlam::SlamParameters::info) << "\n***\n";
 
-    printf("EXITING\n");
+    // delete slam;
+    // delete vOdom;
+    // delete visualizer;
 
     return 0;
 }

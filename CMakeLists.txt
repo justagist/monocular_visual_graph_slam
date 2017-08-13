@@ -177,7 +177,7 @@ include_directories(
 # add_library(${PROJECT_NAME}
 #   src/${PROJECT_NAME}/visual_odom.cpp
 # )
-SET(GSLAM_SOURCES ${GSLAM_SRC_DIR}/gslam/ros_utils.cpp
+SET(GSLAM_SOURCES ${GSLAM_SRC_DIR}/gslam/ros_visualizer.cpp
                   ${GSLAM_SRC_DIR}/gslam/graphslam.cpp
                   ${GSLAM_SRC_DIR}/gslam/data_spot.cpp
                   ${GSLAM_SRC_DIR}/gslam/data_pool.cpp
@@ -230,7 +230,7 @@ target_link_libraries(test_node
    ${catkin_LIBRARIES}
 	${STAM_LIBRARY}	${OpenCV_LIBS} ${cvsba_LIBS}
 )
-target_link_libraries(gslam ${STAM_LIBRARY} ${STAM_LINK_LIBS} ${GSLAM_LINK_LIBS} core types_slam3d
+target_link_libraries(gslam ${STAM_LIBRARY} ${STAM_LINK_LIBS} ${GSLAM_LINK_LIBS} ${catkin_LIBRARIES} core types_slam3d
                                    solver_csparse)
 
 target_link_libraries(main_slam_node

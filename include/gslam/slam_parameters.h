@@ -1,7 +1,6 @@
 #ifndef __SLAM_PARAMS__
 #define __SLAM_PARAMS__
 
-#include "STAM.h"
 // #include "gslam/typedefs.h"
 // #include "gslam/slam_utils.h"
 
