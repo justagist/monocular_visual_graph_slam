@@ -130,7 +130,7 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
 
     // std::cout << " Adding odometry " << std::endl;
     // Odometry constraint
-    float odom_info_numer = 10000000.00; // high value gives more importance to odometry links, thereby propogating map correction longer back in path history
+    float odom_info_numer = 1000000.00; // high value gives more importance to odometry links, thereby propogating map correction longer back in path history
     float odom_info_denom = 1;
     if( last_spot_.get() )
     {

@@ -191,7 +191,7 @@ namespace gSlam
 
         // ------- Defining optical flow thresholds
         float opt_flow_err_tol = 12.0; // was 12.0
-        int opt_flow_min_match_reqd = 500; // was 50 with max_features 1000;
+        int opt_flow_min_match_reqd = 150; // was 50 with max_features 1000;
 
         // ------- recording parameters to SlamParameters 
         if (!opt_flow_parameters_defined)

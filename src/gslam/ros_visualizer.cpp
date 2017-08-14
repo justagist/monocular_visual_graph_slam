@@ -168,7 +168,7 @@ namespace gSlam
         return path_msg;
     }
 
-    // ----- checks if the poses have changed from the original STAM poses. If yes, new world points are obtained and they are used to create marker message 
+    // ----- checks if the poses have changed from the original STAM poses. If yes, new world points are obtained and they are used to create marker message. (Not a good method if there is large rotational correction in map)
     void RosVisualizer::checkMapUpdateAndCreateNewPointMsg(DataSpot3D::DataSpotMap pool, visualization_msgs::Marker& points_msg)
     {
 
@@ -186,7 +186,6 @@ namespace gSlam
             Eigen::Vector3d original_position = original_pose.translation();
             Eigen::Vector3d new_position = new_pose.translation();
 
-
             float dist = (original_position-new_position).norm();
             // std::cout << dist << std::endl;
 
@@ -194,18 +193,17 @@ namespace gSlam
             if (dist >= 10.0)
             {
                 changed = true;
-                customtype::TransformSE3 pose_change = original_pose.inverse()*new_pose;
-                cv::Mat_<float> cv_pose_change;
-                cv::eigen2cv(pose_change.matrix(),cv_pose_change);
-                customtype::WorldPtsType world_points = spot->getWorldPoints();
 
+                // customtype::TransformSE3 pose_change = original_pose.inverse()*new_pose;
+
+                customtype::WorldPtsType world_points = spot->getWorldPoints();
 
                 // ----- transforming points according to change in pose
                 for (int i = 0; i < world_points.size(); i++) 
                 {
                     cv::Point3f pt = world_points[i];
 
-                    // ----- finding the distance of the points from the original pose along the x, y and z directions
+                    // // ----- finding the distance of the points from the original pose along the x, y and z directions
                     float dx = pt.x - original_position.x();
                     float dy = pt.y - original_position.y();
                     float dz = pt.z - original_position.z();
@@ -213,14 +211,22 @@ namespace gSlam
                     // ----- creating new points that are the same distance from the new pose
                     cv::Point3f new_pt(new_position.x() + dx, new_position.y() + dy, new_position.z() + dz);
                     transformed_points.push_back(new_pt);
+
+                    // Eigen::Vector4d pt(world_points[i].x, world_points[i].y, world_points[i].z, 1.0);
+                    // Eigen::Vector4d  new_pt_pose = pose_change*pt;
+
+                    // std::cout << pt << std::endl << std::endl << new_pt_pose << std::endl;
+
+                    // float scale = new_pt_pose[3];
+                    // cv::Point3f new_pt(new_pt_pose[0]/scale, new_pt_pose[1]/scale, new_pt_pose[2]/scale);
+                    // transformed_points.push_back(new_pt);
                 }
             }
         }
 
         if (changed)
         {
-            std::cout << "REACHED HERE!!" << std::endl;
-            createPointMsg(transformed_points, points_msg);                
+            createPointMsg(transformed_points, points_msg);  
         }
     }
 
@@ -235,7 +241,6 @@ namespace gSlam
             createPointMsg(world_points, stam_world_points_msg_);
             if (optimisation_flag_)
             {
-                std::cout << "reached here!1!" << std::endl;
                 storeTruePose(frame_no, posemat);
                 checkMapUpdateAndCreateNewPointMsg(pool, updated_worldpts_msg_);
             }
