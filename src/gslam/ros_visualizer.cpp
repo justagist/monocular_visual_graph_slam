@@ -22,6 +22,7 @@ namespace gSlam
         stam_world_points_msg_.scale.x = 0.005;
         stam_world_points_msg_.scale.y = 0.005;
         stam_world_points_msg_.color.a = 1.0; // always keep 1.0
+        stam_world_points_msg_.points.clear();
 
         // ----- updated_worldpts_msg_: visualizes the updated world points after graph optimisation
         updated_worldpts_msg_.id = 1;
@@ -33,6 +34,7 @@ namespace gSlam
         updated_worldpts_msg_.scale.y = 0.005;
         updated_worldpts_msg_.color.a = 1.0; // always keep 1.0
         updated_worldpts_msg_.color.r = 1.0f;
+        updated_worldpts_msg_.points.clear();
         // ------------
 
         // ----- trajectory msg parameters
@@ -46,6 +48,7 @@ namespace gSlam
         optimised_trajectory_msg_.color.r = 0.0f;
         optimised_trajectory_msg_.color.g = 0.0;
         optimised_trajectory_msg_.color.b = 0.0f;
+        optimised_trajectory_msg_.points.clear();
     }    
 
     // ----- Creates a transformstamped message to visualize the current STAM pose in rviz
@@ -226,6 +229,7 @@ namespace gSlam
 
         if (changed)
         {
+            points_msg.points.clear();
             createPointMsg(transformed_points, points_msg);  
         }
     }
