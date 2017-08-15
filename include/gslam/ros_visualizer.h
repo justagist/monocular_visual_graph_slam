@@ -27,7 +27,7 @@ namespace gSlam
         // ==========================================
 
         const int visualization_scale_ = 1000; // for better visualization in rviz
-        const float virtual_map_scale_ = 0.01; // for scaling point-to-point when creating point cloud for pixels near a keypoints (in createVirtualMap)
+        const float virtual_map_scale_ = 0.003; // for scaling point-to-point when creating point cloud for pixels near a keypoints (in createVirtualMap)
 
         std::map<customtype::Identifier, customtype::TransformSE3> original_poses_; // stores original poses of the frames which bring new world points. These frames bring the points that create the 3D map. Updating these points according to the change in the poses after graph optimization should give the updated map.
 

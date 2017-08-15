@@ -174,7 +174,7 @@ namespace gSlam
             // std::cout << cam_pose.matrix() << std::endl;
             
             if (use_ismar_coordinates_)
-                scale = (tf_pt(2)/tf_pt(3))*virtual_map_scale_; 
+                scale = (tf_pt(2)/tf_pt(3))*virtual_map_scale_*0.5; 
             else scale = (tf_pt(0)/tf_pt(3))*virtual_map_scale_;
 
             for (int px = -5; px < 6; px++)

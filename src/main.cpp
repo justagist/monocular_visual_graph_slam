@@ -167,11 +167,6 @@ int main(int argc, char** argv)
             gSlam::customtype::KeyPoints key_points;
             cv::KeyPoint::convert(vOdom.getCurrent2dKeyPoints(), key_points);
 
-            // for (int i = 0; i < key_points.size(); i++)
-            // {
-            //     std::cout << key_points[i].pt << std::endl;
-            // }
-
             // ----- get current camera pose from STAM 
             gSlam::customtype::TransformSE3 posemat;
             cv::cv2eigen(current_odom_frame->getCurrentPose(),posemat.matrix()); // conversion of cv::Mat to Eigen for quaternion calculation and further slam processing
