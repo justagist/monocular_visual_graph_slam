@@ -8,6 +8,7 @@ namespace vo = visual_odometry;
 bool visualize_flag = false;
 bool ros_flag = false;
 int vis_odo_baseline = 100;
+bool ismar_dataset = false;
 int ideal_baselines_[] ={175, 50, 80, 
                         100, 100, 100, 75, 75, 
                         175, /*150*/
@@ -28,6 +29,7 @@ int ideal_baselines_[] ={175, 50, 80,
 
 bool write_file = false;
 bool optimise_graph = false;
+gSlam::customtype::TransformSE3 ismar_aligner = gSlam::slam_utils::getIsmarFrameAligner();
 
 // Creating object for storing all parameterss that can be tuned. (Used for writing all the paramters used while writing trajectory to file)
 namespace gSlam{ namespace SlamParameters   
@@ -49,6 +51,11 @@ int main(int argc, char** argv)
         {
              printf(" usage: rosrun graph_slam main_slam_node <scene_number> [visualize? (0/1)] [publish rostopics? (0/1)] [save trajectory to txt file? (0/1)] [baseline for visual odometry]\n where <scene_number> = 1 - 23\n\n");
              exit(1);
+        }
+
+        if (SCENE < 4)
+        {
+            ismar_dataset = true;
         }
 
         if (ideal_baselines_[SCENE-1])
@@ -95,7 +102,7 @@ int main(int argc, char** argv)
     // ROS Stuff ====================================================================================================
 
     ros::init(argc, argv, "Graph_Slam_Visualizer");
-    gSlam::RosVisualizer visualizer(optimise_graph);
+    gSlam::RosVisualizer visualizer(optimise_graph, ismar_dataset);
 
     // ==============================================================================================================
 
@@ -159,12 +166,19 @@ int main(int argc, char** argv)
             gSlam::customtype::KeyPoints key_points;
             cv::KeyPoint::convert(vOdom.getCurrent2dKeyPoints(), key_points);
 
+            // for (int i = 0; i < key_points.size(); i++)
+            // {
+            //     std::cout << key_points[i].pt << std::endl;
+            // }
+
             // ----- get current camera pose from STAM 
             gSlam::customtype::TransformSE3 posemat;
             cv::cv2eigen(current_odom_frame->getCurrentPose(),posemat.matrix()); // conversion of cv::Mat to Eigen for quaternion calculation and further slam processing
 
             // ------- Align pose (in camera frame) with body frame of drone
-            posemat = posemat*gSlam::SlamParameters::pose_aligner_;
+            if (!ismar_dataset)
+                posemat = posemat*gSlam::SlamParameters::pose_aligner_;
+            // else posemat = posemat*ismar_aligner;
 
             // gSlam::customtype::ProjMatType projectionMatrix;
             // cv::cv2eigen(current_odom_frame->projMatrix,projectionMatrix);
@@ -178,7 +192,7 @@ int main(int argc, char** argv)
             // ===== Creating and Publishing ROS Messages ===============================================================================
             if (ros_flag)
             {
-             visualizer.updateRosMessagesAndPublish(world_points, slam->getDataPool().getDataSpots(), frame_no, posemat);   
+             visualizer.updateRosMessagesAndPublish(world_points, slam->getDataPool().getDataSpots(), frame_no, posemat, key_points, frame, points3d);   
             }
             // ==========================================================================================================================
 

@@ -38,6 +38,8 @@ namespace slam_utils
     customtype::TransformSE3 getTransformation (double x, double y, double z, double qx, double qy, double qz, double qw);
 
     customtype::TransformSE3 getFrameAligner();
+    
+    customtype::TransformSE3 getIsmarFrameAligner();
 
     void computeVariance(const customtype::PointCloudPtr & cloud_source,
                        const customtype::PointCloudPtr & cloud_target,

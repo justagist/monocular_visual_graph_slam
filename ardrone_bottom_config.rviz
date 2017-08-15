@@ -58,19 +58,13 @@ Visualization Manager:
       Frame Timeout: 15
       Frames:
         All Enabled: true
-        cam_frame:
-          Value: true
-        world_frame:
-          Value: true
       Marker Scale: 0.5
       Name: TF
       Show Arrows: false
       Show Axes: true
       Show Names: false
       Tree:
-        world_frame:
-          cam_frame:
-            {}
+        {}
       Update Interval: 0
       Value: true
     - Class: rviz/Marker
@@ -140,10 +134,10 @@ Visualization Manager:
         Z: 0.00884853
       Name: Current View
       Near Clip Distance: 0.01
-      Pitch: 0.464797
+      Pitch: 0.574797
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 3.0628
+      Yaw: 3.0728
     Saved: ~
 Window Geometry:
   Displays:

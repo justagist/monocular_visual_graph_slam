@@ -48,6 +48,15 @@ namespace slam_utils
 
     }
 
+    customtype::TransformSE3 getIsmarFrameAligner()
+    {
+        customtype::TransformSE3 alignment = customtype::TransformSE3::Identity();
+        alignment(0,0) = 0; alignment(0,1) = 1; alignment(0,2) = 0; 
+        alignment(1,0) = 0; alignment(1,1) = 0; alignment(1,2) = -1;
+        alignment(2,0) = -1; alignment(2,1) = 0; alignment(2,2) = 0;
+        return alignment;
+    }
+
     customtype::PointCloudPtr getCleanCloud(customtype::PointCloudPtr cloud_in){
         customtype::PointCloudPtr cloud_out(new customtype::PointCloud());
 

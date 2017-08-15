@@ -17,10 +17,10 @@ namespace gSlam
 
     public:
 
-        RosVisualizer(bool optimise = false);
+        RosVisualizer(bool optimise = false, bool ismar_coordinates = false);
         ~RosVisualizer(){ros::shutdown();}
 
-        void updateRosMessagesAndPublish(customtype::WorldPtsType world_points, DataSpot3D::DataSpotMap pool, int frame_no, customtype::TransformSE3 posemat);
+        void updateRosMessagesAndPublish(customtype::WorldPtsType world_points, DataSpot3D::DataSpotMap pool, int frame_no, customtype::TransformSE3 posemat, customtype::KeyPoints kpts, cv::Mat src_frame, customtype::WorldPtsType all_world_points);
 
     private:
 
@@ -31,6 +31,7 @@ namespace gSlam
         std::map<customtype::Identifier, customtype::TransformSE3> original_poses_; // stores original poses of the frames which bring new world points. These frames bring the points that create the 3D map. Updating these points according to the change in the poses after graph optimization should give the updated map.
 
         bool optimisation_flag_;
+        bool use_ismar_coordinates_;
                 
         // ==========================================
 
@@ -39,7 +40,7 @@ namespace gSlam
         tf::TransformBroadcaster odom_broadcaster_;
         // tf::TransformBroadcaster frame_corrector; // coordinate frame orientation correction for ISMAR dataset -- NOT DONE CORRECTLY YET.
         ros::Publisher marker_pub_, trajectory_publisher_; // visualizing 3d worldpoints detected by STAM (can also be used for publishing (optimised) trajectory using markers). Trajectory publisher using path msg.
-        visualization_msgs::Marker stam_world_points_msg_, optimised_trajectory_msg_, updated_worldpts_msg_; // 'optimised_trajectory_msg' is used only if marker message is used for publishing trajectory.
+        visualization_msgs::Marker stam_world_points_msg_, optimised_trajectory_msg_, updated_worldpts_msg_, virtual_map_msg_; // 'optimised_trajectory_msg' is used only if marker message is used for publishing trajectory.
         nav_msgs::Path path_msg;
 
         // =========================================
@@ -47,6 +48,9 @@ namespace gSlam
         geometry_msgs::TransformStamped createOdomMsg(customtype::TransformSE3 posemat);
 
         geometry_msgs::TransformStamped setFrameCorrection();
+
+        void createVirtualMap(customtype::WorldPtsType world_points, customtype::KeyPoints kps, visualization_msgs::Marker& points, cv::Mat src);
+        void createVirtualMap2(customtype::WorldPtsType world_points, customtype::KeyPoints kps, visualization_msgs::Marker& points, cv::Mat src, customtype::TransformSE3 cam_pose);
 
         void createPointMsg(customtype::WorldPtsType world_points, visualization_msgs::Marker& world_visualizer);
 
