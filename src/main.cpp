@@ -29,12 +29,12 @@ int ideal_baselines_[] ={175, 50, 80,
 
 bool write_file = false;
 bool optimise_graph = false;
-gSlam::customtype::TransformSE3 ismar_aligner = gSlam::slam_utils::getIsmarFrameAligner();
 
 // Creating object for storing all parameterss that can be tuned. (Used for writing all the paramters used while writing trajectory to file)
 namespace gSlam{ namespace SlamParameters   
     { SLAMinfo::SLAMinfoPtr info(new SLAMinfo); 
       const customtype::TransformSE3 pose_aligner_ = slam_utils::getFrameAligner(); // if no frame alignment required, use Identity
+      const customtype::TransformSE3 ismar_frame_aligner_ = gSlam::slam_utils::getIsmarFrameAligner();
     } }
 
 
@@ -53,10 +53,6 @@ int main(int argc, char** argv)
              exit(1);
         }
 
-        if (SCENE < 4)
-        {
-            ismar_dataset = true;
-        }
 
         if (ideal_baselines_[SCENE-1])
             vis_odo_baseline = ideal_baselines_[SCENE-1];
@@ -83,6 +79,11 @@ int main(int argc, char** argv)
         {
             if (atoi(argv[6])!=0)
                 vis_odo_baseline = atoi(argv[6]);
+        }
+        if (SCENE < 4)
+        {
+            optimise_graph = false;
+            ismar_dataset = true;
         }
         std::cout << "Writing Trajectory: " << std::boolalpha << write_file << std::noboolalpha << std::endl;
         std::cout << "Running g2o graph optimisation: " << std::boolalpha << optimise_graph << std::noboolalpha << std::endl;
@@ -178,7 +179,8 @@ int main(int argc, char** argv)
             // ------- Align pose (in camera frame) with body frame of drone
             if (!ismar_dataset)
                 posemat = posemat*gSlam::SlamParameters::pose_aligner_;
-            // else posemat = posemat*ismar_aligner;
+            else posemat = gSlam::SlamParameters::ismar_frame_aligner_*posemat;
+            // else posemat = posemat*ismar_frame_aligner_;
 
             // gSlam::customtype::ProjMatType projectionMatrix;
             // cv::cv2eigen(current_odom_frame->projMatrix,projectionMatrix);

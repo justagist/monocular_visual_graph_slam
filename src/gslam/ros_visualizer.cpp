@@ -79,24 +79,9 @@ namespace gSlam
         odom_trans.header.frame_id = "world_frame";
         odom_trans.child_frame_id = "cam_frame";
 
-
-        // ismar coordinates ---------
-        if (use_ismar_coordinates_)
-        {
-            odom_trans.transform.translation.x = -posemat.translation()[2]/visualization_scale_;
-            odom_trans.transform.translation.y = posemat.translation()[0]/visualization_scale_;
-            odom_trans.transform.translation.z = -posemat.translation()[1]/visualization_scale_;
-        }
-        // --------------
-
-        // actual coordinates ----------
-        else
-        {
-            odom_trans.transform.translation.x = posemat.translation()[0]/visualization_scale_;
-            odom_trans.transform.translation.y = posemat.translation()[1]/visualization_scale_;
-            odom_trans.transform.translation.z = posemat.translation()[2]/visualization_scale_;
-        }
-        // --------------------------
+        odom_trans.transform.translation.x = posemat.translation()[0]/visualization_scale_;
+        odom_trans.transform.translation.y = posemat.translation()[1]/visualization_scale_;
+        odom_trans.transform.translation.z = posemat.translation()[2]/visualization_scale_;
 
         odom_trans.transform.rotation.x = q1;
         odom_trans.transform.rotation.y = q2;
@@ -123,7 +108,7 @@ namespace gSlam
         return transf;
     }
 
-    void RosVisualizer::createVirtualMap(customtype::WorldPtsType all_world_pts, customtype::KeyPoints kpts, visualization_msgs::Marker& points_msg, cv::Mat src)
+    void RosVisualizer::createVirtualMap2(customtype::WorldPtsType all_world_pts, customtype::KeyPoints kpts, visualization_msgs::Marker& points_msg, cv::Mat src)
     {
         points_msg.header.stamp = ros::Time::now();
         auto it_img = kpts.begin();
@@ -165,24 +150,33 @@ namespace gSlam
 
     }
 
-    void RosVisualizer::createVirtualMap2(customtype::WorldPtsType all_world_pts, customtype::KeyPoints kpts, visualization_msgs::Marker& points_msg, cv::Mat src, customtype::TransformSE3 cam_pose)
+    void RosVisualizer::createVirtualMap(customtype::WorldPtsType all_world_pts, customtype::KeyPoints kpts, visualization_msgs::Marker& points_msg, cv::Mat src, customtype::TransformSE3 cam_pose)
     {
         points_msg.header.stamp = ros::Time::now();
         auto it_img = kpts.begin();
         std_msgs::ColorRGBA crgb;
         // std::cout << "img size \n " << src.size() << std::endl;
-        std::cout << "size of vectors: " << all_world_pts.size() << " " << kpts.size() << std::endl;
+        // std::cout << "size of vectors: " << all_world_pts.size() << " " << kpts.size() << std::endl;
         assert(kpts.size() == all_world_pts.size());
-        float virtual_map_scale = 0.01;
+        float scale;
         for(auto it = all_world_pts.begin(); it != all_world_pts.end(); it++)
         {
             cv::Point3d point = *it;
             cv::KeyPoint kpt = *it_img;
 
             Eigen::Vector4d e_pt(point.x, point.y, point.z, 1);
-            Eigen::Vector4d tf_pt = cam_pose*e_pt;
-            float scale = (tf_pt(0)/tf_pt(3))*virtual_map_scale;
-            // std::cout << tf_pt << std::endl;
+            // std::cout << e_pt << std::endl;
+            if (use_ismar_coordinates_)
+                e_pt = SlamParameters::ismar_frame_aligner_*e_pt;
+            // std::cout << e_pt << std::endl;
+
+            Eigen::Vector4d tf_pt =  cam_pose*e_pt;
+            // std::cout << cam_pose.matrix() << std::endl;
+            
+            if (use_ismar_coordinates_)
+                scale = (tf_pt(2)/tf_pt(3))*virtual_map_scale_; 
+            else scale = (tf_pt(0)/tf_pt(3))*virtual_map_scale_;
+
             for (int px = -5; px < 6; px++)
             {
                 for (int py = -5; py < 6; py++)
@@ -195,27 +189,27 @@ namespace gSlam
                     crgb.g = intensity.val[1] / 255.0;
                     crgb.b = intensity.val[0] / 255.0;
                     crgb.a = 1.0;
-                    Eigen::Vector4d pt_in_kpt_cloud((tf_pt(0)/tf_pt(3)), (tf_pt(1)/tf_pt(3))-(px*scale), tf_pt(2)/tf_pt(3)-(py*scale), 1);
+                    Eigen::Vector4d pt_in_kpt_cloud;
+                    // std::cout << pt_in_kpt_cloud << std::endl;
+                    if (use_ismar_coordinates_)
+                        pt_in_kpt_cloud << (tf_pt(0)/tf_pt(3))+(px*scale), (tf_pt(1)/tf_pt(3))+(py*scale), tf_pt(2)/tf_pt(3), 1;
+                    else pt_in_kpt_cloud << (tf_pt(0)/tf_pt(3)), (tf_pt(1)/tf_pt(3))-(px*scale), tf_pt(2)/tf_pt(3)-(py*scale), 1;
+
 
                     Eigen::Vector4d pt_in_original_frame = cam_pose.inverse()*pt_in_kpt_cloud;
+
                     gm_p.x = (pt_in_original_frame(0)/pt_in_original_frame(3))/visualization_scale_; gm_p.y = (pt_in_original_frame(1)/pt_in_original_frame(3))/visualization_scale_; gm_p.z = (pt_in_original_frame(2)/pt_in_original_frame(3))/visualization_scale_;
                     // gm_p.x = -(pt_in_original_frame(2)/pt_in_original_frame(3))/visualization_scale_; gm_p.y = (pt_in_original_frame(0)/pt_in_original_frame(3))/visualization_scale_; gm_p.z = -(pt_in_original_frame(1)/pt_in_original_frame(3))/visualization_scale_;
                     points_msg.points.push_back (gm_p);
                     points_msg.colors.push_back(crgb);
-                    // std::cout << gm_p << std::endl;
                 }
             }
-
-            // std::cin.get();
+                // exit(1);
 
             ++it_img;
-
         }
 
-        std::cout << "VECTOR SIZE: " << points_msg.points.size() << std::endl;
-
     }
-
 
     // ----- Creates marker message to visualize 3D worldpoints
     void RosVisualizer::createPointMsg(customtype::WorldPtsType world_points, visualization_msgs::Marker& points_msg)
@@ -226,10 +220,13 @@ namespace gSlam
             cv::Point3d point = *it;
             geometry_msgs::Point gm_p;
 
+
             //// ismar --------------
             if (use_ismar_coordinates_)
             {
-                gm_p.x = -point.z/visualization_scale_; gm_p.y = point.x/visualization_scale_; gm_p.z = -point.y/visualization_scale_;
+                Eigen::Vector4d pt(point.x, point.y, point.z,1);
+                Eigen::Vector4d new_pt = SlamParameters::ismar_frame_aligner_*pt;
+                gm_p.x = new_pt(0)/visualization_scale_; gm_p.y = new_pt(1)/visualization_scale_; gm_p.z = new_pt(2)/visualization_scale_;
             }
             //// --------------------
 
@@ -255,19 +252,12 @@ namespace gSlam
         for (auto it = posemap.begin(); it != posemap.end(); it++)
         {
             Eigen::Vector3d t = it->second->getPose().translation();
+
             geometry_msgs::Point pose_pt;
-            if (use_ismar_coordinates_)
-            {
-                pose_pt.x = -t.z()/visualization_scale_;
-                pose_pt.y = t.x()/visualization_scale_;
-                pose_pt.z = -t.y()/visualization_scale_;
-            }
-            else
-            {
-                pose_pt.x = t.x()/visualization_scale_;
-                pose_pt.y = t.y()/visualization_scale_;
-                pose_pt.z = t.z()/visualization_scale_;
-            }
+            pose_pt.x = t.x()/visualization_scale_;
+            pose_pt.y = t.y()/visualization_scale_;
+            pose_pt.z = t.z()/visualization_scale_;
+
             optimised_trajectory_msg.points.push_back(pose_pt);
 
         }
@@ -286,18 +276,11 @@ namespace gSlam
         for (auto it = posemap.begin(); it != posemap.end(); it++)
         {
             Eigen::Vector3d t = it->second->getPose().translation();
-            if(use_ismar_coordinates_)
-            {
-                poses.at(it->first).pose.position.x = -t.z()/visualization_scale_;
-                poses.at(it->first).pose.position.y = t.x()/visualization_scale_;
-                poses.at(it->first).pose.position.z = -t.y()/visualization_scale_;
-            }
-            else
-            {
-                poses.at(it->first).pose.position.x = t.x()/visualization_scale_;
-                poses.at(it->first).pose.position.y = t.y()/visualization_scale_;
-                poses.at(it->first).pose.position.z = t.z()/visualization_scale_;
-            }
+            
+            poses.at(it->first).pose.position.x = t.x()/visualization_scale_;
+            poses.at(it->first).pose.position.y = t.y()/visualization_scale_;
+            poses.at(it->first).pose.position.z = t.z()/visualization_scale_;
+            
             poses.at(it->first).header.frame_id = "world_frame";
             poses.at(it->first).header.stamp = ros::Time::now();
         }
@@ -377,9 +360,9 @@ namespace gSlam
         // -------- update stam_world_points_msg_ only when new world points are observed by STAM
         if (world_points.size()>0)
         {
-            // createPointMsg(world_points, stam_world_points_msg_);
-            // createVirtualMap(all_world_points, kpts, virtual_map_msg_, src_frame);
-            createVirtualMap2(all_world_points, kpts, virtual_map_msg_, src_frame, posemat);
+            createPointMsg(world_points, stam_world_points_msg_);
+
+            createVirtualMap(all_world_points, kpts, virtual_map_msg_, src_frame, posemat);
 
             if (optimisation_flag_)
             {

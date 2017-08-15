@@ -51,10 +51,12 @@ namespace slam_utils
     customtype::TransformSE3 getIsmarFrameAligner()
     {
         customtype::TransformSE3 alignment = customtype::TransformSE3::Identity();
-        alignment(0,0) = 0; alignment(0,1) = 1; alignment(0,2) = 0; 
+        alignment(0,0) = 1; alignment(0,1) = 0; alignment(0,2) = 0; 
         alignment(1,0) = 0; alignment(1,1) = 0; alignment(1,2) = -1;
-        alignment(2,0) = -1; alignment(2,1) = 0; alignment(2,2) = 0;
-        return alignment;
+        alignment(2,0) = 0; alignment(2,1) = 1; alignment(2,2) = 0;
+        // std::cout << alignment.matrix();
+        alignment = alignment.inverse();
+        return alignment;//.inverse();
     }
 
     customtype::PointCloudPtr getCleanCloud(customtype::PointCloudPtr cloud_in){

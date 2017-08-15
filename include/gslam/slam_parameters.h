@@ -77,6 +77,7 @@ namespace SlamParameters
 
     // ----- Frame Alignement Transformation to align camera frame of the Ardrone to its body frame
     extern const Eigen::Affine3d pose_aligner_;
+    extern const Eigen::Affine3d ismar_frame_aligner_;
 
 } // namespace Constants
 

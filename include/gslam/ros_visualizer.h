@@ -27,6 +27,7 @@ namespace gSlam
         // ==========================================
 
         const int visualization_scale_ = 1000; // for better visualization in rviz
+        const float virtual_map_scale_ = 0.01; // for scaling point-to-point when creating point cloud for pixels near a keypoints (in createVirtualMap)
 
         std::map<customtype::Identifier, customtype::TransformSE3> original_poses_; // stores original poses of the frames which bring new world points. These frames bring the points that create the 3D map. Updating these points according to the change in the poses after graph optimization should give the updated map.
 
@@ -49,8 +50,8 @@ namespace gSlam
 
         geometry_msgs::TransformStamped setFrameCorrection();
 
-        void createVirtualMap(customtype::WorldPtsType world_points, customtype::KeyPoints kps, visualization_msgs::Marker& points, cv::Mat src);
-        void createVirtualMap2(customtype::WorldPtsType world_points, customtype::KeyPoints kps, visualization_msgs::Marker& points, cv::Mat src, customtype::TransformSE3 cam_pose);
+        void createVirtualMap2(customtype::WorldPtsType world_points, customtype::KeyPoints kps, visualization_msgs::Marker& points, cv::Mat src);
+        void createVirtualMap(customtype::WorldPtsType world_points, customtype::KeyPoints kps, visualization_msgs::Marker& points, cv::Mat src, customtype::TransformSE3 cam_pose);
 
         void createPointMsg(customtype::WorldPtsType world_points, visualization_msgs::Marker& world_visualizer);
 
