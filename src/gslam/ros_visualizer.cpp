@@ -156,7 +156,7 @@ namespace gSlam
         auto it_img = kpts.begin();
         std_msgs::ColorRGBA crgb;
         // std::cout << "img size \n " << src.size() << std::endl;
-        // std::cout << "size of vectors: " << all_world_pts.size() << " " << kpts.size() << std::endl;
+        std::cout << "size of new VirtualMap points: " << all_world_pts.size() << " " << kpts.size() << std::endl;
         assert(kpts.size() == all_world_pts.size());
         float scale;
         for(auto it = all_world_pts.begin(); it != all_world_pts.end(); it++)
@@ -170,7 +170,7 @@ namespace gSlam
                 e_pt = SlamParameters::ismar_frame_aligner_*e_pt;
             // std::cout << e_pt << std::endl;
 
-            Eigen::Vector4d tf_pt =  cam_pose*e_pt;
+            Eigen::Vector4d tf_pt =  cam_pose.inverse()*e_pt;
             // std::cout << cam_pose.matrix() << std::endl;
             
             if (use_ismar_coordinates_)
@@ -196,7 +196,7 @@ namespace gSlam
                     else pt_in_kpt_cloud << (tf_pt(0)/tf_pt(3)), (tf_pt(1)/tf_pt(3))-(px*scale), tf_pt(2)/tf_pt(3)-(py*scale), 1;
 
 
-                    Eigen::Vector4d pt_in_original_frame = cam_pose.inverse()*pt_in_kpt_cloud;
+                    Eigen::Vector4d pt_in_original_frame = cam_pose*pt_in_kpt_cloud;
 
                     gm_p.x = (pt_in_original_frame(0)/pt_in_original_frame(3))/visualization_scale_; gm_p.y = (pt_in_original_frame(1)/pt_in_original_frame(3))/visualization_scale_; gm_p.z = (pt_in_original_frame(2)/pt_in_original_frame(3))/visualization_scale_;
                     // gm_p.x = -(pt_in_original_frame(2)/pt_in_original_frame(3))/visualization_scale_; gm_p.y = (pt_in_original_frame(0)/pt_in_original_frame(3))/visualization_scale_; gm_p.z = -(pt_in_original_frame(1)/pt_in_original_frame(3))/visualization_scale_;
