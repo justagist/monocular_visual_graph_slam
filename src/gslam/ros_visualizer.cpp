@@ -182,7 +182,7 @@ namespace gSlam
 
             ++it_img;
         }
-        if (all_world_pts_.size() > 3000)
+        if (all_world_pts_.size() > 2000)
         {
             std::vector<worldpt_struct>::const_iterator first = all_world_pts_.end() - 3000;
             std::vector<worldpt_struct>::const_iterator last = all_world_pts_.end();
@@ -390,28 +390,26 @@ namespace gSlam
             customtype::WorldPtsType::const_iterator last = current_world_pts.end();
             customtype::WorldPtsType new_world_pts(first,last);
 
-            customtype::KeyPoints::const_iterator first_kp = kpts.end() - prev_cloud_size_;
-            customtype::KeyPoints::const_iterator last_kp = kpts.end();
-            customtype::KeyPoints new_kpts(first_kp,last_kp);
-
             // ----- create the point markers for the 3D points obtained from STAM
             // createPointMsg(new_world_pts, stam_world_points_msg_);
 
-            // ----- create a virtual map using the world points and the color of the corresponding image points
-            createVirtualMap(new_world_pts, new_kpts, virtual_map_msg_, src_frame, posemat);
-
-            // ----- checks if the poses have changed and corrects map if true
-            if (optimisation_flag_)
-            {
-                storeTruePose(frame_no, posemat);
-                // ----- red point markers
-                checkMapUpdateAndCreateNewPointMsg(pool, updated_worldpts_msg_);
-            }
             new_world_points_obtained = false;
         }
         if (world_points.size()>0)
         {
+            // ----- create a virtual map using the world points and the color of the corresponding image points
+            createVirtualMap(current_world_pts, kpts, virtual_map_msg_, src_frame, posemat);
+
+            if (optimisation_flag_)
+            {
+                storeTruePose(frame_no, posemat);
+                // ----- red point markers
+                // ----- checks if the poses have changed and corrects map if true
+                checkMapUpdateAndCreateNewPointMsg(pool, updated_worldpts_msg_);
+            }
+
             new_world_points_obtained = true;
+
         }
         prev_cloud_size_ = current_world_pts.size();
 
