@@ -4,7 +4,7 @@ namespace gSlam
 {
 
 
-    RosVisualizer::RosVisualizer(bool optimise, bool ismar_coordinates): optimisation_flag_(optimise), use_ismar_coordinates_(ismar_coordinates)
+    RosVisualizer::RosVisualizer(bool optimise, bool ismar_coordinates): optimisation_flag_(optimise), use_ismar_coordinates_(ismar_coordinates), prev_cloud_size_(0)
     {
 
         marker_pub_ = rosNodeHandle.advertise<visualization_msgs::Marker>("markers", 10);
@@ -19,8 +19,8 @@ namespace gSlam
         stam_world_points_msg_.type = visualization_msgs::Marker::POINTS;
         stam_world_points_msg_.action = visualization_msgs::Marker::ADD;
         stam_world_points_msg_.color.g = 1.0f;
-        stam_world_points_msg_.scale.x = 0.005;
-        stam_world_points_msg_.scale.y = 0.005;
+        stam_world_points_msg_.scale.x = 0.0075;
+        stam_world_points_msg_.scale.y = 0.0075;
         stam_world_points_msg_.color.a = 1.0; // always keep 1.0
         stam_world_points_msg_.points.clear();
 
@@ -108,7 +108,92 @@ namespace gSlam
         return transf;
     }
 
+    // ----- creates a map using the pixels around the image keypoints whose 3D position in the world have been triangulated and obtained. Memory-expensive.
+    void RosVisualizer::createVirtualMap(customtype::WorldPtsType current_world_pts, customtype::KeyPoints kpts, visualization_msgs::Marker& points_msg, cv::Mat src, customtype::TransformSE3 cam_pose)
+    {
+        points_msg.header.stamp = ros::Time::now();
+        std_msgs::ColorRGBA crgb; // for defining the color of each point
 
+        std::cout << "size of new VirtualMap points: " << current_world_pts.size() << " " << kpts.size() << std::endl;
+        assert(kpts.size() == current_world_pts.size());
+
+        float scale; // for adjusting the 3D point distance between the nearby pixels for each keypoint. This should increase with increase in distance from the camera
+
+        auto it_img = kpts.begin();
+        for(auto it = current_world_pts.begin(); it != current_world_pts.end(); it++)
+        {
+            cv::Point3d point = *it;
+            worldpt_struct pt_struct;
+            pt_struct.x = point.x;
+            pt_struct.y = point.y;
+            pt_struct.z = point.z;
+            if (std::find(all_world_pts_.begin(), all_world_pts_.end(), pt_struct) == all_world_pts_.end())
+            {
+
+                all_world_pts_.push_back(pt_struct);
+
+                cv::KeyPoint kpt = *it_img;
+
+                Eigen::Vector4d e_pt(point.x, point.y, point.z, 1);
+
+                // ----- transforming points from ismar frame to the GSlam world frame
+                if (use_ismar_coordinates_)
+                    e_pt = SlamParameters::ismar_frame_aligner_*e_pt;
+
+                // ----- transforming points to the camera coordinate frame so that new points can be created in the nearby region of each keypoint in the direction of the camera view
+                Eigen::Vector4d tf_pt =  cam_pose.inverse()*e_pt;
+                
+                // ----- adjusting scale so that world points that are farther from the camera have more inter-marker spacing while visualizing (If the point is far, pixel distance is more significant in world coordinates) 
+                if (use_ismar_coordinates_)
+                    scale = (tf_pt(2)/tf_pt(3))*virtual_map_scale_*0.5; 
+                else scale = (tf_pt(0)/tf_pt(3))*virtual_map_scale_;
+
+                // ----- Window around the keypoint is selected
+                for (int px = -5; px < 6; px++)
+                {
+                    for (int py = -5; py < 6; py++)
+                    {
+                        geometry_msgs::Point gm_p;
+
+                        // ----- assiging the point the same color as the corresponding image pixel 
+                        cv::Vec3b intensity = src.at<cv::Vec3b>(kpt.pt.y + py, kpt.pt.x + px);
+                        crgb.r = intensity.val[2] / 255.0;
+                        crgb.g = intensity.val[1] / 255.0;
+                        crgb.b = intensity.val[0] / 255.0;
+                        crgb.a = 1.0;
+
+                        // ----- The region will be placed around the known keypoint, such that it is perpendicular to the camera axis. The ISMAR camera has its z axis the camera axis and the drone has its x-axis
+                        Eigen::Vector4d pt_in_kpt_cloud;
+                        if (use_ismar_coordinates_)
+                            pt_in_kpt_cloud << (tf_pt(0)/tf_pt(3))+(px*scale), (tf_pt(1)/tf_pt(3))+(py*scale), tf_pt(2)/tf_pt(3), 1;
+                        else pt_in_kpt_cloud << (tf_pt(0)/tf_pt(3)), (tf_pt(1)/tf_pt(3))-(px*scale), tf_pt(2)/tf_pt(3)-(py*scale), 1;
+
+
+                        Eigen::Vector4d pt_in_original_frame = cam_pose*pt_in_kpt_cloud;
+
+                        // ----- Converting the point back to the world frame 
+                        gm_p.x = (pt_in_original_frame(0)/pt_in_original_frame(3))/visualization_scale_; gm_p.y = (pt_in_original_frame(1)/pt_in_original_frame(3))/visualization_scale_; gm_p.z = (pt_in_original_frame(2)/pt_in_original_frame(3))/visualization_scale_;
+
+                        points_msg.points.push_back (gm_p);
+                        points_msg.colors.push_back(crgb);
+                    }
+                }
+            }
+
+            ++it_img;
+        }
+        if (all_world_pts_.size() > 3000)
+        {
+            std::vector<worldpt_struct>::const_iterator first = all_world_pts_.end() - 3000;
+            std::vector<worldpt_struct>::const_iterator last = all_world_pts_.end();
+            std::vector<worldpt_struct> new_vec(first,last);
+            all_world_pts_.clear();
+            all_world_pts_ = new_vec;
+        }
+
+    }
+
+    // ----- Creates marker points which mimic the color of the corresponding keypoint pixel in the image. Requires less memory.
     void RosVisualizer::createVirtualMap2(customtype::WorldPtsType current_world_pts, customtype::KeyPoints kpts, visualization_msgs::Marker& points_msg, cv::Mat src)
     {
         points_msg.header.stamp = ros::Time::now();
@@ -147,84 +232,6 @@ namespace gSlam
             points_msg.colors.push_back(crgb);
             ++it_img;
 
-        }
-
-    }
-
-    void RosVisualizer::createVirtualMap(customtype::WorldPtsType current_world_pts, customtype::KeyPoints kpts, visualization_msgs::Marker& points_msg, cv::Mat src, customtype::TransformSE3 cam_pose)
-    {
-        points_msg.header.stamp = ros::Time::now();
-        auto it_img = kpts.begin();
-        std_msgs::ColorRGBA crgb;
-        // std::cout << "img size \n " << src.size() << std::endl;
-        std::cout << "size of new VirtualMap points: " << current_world_pts.size() << " " << kpts.size() << std::endl;
-        assert(kpts.size() == current_world_pts.size());
-        float scale;
-        for(auto it = current_world_pts.begin(); it != current_world_pts.end(); it++)
-        {
-            cv::Point3d point = *it;
-            worldpt_struct pt_struct;
-            pt_struct.x = point.x;
-            pt_struct.y = point.y;
-            pt_struct.z = point.z;
-            if (std::find(all_world_pts_.begin(), all_world_pts_.end(), pt_struct) == all_world_pts_.end())
-            {
-
-                all_world_pts_.push_back(pt_struct);
-                cv::KeyPoint kpt = *it_img;
-
-                Eigen::Vector4d e_pt(point.x, point.y, point.z, 1);
-                // std::cout << e_pt << std::endl;
-                if (use_ismar_coordinates_)
-                    e_pt = SlamParameters::ismar_frame_aligner_*e_pt;
-                // std::cout << e_pt << std::endl;
-
-                Eigen::Vector4d tf_pt =  cam_pose.inverse()*e_pt;
-                // std::cout << cam_pose.matrix() << std::endl;
-                
-                if (use_ismar_coordinates_)
-                    scale = (tf_pt(2)/tf_pt(3))*virtual_map_scale_*0.5; 
-                else scale = (tf_pt(0)/tf_pt(3))*virtual_map_scale_;
-
-                for (int px = -5; px < 6; px++)
-                {
-                    for (int py = -5; py < 6; py++)
-                    {
-                        geometry_msgs::Point gm_p;
-
-                        cv::Vec3b intensity = src.at<cv::Vec3b>(kpt.pt.y + py, kpt.pt.x + px);
-
-                        crgb.r = intensity.val[2] / 255.0;
-                        crgb.g = intensity.val[1] / 255.0;
-                        crgb.b = intensity.val[0] / 255.0;
-                        crgb.a = 1.0;
-                        Eigen::Vector4d pt_in_kpt_cloud;
-                        // std::cout << pt_in_kpt_cloud << std::endl;
-                        if (use_ismar_coordinates_)
-                            pt_in_kpt_cloud << (tf_pt(0)/tf_pt(3))+(px*scale), (tf_pt(1)/tf_pt(3))+(py*scale), tf_pt(2)/tf_pt(3), 1;
-                        else pt_in_kpt_cloud << (tf_pt(0)/tf_pt(3)), (tf_pt(1)/tf_pt(3))-(px*scale), tf_pt(2)/tf_pt(3)-(py*scale), 1;
-
-
-                        Eigen::Vector4d pt_in_original_frame = cam_pose*pt_in_kpt_cloud;
-
-                        gm_p.x = (pt_in_original_frame(0)/pt_in_original_frame(3))/visualization_scale_; gm_p.y = (pt_in_original_frame(1)/pt_in_original_frame(3))/visualization_scale_; gm_p.z = (pt_in_original_frame(2)/pt_in_original_frame(3))/visualization_scale_;
-                        // gm_p.x = -(pt_in_original_frame(2)/pt_in_original_frame(3))/visualization_scale_; gm_p.y = (pt_in_original_frame(0)/pt_in_original_frame(3))/visualization_scale_; gm_p.z = -(pt_in_original_frame(1)/pt_in_original_frame(3))/visualization_scale_;
-                        points_msg.points.push_back (gm_p);
-                        points_msg.colors.push_back(crgb);
-                    }
-                }
-            }
-                // exit(1);
-
-            ++it_img;
-        }
-        if (all_world_pts_.size() > 3000)
-        {
-            std::vector<worldpt_struct>::const_iterator first = all_world_pts_.end() - 3000;
-            std::vector<worldpt_struct>::const_iterator last = all_world_pts_.end();
-            std::vector<worldpt_struct> new_vec(first,last);
-            all_world_pts_.clear();
-            all_world_pts_ = new_vec;
         }
 
     }
@@ -373,21 +380,40 @@ namespace gSlam
 
     void RosVisualizer::updateRosMessagesAndPublish(customtype::WorldPtsType world_points, DataSpot3D::DataSpotMap pool, int frame_no, customtype::TransformSE3 posemat, customtype::KeyPoints kpts, cv::Mat src_frame, customtype::WorldPtsType current_world_pts)
     {
-        // ros::Rate rate_(1000);
+        static bool new_world_points_obtained = false;
         ros::spinOnce();
-        // -------- update stam_world_points_msg_ only when new world points are observed by STAM
-        if (world_points.size()>0)
+        // -------- update stam_world_points_msg_ only when new world points are observed by STAM. new points comes to current_world_pts only in the next iteration, making this necessary. (STAM!)
+        if (new_world_points_obtained)
         {
-            createPointMsg(world_points, stam_world_points_msg_);
+            // ----- removing points that have already been included in the point clouds before
+            customtype::WorldPtsType::const_iterator first = current_world_pts.end() - prev_cloud_size_;
+            customtype::WorldPtsType::const_iterator last = current_world_pts.end();
+            customtype::WorldPtsType new_world_pts(first,last);
 
-            createVirtualMap(current_world_pts, kpts, virtual_map_msg_, src_frame, posemat);
+            customtype::KeyPoints::const_iterator first_kp = kpts.end() - prev_cloud_size_;
+            customtype::KeyPoints::const_iterator last_kp = kpts.end();
+            customtype::KeyPoints new_kpts(first_kp,last_kp);
 
+            // ----- create the point markers for the 3D points obtained from STAM
+            // createPointMsg(new_world_pts, stam_world_points_msg_);
+
+            // ----- create a virtual map using the world points and the color of the corresponding image points
+            createVirtualMap(new_world_pts, new_kpts, virtual_map_msg_, src_frame, posemat);
+
+            // ----- checks if the poses have changed and corrects map if true
             if (optimisation_flag_)
             {
                 storeTruePose(frame_no, posemat);
+                // ----- red point markers
                 checkMapUpdateAndCreateNewPointMsg(pool, updated_worldpts_msg_);
             }
+            new_world_points_obtained = false;
         }
+        if (world_points.size()>0)
+        {
+            new_world_points_obtained = true;
+        }
+        prev_cloud_size_ = current_world_pts.size();
 
         geometry_msgs::TransformStamped odom_trans = createOdomMsg(posemat);
 

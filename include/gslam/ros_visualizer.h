@@ -12,7 +12,6 @@
 
 namespace gSlam
 {
-
     class worldpt_struct
     {   
     public:
@@ -48,6 +47,7 @@ namespace gSlam
 
         bool optimisation_flag_;
         bool use_ismar_coordinates_;
+        int prev_cloud_size_;
         std::vector<worldpt_struct> all_world_pts_;
                 
         // ==========================================
@@ -66,8 +66,8 @@ namespace gSlam
 
         geometry_msgs::TransformStamped setFrameCorrection();
 
-        void createVirtualMap2(customtype::WorldPtsType world_points, customtype::KeyPoints kps, visualization_msgs::Marker& points, cv::Mat src);
         void createVirtualMap(customtype::WorldPtsType world_points, customtype::KeyPoints kps, visualization_msgs::Marker& points, cv::Mat src, customtype::TransformSE3 cam_pose);
+        void createVirtualMap2(customtype::WorldPtsType world_points, customtype::KeyPoints kps, visualization_msgs::Marker& points, cv::Mat src);
 
         void createPointMsg(customtype::WorldPtsType world_points, visualization_msgs::Marker& world_visualizer);
 
