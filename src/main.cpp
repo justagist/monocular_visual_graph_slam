@@ -7,6 +7,7 @@
 namespace vo = visual_odometry;
 bool visualize_flag = false;
 bool ros_flag = false;
+bool create_virtual_map = false;
 int vis_odo_baseline = 100;
 bool ismar_dataset = false;
 int ideal_baselines_[] ={175, 50, 80, 
@@ -65,7 +66,9 @@ int main(int argc, char** argv)
         }
         if (argc > 3)
         {
-            ros_flag = (atoi(argv[3]) == 1);
+            ros_flag = (atoi(argv[3]) == 1 || atoi(argv[3]) == 2);
+            if (atoi(argv[3]) == 2)
+                create_virtual_map = true;
         }
         if (argc > 4)
         {
@@ -88,6 +91,8 @@ int main(int argc, char** argv)
         std::cout << "Writing Trajectory: " << std::boolalpha << write_file << std::noboolalpha << std::endl;
         std::cout << "Running g2o graph optimisation: " << std::boolalpha << optimise_graph << std::noboolalpha << std::endl;
         std::cout << "Publishing ros messages: " << std::boolalpha << ros_flag << std::noboolalpha << std::endl;
+        std::cout << "Creating virtual map: " << std::boolalpha << create_virtual_map << std::noboolalpha << std::endl;
+
 
     }
 
@@ -103,7 +108,7 @@ int main(int argc, char** argv)
     // ROS Stuff ====================================================================================================
 
     ros::init(argc, argv, "Graph_Slam_Visualizer");
-    gSlam::RosVisualizer visualizer(optimise_graph, ismar_dataset);
+    gSlam::RosVisualizer visualizer(optimise_graph, ismar_dataset, create_virtual_map);
 
     // ==============================================================================================================
 

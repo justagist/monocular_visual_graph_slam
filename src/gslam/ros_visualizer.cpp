@@ -4,7 +4,7 @@ namespace gSlam
 {
 
 
-    RosVisualizer::RosVisualizer(bool optimise, bool ismar_coordinates): optimisation_flag_(optimise), use_ismar_coordinates_(ismar_coordinates), point_block_count_(0)
+    RosVisualizer::RosVisualizer(bool optimise, bool ismar_coordinates, bool virtual_map_mode): optimisation_flag_(optimise), use_ismar_coordinates_(ismar_coordinates), virtual_map_mode_(virtual_map_mode), point_block_count_(0)
     {
 
         marker_pub_ = rosNodeHandle.advertise<visualization_msgs::Marker>("markers", 10);
@@ -60,6 +60,9 @@ namespace gSlam
         virtual_map_msg_.scale.y = 0.005;
         // virtual_map_msg_.color.a = 1.0; // always keep 1.0
         virtual_map_msg_.points.clear();
+
+        int kp_region_val_ = 5; // number of rows (rows = cols) before and after the keypoint pixel to be considered for creating virtual map
+        window_size_ = 2*((2*kp_region_val_)+1); // size of the keypoint region window
 
     }    
 
@@ -527,10 +530,8 @@ namespace gSlam
         }
     }
 
-
-    void RosVisualizer::updateRosMessagesAndPublish(customtype::WorldPtsType world_points, DataSpot3D::DataSpotMap pool, int frame_no, customtype::TransformSE3 posemat, customtype::KeyPoints kpts, cv::Mat src_frame, customtype::WorldPtsType current_world_pts)
+    void RosVisualizer::visualizePointMap(customtype::WorldPtsType world_points, DataSpot3D::DataSpotMap pool, int frame_no, customtype::TransformSE3 posemat)
     {
-        ros::spinOnce();
         // -------- update correct_map_points_msg_ only when new world points are observed by STAM.
         if (world_points.size()>0)
         {
@@ -544,35 +545,146 @@ namespace gSlam
             if (optimisation_flag_)
             {
                 {
-                    // mutex_viz_.lock();
                     // ----- storing true poses to later compare if the poses changed due to graph optimisation
                     storeTruePose(frame_no, posemat);
-                    // mutex_viz_.unlock();
 
                     std::vector<int> original_pose_ids, point_block_ids;
                     std::vector<customtype::TransformSE3> new_posemats;
                     
                     // ----- checks if the poses have changed, if yes, gives the changed poses
-                    // mutex_viz_.lock();
                     bool map_changed = checkMapForUpdate(pool, original_pose_ids, point_block_ids, new_posemats);
-                    // mutex_viz_.unlock();
 
                     // ----- and corrects map if true
                     if (map_changed)
                     {
-                        // {
-                            // customtype::Lock lk(mutex_viz_);
-                            updatePointMap(original_pose_ids, point_block_ids, new_posemats);
-                        // }
-
+                        updatePointMap(original_pose_ids, point_block_ids, new_posemats);
                     }
-
-                    // checkMapUpdateAndCreateNewPointMsg(pool, point_map_error_msgs_);
                 }
             }
 
         }
 
+        marker_pub_.publish(correct_map_points_msg_);
+        // marker_pub_.publish(virtual_map_msg_);
+        if (optimisation_flag_)
+        {
+            marker_pub_.publish(point_map_error_msgs_);
+        }
+    }
+
+    void RosVisualizer::updateVirtualMap(std::vector<int> original_pose_ids, std::vector<int> block_ids, std::vector<customtype::TransformSE3> new_poses)
+    {
+
+        int block_count = 0;
+        for (std::vector<int>::iterator it = block_ids.begin(); it != block_ids.end(); ++it)
+        {
+
+            Eigen::Vector3d original_position = original_poses_.find(original_pose_ids[block_count])->second.translation();
+            customtype::TransformSE3 new_pose = new_poses[block_count];
+            Eigen::Vector3d new_position = new_pose.translation();
+
+            // ----- selecting the block of world points associated with the original pose
+            PointMsgBlock block = point_map_blocks_.find(*it)->second;
+
+            // ----- blocks of marker points that are affected due to the map optimisation
+            int region_counter = (window_size_/2) + 1;
+            for (int i = block.from_; i < block.to_; ++i)
+            {
+                geometry_msgs::Point original_point = virtual_map_msg_.points[i];
+                geometry_msgs::Point new_pt;
+                float dx = new_position.x() - original_position.x();
+                float dy = new_position.y() - original_position.y();
+                float dz = new_position.z() - original_position.z();
+
+                // ----- adding the original point to the error marker msg (not the entire virtual keypoint region)
+                if (region_counter % window_size_ == 0)
+                    point_map_error_msgs_.points.push_back(original_point);
+
+                // ----- defining the new position of the points according to the translation in the camera poses
+                // ----- replace the original point with the corrected point in the correct map point msg
+                virtual_map_msg_.points[i].x = virtual_map_msg_.points[i].x + (dx/visualization_scale_); 
+                virtual_map_msg_.points[i].y = virtual_map_msg_.points[i].y + (dy/visualization_scale_); 
+                virtual_map_msg_.points[i].z = virtual_map_msg_.points[i].z + (dz/visualization_scale_);
+
+                ++region_counter;
+            }
+
+            original_poses_[original_pose_ids[block_count]] = new_pose;
+
+
+            ++block_count;
+        }
+    }
+
+    void RosVisualizer::visualizeVirtualMap(int size_of_next_new_cloud, customtype::WorldPtsType current_world_pts, DataSpot3D::DataSpotMap pool, int frame_no, customtype::KeyPoints kpts, cv::Mat src, customtype::TransformSE3 cam_pose)
+    {
+
+        // ----- build virtual map using the current_world_pts
+        if (size_of_next_new_cloud > 0)
+        {
+            addPointsToVirtualMap(current_world_pts, kpts, src, cam_pose);
+
+            if (optimisation_flag_)
+            {
+                {
+                    // ----- storing true poses to later compare if the poses changed due to graph optimisation
+                    storeTruePose(frame_no, cam_pose);
+
+                    std::vector<int> original_pose_ids, point_block_ids;
+                    std::vector<customtype::TransformSE3> new_posemats;
+                    
+                    // ----- checks if the poses have changed, if yes, gives the changed poses
+                    bool map_changed = checkMapForUpdate(pool, original_pose_ids, point_block_ids, new_posemats);
+
+                    // ----- and corrects map if true
+                    if (map_changed)
+                    {
+                        updateVirtualMap(original_pose_ids, point_block_ids, new_posemats);
+                    }
+
+                    // checkMapUpdateAndCreateNewPointMsg(pool, point_map_error_msgs_);
+                }
+            }
+        }
+
+        marker_pub_.publish(virtual_map_msg_);
+        if (optimisation_flag_)
+        {
+            marker_pub_.publish(point_map_error_msgs_);
+        }
+    }
+
+    void RosVisualizer::addPointsToVirtualMap(customtype::WorldPtsType current_world_pts, customtype::KeyPoints kpts, cv::Mat src, customtype::TransformSE3 cam_pose)
+    {
+        unsigned int from, to;
+
+        from = virtual_map_msg_.points.size();
+
+        createVirtualMap(current_world_pts, kpts, virtual_map_msg_, src, cam_pose);
+
+        to = virtual_map_msg_.points.size();
+
+        if (optimisation_flag_)
+        {
+            // ----- storing the starting and ending position (in the marker message) of the points got from this frame
+            PointMsgBlock point_block;
+            point_block.from_ = from;
+            point_block.to_ = to;
+
+            point_map_blocks_.insert(std::make_pair(point_block_count_++, point_block));
+        }
+    }
+
+
+    void RosVisualizer::updateRosMessagesAndPublish(customtype::WorldPtsType world_points, DataSpot3D::DataSpotMap pool, int frame_no, customtype::TransformSE3 posemat, customtype::KeyPoints kpts, cv::Mat src_frame, customtype::WorldPtsType current_world_pts)
+    {
+        ros::spinOnce();
+
+        if (virtual_map_mode_)
+            visualizeVirtualMap(world_points.size(), current_world_pts, pool, frame_no, kpts, src_frame, posemat);
+        else visualizePointMap(world_points, pool, frame_no, posemat);
+
+        // ----- create the odometry transform message
         geometry_msgs::TransformStamped odom_trans = createOdomMsg(posemat);
 
         //// ------ Use 1 of the following trajectory message types
@@ -580,14 +692,9 @@ namespace gSlam
         path_msg = createPathMsg(pool);
         //// --------------------------------------------
 
-        // -------- publish the transform and world points
+        // -------- publish the transform
         odom_broadcaster_.sendTransform(odom_trans);
-        marker_pub_.publish(correct_map_points_msg_);
-        // marker_pub_.publish(virtual_map_msg_);
-        if (optimisation_flag_)
-        {
-            marker_pub_.publish(point_map_error_msgs_);
-        }
+        
         // marker_pub_.publish(optimised_trajectory_msg_); // for publishing trajectory using markers
 
         //// ------ Use only if publishing path message and not marker message for trajectory

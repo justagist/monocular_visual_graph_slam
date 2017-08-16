@@ -31,7 +31,7 @@ namespace gSlam
 
     public:
 
-        RosVisualizer(bool optimise = false, bool ismar_coordinates = false);
+        RosVisualizer(bool optimise = false, bool ismar_coordinates = false, bool virtual_map_mode = false);
         ~RosVisualizer(){ros::shutdown();}
 
         void updateRosMessagesAndPublish(customtype::WorldPtsType world_points, DataSpot3D::DataSpotMap pool, int frame_no, customtype::TransformSE3 posemat, customtype::KeyPoints kpts, cv::Mat src_frame, customtype::WorldPtsType current_world_points);
@@ -47,6 +47,7 @@ namespace gSlam
 
         bool optimisation_flag_;
         bool use_ismar_coordinates_;
+        bool virtual_map_mode_;
         std::vector<worldpt_struct> all_world_pts_;
 
         std::vector<worldpt_struct> point_map_structs_;
@@ -60,7 +61,7 @@ namespace gSlam
         std::map < unsigned int, unsigned int > frame_block_pair_;
         unsigned int point_block_count_;
 
-        customtype::Mutex mutex_viz_;
+        int window_size_; // size of keypoint region window considered for creating the virtual map
                 
         // ==========================================
 
@@ -78,8 +79,16 @@ namespace gSlam
 
         geometry_msgs::TransformStamped setFrameCorrection();
 
+        void visualizePointMap(customtype::WorldPtsType world_points, DataSpot3D::DataSpotMap pool, int frame_no, customtype::TransformSE3 posemat);
+
+        void visualizeVirtualMap(int size_of_next_new_cloud, customtype::WorldPtsType current_world_pts, DataSpot3D::DataSpotMap pool, int frame_no, customtype::KeyPoints kpts, cv::Mat src, customtype::TransformSE3 cam_pose);
+
+        void addPointsToVirtualMap(customtype::WorldPtsType current_world_pts, customtype::KeyPoints kpts, cv::Mat src, customtype::TransformSE3 cam_pose);
+
         void createVirtualMap(customtype::WorldPtsType world_points, customtype::KeyPoints kps, visualization_msgs::Marker& points, cv::Mat src, customtype::TransformSE3 cam_pose);
         void createVirtualMap2(customtype::WorldPtsType world_points, customtype::KeyPoints kps, visualization_msgs::Marker& points, cv::Mat src);
+
+        void updateVirtualMap(std::vector<int> original_pose_ids, std::vector<int> block_ids, std::vector<customtype::TransformSE3> new_poses);
 
         void addNewPointsToMap(customtype::WorldPtsType current_world_pts);
 
