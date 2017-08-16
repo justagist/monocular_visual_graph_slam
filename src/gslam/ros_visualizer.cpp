@@ -17,7 +17,7 @@ namespace gSlam
         correct_map_points_msg_.header.frame_id = "world_frame";
         correct_map_points_msg_.ns = "3D Keypoints";
         correct_map_points_msg_.type = visualization_msgs::Marker::POINTS;
-        correct_map_points_msg_.action = visualization_msgs::Marker::ADD;
+        correct_map_points_msg_.action = 0; // -- 0 = add/modify (ADD alone cannot be used, since the points are modified too)
         correct_map_points_msg_.color.g = 1.0f;
         correct_map_points_msg_.scale.x = 0.0075;
         correct_map_points_msg_.scale.y = 0.0075;
@@ -51,7 +51,7 @@ namespace gSlam
         optimised_trajectory_msg_.points.clear();
 
         // ----- virtual map parameters
-        virtual_map_msg_.id = 2;
+        virtual_map_msg_.id = 3;
         virtual_map_msg_.header.frame_id = "world_frame";
         virtual_map_msg_.ns = "Virtual Map";
         virtual_map_msg_.type = visualization_msgs::Marker::POINTS;
@@ -243,13 +243,13 @@ namespace gSlam
         from = correct_map_points_msg_.points.size();
 
         verifyAndCreatePointMsg(worldpts, correct_map_points_msg_);
+        // createPointMsg(worldpts, correct_map_points_msg_);
 
         to = correct_map_points_msg_.points.size();
 
-        std::cout << from << " " << to << std::endl;
-
         if (optimisation_flag_)
         {
+            // ----- storing the starting and ending position (in the marker message) of the points got from this frame
             PointMsgBlock point_block;
             point_block.from_ = from;
             point_block.to_ = to;
@@ -500,22 +500,23 @@ namespace gSlam
 
             // std::cout << correct_map_points_msg_.points.size() << std::endl;
 
+            // ----- blocks of marker points that are affected due to the map optimisation
             for (int i = block.from_; i < block.to_; ++i)
             {
                 geometry_msgs::Point original_point = correct_map_points_msg_.points[i];
                 geometry_msgs::Point new_pt;
-                float dx = original_point.x - original_position.x();
-                float dy = original_point.y - original_position.y();
-                float dz = original_point.z - original_position.z();
+                float dx = new_position.x() - original_position.x();
+                float dy = new_position.y() - original_position.y();
+                float dz = new_position.z() - original_position.z();
 
                 // ----- adding the original point to the error marker msg
                 point_map_error_msgs_.points.push_back(original_point);
 
                 // ----- defining the new position of the points according to the translation in the camera poses
-                new_pt.x = new_position.x() + dx; new_pt.y = new_position.y() + dy; new_pt.z = new_position.z() + dz;
-
                 // ----- replace the original point with the corrected point in the correct map point msg
-                correct_map_points_msg_.points.at(i) = new_pt;
+                correct_map_points_msg_.points[i].x = correct_map_points_msg_.points[i].x + (dx/visualization_scale_); 
+                correct_map_points_msg_.points[i].y = correct_map_points_msg_.points[i].y + (dy/visualization_scale_); 
+                correct_map_points_msg_.points[i].z = correct_map_points_msg_.points[i].z + (dz/visualization_scale_);
 
             }
 
@@ -524,7 +525,6 @@ namespace gSlam
 
             ++block_count;
         }
-
     }
 
 
