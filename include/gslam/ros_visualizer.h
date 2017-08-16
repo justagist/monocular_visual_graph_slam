@@ -49,13 +49,18 @@ namespace gSlam
         bool use_ismar_coordinates_;
         std::vector<worldpt_struct> all_world_pts_;
 
+        std::vector<worldpt_struct> point_map_structs_;
+
         struct PointMsgBlock
         {
             unsigned int from_, to_;            
         };
 
         std::map < unsigned int, PointMsgBlock > point_map_blocks_;
+        std::map < unsigned int, unsigned int > frame_block_pair_;
         unsigned int point_block_count_;
+
+        customtype::Mutex mutex_viz_;
                 
         // ==========================================
 
@@ -64,7 +69,7 @@ namespace gSlam
         tf::TransformBroadcaster odom_broadcaster_;
         // tf::TransformBroadcaster frame_corrector; // coordinate frame orientation correction for ISMAR dataset -- NOT DONE CORRECTLY YET.
         ros::Publisher marker_pub_, trajectory_publisher_; // visualizing 3d worldpoints detected by STAM (can also be used for publishing (optimised) trajectory using markers). Trajectory publisher using path msg.
-        visualization_msgs::Marker correct_map_points_msg_, optimised_trajectory_msg_, updated_worldpts_msg_, virtual_map_msg_; // 'optimised_trajectory_msg' is used only if marker message is used for publishing trajectory.
+        visualization_msgs::Marker correct_map_points_msg_, optimised_trajectory_msg_, point_map_error_msgs_, virtual_map_msg_; // 'optimised_trajectory_msg' is used only if marker message is used for publishing trajectory.
         nav_msgs::Path path_msg;
 
         // =========================================
@@ -79,16 +84,22 @@ namespace gSlam
         void addNewPointsToMap(customtype::WorldPtsType current_world_pts);
 
         void createPointMsg(customtype::WorldPtsType world_points, visualization_msgs::Marker& world_visualizer);
+        void verifyAndCreatePointMsg(customtype::WorldPtsType world_points, visualization_msgs::Marker& world_visualizer);
 
         // Either of the 2 following methods can be used for visualising trajectory
         void createOptimisedTrajectoryMsg(DataSpot3D::DataSpotMap posemap, visualization_msgs::Marker& optimised_trajectory_msg);
         nav_msgs::Path createPathMsg(DataSpot3D::DataSpotMap posemap);
+
+        bool checkMapForUpdate(DataSpot3D::DataSpotMap pool, std::vector<int>& original_pose_ids, std::vector<int>& block_ids, std::vector<customtype::TransformSE3>& new_poses);
+
+        void updatePointMap(std::vector<int> original_pose_ids, std::vector<int> block_ids, std::vector<customtype::TransformSE3> new_poses);
 
         void checkMapUpdateAndCreateNewPointMsg(DataSpot3D::DataSpotMap dataspots, visualization_msgs::Marker& points_msg);
 
         void storeTruePose(customtype::Identifier i, customtype::TransformSE3 pose) // stores true poses for the frames that bring new STAM keypoints
         {
             original_poses_.insert( std::make_pair(i, pose));
+            frame_block_pair_.insert(std::make_pair(i, point_block_count_ - 1 ));
         }
 
 

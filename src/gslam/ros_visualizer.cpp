@@ -24,17 +24,17 @@ namespace gSlam
         correct_map_points_msg_.color.a = 1.0; // always keep 1.0
         correct_map_points_msg_.points.clear();
 
-        // ----- updated_worldpts_msg_: visualizes the updated world points after graph optimisation
-        updated_worldpts_msg_.id = 1;
-        updated_worldpts_msg_.header.frame_id = "world_frame";
-        updated_worldpts_msg_.ns = "Updated 3D Keypoints";
-        updated_worldpts_msg_.type = visualization_msgs::Marker::POINTS;
-        updated_worldpts_msg_.action = visualization_msgs::Marker::ADD;
-        updated_worldpts_msg_.scale.x = 0.005;
-        updated_worldpts_msg_.scale.y = 0.005;
-        updated_worldpts_msg_.color.a = 1.0; // always keep 1.0
-        updated_worldpts_msg_.color.r = 1.0f;
-        updated_worldpts_msg_.points.clear();
+        // ----- point_map_error_msgs_: visualizes the updated world points after graph optimisation
+        point_map_error_msgs_.id = 1;
+        point_map_error_msgs_.header.frame_id = "world_frame";
+        point_map_error_msgs_.ns = "Updated 3D Keypoints";
+        point_map_error_msgs_.type = visualization_msgs::Marker::POINTS;
+        point_map_error_msgs_.action = visualization_msgs::Marker::ADD;
+        point_map_error_msgs_.scale.x = 0.005;
+        point_map_error_msgs_.scale.y = 0.005;
+        point_map_error_msgs_.color.a = 1.0; // always keep 1.0
+        point_map_error_msgs_.color.r = 1.0f;
+        point_map_error_msgs_.points.clear();
         // ------------
 
         // ----- trajectory msg parameters
@@ -242,7 +242,7 @@ namespace gSlam
 
         from = correct_map_points_msg_.points.size();
 
-        createPointMsg(worldpts, correct_map_points_msg_);
+        verifyAndCreatePointMsg(worldpts, correct_map_points_msg_);
 
         to = correct_map_points_msg_.points.size();
 
@@ -252,12 +252,62 @@ namespace gSlam
         {
             PointMsgBlock point_block;
             point_block.from_ = from;
-            point_block.to_ - to;
+            point_block.to_ = to;
 
             point_map_blocks_.insert(std::make_pair(point_block_count_++, point_block));
         }
-
     }
+
+    // ----- verifies that the points have not been added previously to the message
+    void RosVisualizer::verifyAndCreatePointMsg(customtype::WorldPtsType world_points, visualization_msgs::Marker& points_msg)
+    {
+        points_msg.header.stamp = ros::Time::now();
+        for(auto it = world_points.begin(); it != world_points.end(); it++)
+        {
+            cv::Point3d point = *it;
+            worldpt_struct pt_struct;
+            pt_struct.x = point.x;
+            pt_struct.y = point.y;
+            pt_struct.z = point.z;
+
+            if (std::find(point_map_structs_.begin(), point_map_structs_.end(), pt_struct) == point_map_structs_.end())
+            {
+
+                point_map_structs_.push_back(pt_struct);
+                geometry_msgs::Point gm_p;
+
+
+                //// ismar --------------
+                if (use_ismar_coordinates_)
+                {
+                    Eigen::Vector4d pt(point.x, point.y, point.z,1);
+                    Eigen::Vector4d new_pt = SlamParameters::ismar_frame_aligner_*pt;
+                    gm_p.x = new_pt(0)/visualization_scale_; gm_p.y = new_pt(1)/visualization_scale_; gm_p.z = new_pt(2)/visualization_scale_;
+                }
+                //// --------------------
+
+                //// actual -------------
+                else
+                {
+                    gm_p.x = point.x/visualization_scale_; gm_p.y = point.y/visualization_scale_; gm_p.z = point.z/visualization_scale_;
+                }
+                //// --------------------
+                points_msg.points.push_back (gm_p);
+            }
+        }
+
+        // ----- clearing long-term memory
+        if (point_map_structs_.size() > 2000)
+        {
+            std::vector<worldpt_struct>::const_iterator first = point_map_structs_.end() - 3000;
+            std::vector<worldpt_struct>::const_iterator last = point_map_structs_.end();
+            std::vector<worldpt_struct> new_vec(first,last);
+            point_map_structs_.clear();
+            point_map_structs_ = new_vec;
+        }
+    }
+
+
 
     // ----- Creates marker message to visualize 3D worldpoints
     void RosVisualizer::createPointMsg(customtype::WorldPtsType world_points, visualization_msgs::Marker& points_msg)
@@ -363,7 +413,7 @@ namespace gSlam
             {
                 changed = true;
 
-                // customtype::TransformSE3 pose_change = original_pose.inverse()*new_pose;
+                customtype::TransformSE3 pose_change = original_pose.inverse()*new_pose;
 
                 customtype::WorldPtsType world_points = spot->getWorldPoints();
 
@@ -372,7 +422,7 @@ namespace gSlam
                 {
                     cv::Point3f pt = world_points[i];
 
-                    // // ----- finding the distance of the points from the original pose along the x, y and z directions
+                    // ----- finding the distance of the points from the original pose along the x, y and z directions
                     float dx = pt.x - original_position.x();
                     float dy = pt.y - original_position.y();
                     float dz = pt.z - original_position.z();
@@ -382,9 +432,11 @@ namespace gSlam
                     transformed_points.push_back(new_pt);
 
                     // Eigen::Vector4d pt(world_points[i].x, world_points[i].y, world_points[i].z, 1.0);
-                    // Eigen::Vector4d  new_pt_pose = pose_change*pt;
+                    // Eigen::Vector4d new_pt_pose = original_pose.inverse()*pt;
+                    // Eigen::Vector4d new_pt_pose1 = pose_change*new_pt_pose;
+                    // new_pt_pose = new_pose*new_pt_pose1;
 
-                    // std::cout << pt << std::endl << std::endl << new_pt_pose << std::endl;
+                    // // std::cout << pt << std::endl << std::endl << new_pt_pose << std::endl;
 
                     // float scale = new_pt_pose[3];
                     // cv::Point3f new_pt(new_pt_pose[0]/scale, new_pt_pose[1]/scale, new_pt_pose[2]/scale);
@@ -400,6 +452,81 @@ namespace gSlam
         }
     }
 
+    bool RosVisualizer::checkMapForUpdate(DataSpot3D::DataSpotMap pool, std::vector<int>& original_pose_ids, std::vector<int>& block_ids, std::vector<customtype::TransformSE3>& new_poses)
+    {
+        bool changed = false;
+        for (auto it = original_poses_.begin(); it != original_poses_.end(); it++)
+        {
+            // ----- getting the original pose from original_poses_ and the corresponding point from the datapool
+            customtype::TransformSE3 original_pose = it->second;
+            DataSpot3D::DataSpot3DPtr spot = pool.find(it->first)->second;
+            customtype::TransformSE3 new_pose = spot->getPose();
+
+            Eigen::Vector3d original_position = original_pose.translation();
+            Eigen::Vector3d new_position = new_pose.translation();
+
+            float dist = (original_position-new_position).norm();
+
+            // ----- checking if the poses have changed enough to trigger new worldpoints computation
+            if (dist >= 10.0)
+            {
+                changed = true;
+                original_pose_ids.push_back(it->first);
+                new_poses.push_back(new_pose);
+                block_ids.push_back(frame_block_pair_.find(it->first)->second);
+            }
+        }
+
+        return changed;
+    }
+
+    void RosVisualizer::updatePointMap(std::vector<int> original_pose_ids, std::vector<int> block_ids, std::vector<customtype::TransformSE3> new_poses)
+    {
+
+        int block_count = 0;
+        for (std::vector<int>::iterator it = block_ids.begin(); it != block_ids.end(); ++it)
+        {
+
+            Eigen::Vector3d original_position = original_poses_.find(original_pose_ids[block_count])->second.translation();
+            customtype::TransformSE3 new_pose = new_poses[block_count];
+            Eigen::Vector3d new_position = new_pose.translation();
+
+            // std::cout << "actual pose: " << original_position <<" new_pose: " << new_position << std::endl;
+
+            // ----- selecting the block of world points associated with the original pose
+            PointMsgBlock block = point_map_blocks_.find(*it)->second;
+
+            // std::cout << block.from_ << " " << block.to_ << std::endl;
+
+            // std::cout << correct_map_points_msg_.points.size() << std::endl;
+
+            for (int i = block.from_; i < block.to_; ++i)
+            {
+                geometry_msgs::Point original_point = correct_map_points_msg_.points[i];
+                geometry_msgs::Point new_pt;
+                float dx = original_point.x - original_position.x();
+                float dy = original_point.y - original_position.y();
+                float dz = original_point.z - original_position.z();
+
+                // ----- adding the original point to the error marker msg
+                point_map_error_msgs_.points.push_back(original_point);
+
+                // ----- defining the new position of the points according to the translation in the camera poses
+                new_pt.x = new_position.x() + dx; new_pt.y = new_position.y() + dy; new_pt.z = new_position.z() + dz;
+
+                // ----- replace the original point with the corrected point in the correct map point msg
+                correct_map_points_msg_.points.at(i) = new_pt;
+
+            }
+
+            original_poses_[original_pose_ids[block_count]] = new_pose;
+
+
+            ++block_count;
+        }
+
+    }
+
 
     void RosVisualizer::updateRosMessagesAndPublish(customtype::WorldPtsType world_points, DataSpot3D::DataSpotMap pool, int frame_no, customtype::TransformSE3 posemat, customtype::KeyPoints kpts, cv::Mat src_frame, customtype::WorldPtsType current_world_pts)
     {
@@ -411,20 +538,39 @@ namespace gSlam
             // createVirtualMap(current_world_pts, kpts, virtual_map_msg_, src_frame, posemat);
 
             // ----- create the point markers for the 3D points obtained from STAM
-            addNewPointsToMap(current_world_pts);
+            addNewPointsToMap(world_points);
+            // createPointMsg(world_points, correct_map_points_msg_);
 
             if (optimisation_flag_)
             {
+                {
+                    // mutex_viz_.lock();
+                    // ----- storing true poses to later compare if the poses changed due to graph optimisation
+                    storeTruePose(frame_no, posemat);
+                    // mutex_viz_.unlock();
 
-                // ----- storing true poses to later compare if the poses changed due to graph optimisation
-                storeTruePose(frame_no, posemat);
+                    std::vector<int> original_pose_ids, point_block_ids;
+                    std::vector<customtype::TransformSE3> new_posemats;
+                    
+                    // ----- checks if the poses have changed, if yes, gives the changed poses
+                    // mutex_viz_.lock();
+                    bool map_changed = checkMapForUpdate(pool, original_pose_ids, point_block_ids, new_posemats);
+                    // mutex_viz_.unlock();
 
-                // ----- checks if the poses have changed 
-                // bool map_changed = checkMapForUpdate(pool, )
+                    // ----- and corrects map if true
+                    if (map_changed)
+                    {
+                        // {
+                            // customtype::Lock lk(mutex_viz_);
+                            updatePointMap(original_pose_ids, point_block_ids, new_posemats);
+                        // }
 
-                // ----- and corrects map if true
-                checkMapUpdateAndCreateNewPointMsg(pool, updated_worldpts_msg_);
+                    }
+
+                    // checkMapUpdateAndCreateNewPointMsg(pool, point_map_error_msgs_);
+                }
             }
+
         }
 
         geometry_msgs::TransformStamped odom_trans = createOdomMsg(posemat);
@@ -440,7 +586,7 @@ namespace gSlam
         // marker_pub_.publish(virtual_map_msg_);
         if (optimisation_flag_)
         {
-            marker_pub_.publish(updated_worldpts_msg_);
+            marker_pub_.publish(point_map_error_msgs_);
         }
         // marker_pub_.publish(optimised_trajectory_msg_); // for publishing trajectory using markers
 
