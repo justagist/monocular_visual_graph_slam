@@ -108,15 +108,16 @@ namespace gSlam
         return transf;
     }
 
-    void RosVisualizer::createVirtualMap2(customtype::WorldPtsType all_world_pts, customtype::KeyPoints kpts, visualization_msgs::Marker& points_msg, cv::Mat src)
+
+    void RosVisualizer::createVirtualMap2(customtype::WorldPtsType current_world_pts, customtype::KeyPoints kpts, visualization_msgs::Marker& points_msg, cv::Mat src)
     {
         points_msg.header.stamp = ros::Time::now();
         auto it_img = kpts.begin();
         std_msgs::ColorRGBA crgb;
         // std::cout << "img size \n " << src.size() << std::endl;
-        std::cout << "size of vectors: " << all_world_pts.size() << " " << kpts.size() << std::endl;
-        assert(kpts.size() == all_world_pts.size());
-        for(auto it = all_world_pts.begin(); it != all_world_pts.end(); it++)
+        std::cout << "size of vectors: " << current_world_pts.size() << " " << kpts.size() << std::endl;
+        assert(kpts.size() == current_world_pts.size());
+        for(auto it = current_world_pts.begin(); it != current_world_pts.end(); it++)
         {
             cv::Point3d point = *it;
             geometry_msgs::Point gm_p;
@@ -150,63 +151,80 @@ namespace gSlam
 
     }
 
-    void RosVisualizer::createVirtualMap(customtype::WorldPtsType all_world_pts, customtype::KeyPoints kpts, visualization_msgs::Marker& points_msg, cv::Mat src, customtype::TransformSE3 cam_pose)
+    void RosVisualizer::createVirtualMap(customtype::WorldPtsType current_world_pts, customtype::KeyPoints kpts, visualization_msgs::Marker& points_msg, cv::Mat src, customtype::TransformSE3 cam_pose)
     {
         points_msg.header.stamp = ros::Time::now();
         auto it_img = kpts.begin();
         std_msgs::ColorRGBA crgb;
         // std::cout << "img size \n " << src.size() << std::endl;
-        std::cout << "size of new VirtualMap points: " << all_world_pts.size() << " " << kpts.size() << std::endl;
-        assert(kpts.size() == all_world_pts.size());
+        std::cout << "size of new VirtualMap points: " << current_world_pts.size() << " " << kpts.size() << std::endl;
+        assert(kpts.size() == current_world_pts.size());
         float scale;
-        for(auto it = all_world_pts.begin(); it != all_world_pts.end(); it++)
+        for(auto it = current_world_pts.begin(); it != current_world_pts.end(); it++)
         {
             cv::Point3d point = *it;
-            cv::KeyPoint kpt = *it_img;
-
-            Eigen::Vector4d e_pt(point.x, point.y, point.z, 1);
-            // std::cout << e_pt << std::endl;
-            if (use_ismar_coordinates_)
-                e_pt = SlamParameters::ismar_frame_aligner_*e_pt;
-            // std::cout << e_pt << std::endl;
-
-            Eigen::Vector4d tf_pt =  cam_pose.inverse()*e_pt;
-            // std::cout << cam_pose.matrix() << std::endl;
-            
-            if (use_ismar_coordinates_)
-                scale = (tf_pt(2)/tf_pt(3))*virtual_map_scale_*0.5; 
-            else scale = (tf_pt(0)/tf_pt(3))*virtual_map_scale_;
-
-            for (int px = -5; px < 6; px++)
+            worldpt_struct pt_struct;
+            pt_struct.x = point.x;
+            pt_struct.y = point.y;
+            pt_struct.z = point.z;
+            if (std::find(all_world_pts_.begin(), all_world_pts_.end(), pt_struct) == all_world_pts_.end())
             {
-                for (int py = -5; py < 6; py++)
+
+                all_world_pts_.push_back(pt_struct);
+                cv::KeyPoint kpt = *it_img;
+
+                Eigen::Vector4d e_pt(point.x, point.y, point.z, 1);
+                // std::cout << e_pt << std::endl;
+                if (use_ismar_coordinates_)
+                    e_pt = SlamParameters::ismar_frame_aligner_*e_pt;
+                // std::cout << e_pt << std::endl;
+
+                Eigen::Vector4d tf_pt =  cam_pose.inverse()*e_pt;
+                // std::cout << cam_pose.matrix() << std::endl;
+                
+                if (use_ismar_coordinates_)
+                    scale = (tf_pt(2)/tf_pt(3))*virtual_map_scale_*0.5; 
+                else scale = (tf_pt(0)/tf_pt(3))*virtual_map_scale_;
+
+                for (int px = -5; px < 6; px++)
                 {
-                    geometry_msgs::Point gm_p;
+                    for (int py = -5; py < 6; py++)
+                    {
+                        geometry_msgs::Point gm_p;
 
-                    cv::Vec3b intensity = src.at<cv::Vec3b>(kpt.pt.y + py, kpt.pt.x + px);
+                        cv::Vec3b intensity = src.at<cv::Vec3b>(kpt.pt.y + py, kpt.pt.x + px);
 
-                    crgb.r = intensity.val[2] / 255.0;
-                    crgb.g = intensity.val[1] / 255.0;
-                    crgb.b = intensity.val[0] / 255.0;
-                    crgb.a = 1.0;
-                    Eigen::Vector4d pt_in_kpt_cloud;
-                    // std::cout << pt_in_kpt_cloud << std::endl;
-                    if (use_ismar_coordinates_)
-                        pt_in_kpt_cloud << (tf_pt(0)/tf_pt(3))+(px*scale), (tf_pt(1)/tf_pt(3))+(py*scale), tf_pt(2)/tf_pt(3), 1;
-                    else pt_in_kpt_cloud << (tf_pt(0)/tf_pt(3)), (tf_pt(1)/tf_pt(3))-(px*scale), tf_pt(2)/tf_pt(3)-(py*scale), 1;
+                        crgb.r = intensity.val[2] / 255.0;
+                        crgb.g = intensity.val[1] / 255.0;
+                        crgb.b = intensity.val[0] / 255.0;
+                        crgb.a = 1.0;
+                        Eigen::Vector4d pt_in_kpt_cloud;
+                        // std::cout << pt_in_kpt_cloud << std::endl;
+                        if (use_ismar_coordinates_)
+                            pt_in_kpt_cloud << (tf_pt(0)/tf_pt(3))+(px*scale), (tf_pt(1)/tf_pt(3))+(py*scale), tf_pt(2)/tf_pt(3), 1;
+                        else pt_in_kpt_cloud << (tf_pt(0)/tf_pt(3)), (tf_pt(1)/tf_pt(3))-(px*scale), tf_pt(2)/tf_pt(3)-(py*scale), 1;
 
 
-                    Eigen::Vector4d pt_in_original_frame = cam_pose*pt_in_kpt_cloud;
+                        Eigen::Vector4d pt_in_original_frame = cam_pose*pt_in_kpt_cloud;
 
-                    gm_p.x = (pt_in_original_frame(0)/pt_in_original_frame(3))/visualization_scale_; gm_p.y = (pt_in_original_frame(1)/pt_in_original_frame(3))/visualization_scale_; gm_p.z = (pt_in_original_frame(2)/pt_in_original_frame(3))/visualization_scale_;
-                    // gm_p.x = -(pt_in_original_frame(2)/pt_in_original_frame(3))/visualization_scale_; gm_p.y = (pt_in_original_frame(0)/pt_in_original_frame(3))/visualization_scale_; gm_p.z = -(pt_in_original_frame(1)/pt_in_original_frame(3))/visualization_scale_;
-                    points_msg.points.push_back (gm_p);
-                    points_msg.colors.push_back(crgb);
+                        gm_p.x = (pt_in_original_frame(0)/pt_in_original_frame(3))/visualization_scale_; gm_p.y = (pt_in_original_frame(1)/pt_in_original_frame(3))/visualization_scale_; gm_p.z = (pt_in_original_frame(2)/pt_in_original_frame(3))/visualization_scale_;
+                        // gm_p.x = -(pt_in_original_frame(2)/pt_in_original_frame(3))/visualization_scale_; gm_p.y = (pt_in_original_frame(0)/pt_in_original_frame(3))/visualization_scale_; gm_p.z = -(pt_in_original_frame(1)/pt_in_original_frame(3))/visualization_scale_;
+                        points_msg.points.push_back (gm_p);
+                        points_msg.colors.push_back(crgb);
+                    }
                 }
             }
                 // exit(1);
 
             ++it_img;
+        }
+        if (all_world_pts_.size() > 3000)
+        {
+            std::vector<worldpt_struct>::const_iterator first = all_world_pts_.end() - 3000;
+            std::vector<worldpt_struct>::const_iterator last = all_world_pts_.end();
+            std::vector<worldpt_struct> new_vec(first,last);
+            all_world_pts_.clear();
+            all_world_pts_ = new_vec;
         }
 
     }
@@ -353,7 +371,7 @@ namespace gSlam
     }
 
 
-    void RosVisualizer::updateRosMessagesAndPublish(customtype::WorldPtsType world_points, DataSpot3D::DataSpotMap pool, int frame_no, customtype::TransformSE3 posemat, customtype::KeyPoints kpts, cv::Mat src_frame, customtype::WorldPtsType all_world_points)
+    void RosVisualizer::updateRosMessagesAndPublish(customtype::WorldPtsType world_points, DataSpot3D::DataSpotMap pool, int frame_no, customtype::TransformSE3 posemat, customtype::KeyPoints kpts, cv::Mat src_frame, customtype::WorldPtsType current_world_pts)
     {
         // ros::Rate rate_(1000);
         ros::spinOnce();
@@ -362,7 +380,7 @@ namespace gSlam
         {
             createPointMsg(world_points, stam_world_points_msg_);
 
-            createVirtualMap(all_world_points, kpts, virtual_map_msg_, src_frame, posemat);
+            createVirtualMap(current_world_pts, kpts, virtual_map_msg_, src_frame, posemat);
 
             if (optimisation_flag_)
             {

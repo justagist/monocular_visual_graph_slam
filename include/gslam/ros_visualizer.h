@@ -8,9 +8,24 @@
 #include <visualization_msgs/Marker.h>
 #include "gslam/data_pool.h"
 #include <nav_msgs/Path.h>
+#include <algorithm>
 
 namespace gSlam
 {
+
+    class worldpt_struct
+    {   
+    public:
+        int x, y, z;
+        
+        friend bool operator== ( const worldpt_struct &n1, const worldpt_struct &n2);
+        
+    };
+
+    bool operator== ( const worldpt_struct &n1, const worldpt_struct &n2)
+    {
+        return (n1.x == n2.x && n1.y == n2.y && n1.z == n2.z);
+    }
 
     class RosVisualizer
     {
@@ -20,7 +35,7 @@ namespace gSlam
         RosVisualizer(bool optimise = false, bool ismar_coordinates = false);
         ~RosVisualizer(){ros::shutdown();}
 
-        void updateRosMessagesAndPublish(customtype::WorldPtsType world_points, DataSpot3D::DataSpotMap pool, int frame_no, customtype::TransformSE3 posemat, customtype::KeyPoints kpts, cv::Mat src_frame, customtype::WorldPtsType all_world_points);
+        void updateRosMessagesAndPublish(customtype::WorldPtsType world_points, DataSpot3D::DataSpotMap pool, int frame_no, customtype::TransformSE3 posemat, customtype::KeyPoints kpts, cv::Mat src_frame, customtype::WorldPtsType current_world_points);
 
     private:
 
@@ -33,6 +48,7 @@ namespace gSlam
 
         bool optimisation_flag_;
         bool use_ismar_coordinates_;
+        std::vector<worldpt_struct> all_world_pts_;
                 
         // ==========================================
 
@@ -67,7 +83,9 @@ namespace gSlam
         }
 
 
+
     }; // RosVisualizer
+
     
 }// gSlam
 
