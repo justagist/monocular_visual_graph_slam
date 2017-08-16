@@ -7,6 +7,7 @@
 namespace vo = visual_odometry;
 bool visualize_flag = false;
 bool ros_flag = false;
+bool create_virtual_map = false, visualize_virtual_map_error = false;
 int vis_odo_baseline = 100;
 bool ismar_dataset = false;
 int ideal_baselines_[] ={175, 50, 80, 
@@ -42,14 +43,14 @@ int main(int argc, char** argv)
 {
 
     if( argc < 2 ){
-        printf(" usage: rosrun graph_slam main_slam_node <scene_number> [visualize? (0/1)] [publish rostopics? (0/1)] [save trajectory to txt file? (0/1)] [run graph optimisation thread? (0/1)] [baseline for visual odometry]\n where <scene_number> = 1 - 23\n\n");
+        printf("\n\n ----- USAGE: rosrun graph_slam main_slam_node <scene_number> [visualize?] [publish rostopics?] [save trajectory to txt file?] [run graph optimisation thread?] [baseline for visual odometry] [trajectory file name]\n\nwhere <scene_number> = 1 - 23\n\nOptional Parameters (All are false by default):-\n[visualize?]: 0 = False; 1 = True\n[publish rostopics?]:\n -- 0 = False;\n -- 1 = Show Map using Marker Points (shows map error correction if optimisation thread is on);\n -- 2 = Show Virtual Map Using Color Image Info;\n -- 3 = same as (2) + show map error using Markers (Requires optimisation thread to be on)\n[save trajectory to txt file?]: 0 = False; 1 = True\n[run graph optimisation thread?]: 0 = False; 1 = True\n[baseline for visual odometry]: an integer parameter for visual odometry triangulation (set as 0 for default values)\n[trajectory file name]: optional name of out trajectory txt file\n\n");
         exit(1);
     }
     else{
         SCENE = atoi(argv[1]);
         if( SCENE > 23 || SCENE < 1 )
         {
-             printf(" usage: rosrun graph_slam main_slam_node <scene_number> [visualize? (0/1)] [publish rostopics? (0/1)] [save trajectory to txt file? (0/1)] [baseline for visual odometry]\n where <scene_number> = 1 - 23\n\n");
+             printf("\n\n ----- USAGE: rosrun graph_slam main_slam_node <scene_number> [visualize?] [publish rostopics?] [save trajectory to txt file?] [run graph optimisation thread?] [baseline for visual odometry] [trajectory file name]\n\nwhere <scene_number> = 1 - 23\n\nOptional Parameters (All are false by default):-\n[visualize?]: 0 = False; 1 = True\n[publish rostopics?]:\n -- 0 = False;\n -- 1 = Show Map using Marker Points (shows map error correction if optimisation thread is on);\n -- 2 = Show Virtual Map Using Color Image Info;\n -- 3 = same as (2) + show map error using Markers (Requires optimisation thread to be on)\n[save trajectory to txt file?]: 0 = False; 1 = True\n[run graph optimisation thread?]: 0 = False; 1 = True\n[baseline for visual odometry]: an integer parameter for visual odometry triangulation (set as 0 for default values)\n[trajectory file name]: optional name of out trajectory txt file\n\n");
              exit(1);
         }
 
@@ -65,7 +66,16 @@ int main(int argc, char** argv)
         }
         if (argc > 3)
         {
-            ros_flag = (atoi(argv[3]) == 1);
+            ros_flag = (atoi(argv[3]) > 0);
+            if (atoi(argv[3]) == 2)
+            {
+                create_virtual_map = true;
+            }
+            if (atoi(argv[3]) == 3)
+            {
+                create_virtual_map = true;
+                visualize_virtual_map_error = true;
+            }
         }
         if (argc > 4)
         {
@@ -88,6 +98,8 @@ int main(int argc, char** argv)
         std::cout << "Writing Trajectory: " << std::boolalpha << write_file << std::noboolalpha << std::endl;
         std::cout << "Running g2o graph optimisation: " << std::boolalpha << optimise_graph << std::noboolalpha << std::endl;
         std::cout << "Publishing ros messages: " << std::boolalpha << ros_flag << std::noboolalpha << std::endl;
+        std::cout << "Creating virtual map: " << std::boolalpha << create_virtual_map << std::noboolalpha << std::endl;
+
 
     }
 
@@ -103,7 +115,7 @@ int main(int argc, char** argv)
     // ROS Stuff ====================================================================================================
 
     ros::init(argc, argv, "Graph_Slam_Visualizer");
-    gSlam::RosVisualizer visualizer(optimise_graph, ismar_dataset);
+    gSlam::RosVisualizer visualizer(optimise_graph, ismar_dataset, create_virtual_map, visualize_virtual_map_error);
 
     // ==============================================================================================================
 
