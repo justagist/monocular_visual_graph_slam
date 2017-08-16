@@ -47,8 +47,15 @@ namespace gSlam
 
         bool optimisation_flag_;
         bool use_ismar_coordinates_;
-        int prev_cloud_size_;
         std::vector<worldpt_struct> all_world_pts_;
+
+        struct PointMsgBlock
+        {
+            unsigned int from_, to_;            
+        };
+
+        std::map < unsigned int, PointMsgBlock > point_map_blocks_;
+        unsigned int point_block_count_;
                 
         // ==========================================
 
@@ -57,7 +64,7 @@ namespace gSlam
         tf::TransformBroadcaster odom_broadcaster_;
         // tf::TransformBroadcaster frame_corrector; // coordinate frame orientation correction for ISMAR dataset -- NOT DONE CORRECTLY YET.
         ros::Publisher marker_pub_, trajectory_publisher_; // visualizing 3d worldpoints detected by STAM (can also be used for publishing (optimised) trajectory using markers). Trajectory publisher using path msg.
-        visualization_msgs::Marker stam_world_points_msg_, optimised_trajectory_msg_, updated_worldpts_msg_, virtual_map_msg_; // 'optimised_trajectory_msg' is used only if marker message is used for publishing trajectory.
+        visualization_msgs::Marker correct_map_points_msg_, optimised_trajectory_msg_, updated_worldpts_msg_, virtual_map_msg_; // 'optimised_trajectory_msg' is used only if marker message is used for publishing trajectory.
         nav_msgs::Path path_msg;
 
         // =========================================
@@ -68,6 +75,8 @@ namespace gSlam
 
         void createVirtualMap(customtype::WorldPtsType world_points, customtype::KeyPoints kps, visualization_msgs::Marker& points, cv::Mat src, customtype::TransformSE3 cam_pose);
         void createVirtualMap2(customtype::WorldPtsType world_points, customtype::KeyPoints kps, visualization_msgs::Marker& points, cv::Mat src);
+
+        void addNewPointsToMap(customtype::WorldPtsType current_world_pts);
 
         void createPointMsg(customtype::WorldPtsType world_points, visualization_msgs::Marker& world_visualizer);
 

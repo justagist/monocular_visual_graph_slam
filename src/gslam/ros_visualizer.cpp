@@ -4,7 +4,7 @@ namespace gSlam
 {
 
 
-    RosVisualizer::RosVisualizer(bool optimise, bool ismar_coordinates): optimisation_flag_(optimise), use_ismar_coordinates_(ismar_coordinates), prev_cloud_size_(0)
+    RosVisualizer::RosVisualizer(bool optimise, bool ismar_coordinates): optimisation_flag_(optimise), use_ismar_coordinates_(ismar_coordinates), point_block_count_(0)
     {
 
         marker_pub_ = rosNodeHandle.advertise<visualization_msgs::Marker>("markers", 10);
@@ -12,17 +12,17 @@ namespace gSlam
         trajectory_publisher_ = rosNodeHandle.advertise<nav_msgs::Path>("trajectory",1000);
         // ros::Rate rate_(1000);
 
-        // ----- stam_world_points_msg_: for visualizing the world points as obtained from STAM 
-        stam_world_points_msg_.id = 0;
-        stam_world_points_msg_.header.frame_id = "world_frame";
-        stam_world_points_msg_.ns = "3D Keypoints";
-        stam_world_points_msg_.type = visualization_msgs::Marker::POINTS;
-        stam_world_points_msg_.action = visualization_msgs::Marker::ADD;
-        stam_world_points_msg_.color.g = 1.0f;
-        stam_world_points_msg_.scale.x = 0.0075;
-        stam_world_points_msg_.scale.y = 0.0075;
-        stam_world_points_msg_.color.a = 1.0; // always keep 1.0
-        stam_world_points_msg_.points.clear();
+        // ----- correct_map_points_msg_: for visualizing the world points as obtained from STAM 
+        correct_map_points_msg_.id = 0;
+        correct_map_points_msg_.header.frame_id = "world_frame";
+        correct_map_points_msg_.ns = "3D Keypoints";
+        correct_map_points_msg_.type = visualization_msgs::Marker::POINTS;
+        correct_map_points_msg_.action = visualization_msgs::Marker::ADD;
+        correct_map_points_msg_.color.g = 1.0f;
+        correct_map_points_msg_.scale.x = 0.0075;
+        correct_map_points_msg_.scale.y = 0.0075;
+        correct_map_points_msg_.color.a = 1.0; // always keep 1.0
+        correct_map_points_msg_.points.clear();
 
         // ----- updated_worldpts_msg_: visualizes the updated world points after graph optimisation
         updated_worldpts_msg_.id = 1;
@@ -236,6 +236,29 @@ namespace gSlam
 
     }
 
+    void RosVisualizer::addNewPointsToMap(customtype::WorldPtsType worldpts)
+    {
+        unsigned int from, to;
+
+        from = correct_map_points_msg_.points.size();
+
+        createPointMsg(worldpts, correct_map_points_msg_);
+
+        to = correct_map_points_msg_.points.size();
+
+        std::cout << from << " " << to << std::endl;
+
+        if (optimisation_flag_)
+        {
+            PointMsgBlock point_block;
+            point_block.from_ = from;
+            point_block.to_ - to;
+
+            point_map_blocks_.insert(std::make_pair(point_block_count_++, point_block));
+        }
+
+    }
+
     // ----- Creates marker message to visualize 3D worldpoints
     void RosVisualizer::createPointMsg(customtype::WorldPtsType world_points, visualization_msgs::Marker& points_msg)
     {
@@ -380,38 +403,29 @@ namespace gSlam
 
     void RosVisualizer::updateRosMessagesAndPublish(customtype::WorldPtsType world_points, DataSpot3D::DataSpotMap pool, int frame_no, customtype::TransformSE3 posemat, customtype::KeyPoints kpts, cv::Mat src_frame, customtype::WorldPtsType current_world_pts)
     {
-        static bool new_world_points_obtained = false;
         ros::spinOnce();
-        // -------- update stam_world_points_msg_ only when new world points are observed by STAM. new points comes to current_world_pts only in the next iteration, making this necessary. (STAM!)
-        if (new_world_points_obtained)
-        {
-            // ----- removing points that have already been included in the point clouds before
-            customtype::WorldPtsType::const_iterator first = current_world_pts.end() - prev_cloud_size_;
-            customtype::WorldPtsType::const_iterator last = current_world_pts.end();
-            customtype::WorldPtsType new_world_pts(first,last);
-
-            // ----- create the point markers for the 3D points obtained from STAM
-            // createPointMsg(new_world_pts, stam_world_points_msg_);
-
-            new_world_points_obtained = false;
-        }
+        // -------- update correct_map_points_msg_ only when new world points are observed by STAM.
         if (world_points.size()>0)
         {
             // ----- create a virtual map using the world points and the color of the corresponding image points
-            createVirtualMap(current_world_pts, kpts, virtual_map_msg_, src_frame, posemat);
+            // createVirtualMap(current_world_pts, kpts, virtual_map_msg_, src_frame, posemat);
+
+            // ----- create the point markers for the 3D points obtained from STAM
+            addNewPointsToMap(current_world_pts);
 
             if (optimisation_flag_)
             {
+
+                // ----- storing true poses to later compare if the poses changed due to graph optimisation
                 storeTruePose(frame_no, posemat);
-                // ----- red point markers
-                // ----- checks if the poses have changed and corrects map if true
+
+                // ----- checks if the poses have changed 
+                // bool map_changed = checkMapForUpdate(pool, )
+
+                // ----- and corrects map if true
                 checkMapUpdateAndCreateNewPointMsg(pool, updated_worldpts_msg_);
             }
-
-            new_world_points_obtained = true;
-
         }
-        prev_cloud_size_ = current_world_pts.size();
 
         geometry_msgs::TransformStamped odom_trans = createOdomMsg(posemat);
 
@@ -422,8 +436,8 @@ namespace gSlam
 
         // -------- publish the transform and world points
         odom_broadcaster_.sendTransform(odom_trans);
-        // marker_pub_.publish(stam_world_points_msg_);
-        marker_pub_.publish(virtual_map_msg_);
+        marker_pub_.publish(correct_map_points_msg_);
+        // marker_pub_.publish(virtual_map_msg_);
         if (optimisation_flag_)
         {
             marker_pub_.publish(updated_worldpts_msg_);
