@@ -7,7 +7,7 @@
 namespace vo = visual_odometry;
 bool visualize_flag = false;
 bool ros_flag = false;
-bool create_virtual_map = false, visualize_virtual_map_error = false;
+bool create_virtual_map = false, visualize_virtual_map_error = false, show_keypoints_on_image = false;
 int vis_odo_baseline = 100;
 bool ismar_dataset = false;
 int ideal_baselines_[] ={175, 50, 80, 
@@ -43,14 +43,14 @@ int main(int argc, char** argv)
 {
 
     if( argc < 2 ){
-        printf("\n\n ----- USAGE: rosrun graph_slam main_slam_node <scene_number> [visualize?] [publish rostopics?] [save trajectory to txt file?] [run graph optimisation thread?] [baseline for visual odometry] [trajectory file name]\n\nwhere <scene_number> = 1 - 23\n\nOptional Parameters (All are false by default):-\n[visualize?]: 0 = False; 1 = True\n[publish rostopics?]:\n -- 0 = False;\n -- 1 = Show Map using Marker Points (shows map error correction if optimisation thread is on);\n -- 2 = Show Virtual Map Using Color Image Info;\n -- 3 = same as (2) + show map error using Markers (Requires optimisation thread to be on)\n[save trajectory to txt file?]: 0 = False; 1 = True\n[run graph optimisation thread?]: 0 = False; 1 = True\n[baseline for visual odometry]: an integer parameter for visual odometry triangulation (set as 0 for default values)\n[trajectory file name]: optional name of out trajectory txt file\n\n");
+        printf("\n\n ----- USAGE: rosrun graph_slam main_slam_node <scene_number> [visualize?] [publish rostopics?] [save trajectory to txt file?] [run graph optimisation thread?] [baseline for visual odometry] [trajectory file name]\n\nwhere <scene_number> = 1 - 23\n\nOptional Parameters (All are false by default):-\n[visualize?]: 0 = False; 1 = True; 2 = True (show keypoints in frame)\n[publish rostopics?]:\n -- 0 = False;\n -- 1 = Show Map using Marker Points (shows map error correction if optimisation thread is on);\n -- 2 = Show Virtual Map Using Color Image Info;\n -- 3 = same as (2) + show map error using Markers (Requires optimisation thread to be on)\n[save trajectory to txt file?]: 0 = False; 1 = True\n[run graph optimisation thread?]: 0 = False; 1 = True\n[baseline for visual odometry]: an integer parameter for visual odometry triangulation (set as 0 for default values)\n[trajectory file name]: optional name of out trajectory txt file\n\n");
         exit(1);
     }
     else{
         SCENE = atoi(argv[1]);
         if( SCENE > 23 || SCENE < 1 )
         {
-             printf("\n\n ----- USAGE: rosrun graph_slam main_slam_node <scene_number> [visualize?] [publish rostopics?] [save trajectory to txt file?] [run graph optimisation thread?] [baseline for visual odometry] [trajectory file name]\n\nwhere <scene_number> = 1 - 23\n\nOptional Parameters (All are false by default):-\n[visualize?]: 0 = False; 1 = True\n[publish rostopics?]:\n -- 0 = False;\n -- 1 = Show Map using Marker Points (shows map error correction if optimisation thread is on);\n -- 2 = Show Virtual Map Using Color Image Info;\n -- 3 = same as (2) + show map error using Markers (Requires optimisation thread to be on)\n[save trajectory to txt file?]: 0 = False; 1 = True\n[run graph optimisation thread?]: 0 = False; 1 = True\n[baseline for visual odometry]: an integer parameter for visual odometry triangulation (set as 0 for default values)\n[trajectory file name]: optional name of out trajectory txt file\n\n");
+             printf("\n\n ----- USAGE: rosrun graph_slam main_slam_node <scene_number> [visualize?] [publish rostopics?] [save trajectory to txt file?] [run graph optimisation thread?] [baseline for visual odometry] [trajectory file name]\n\nwhere <scene_number> = 1 - 23\n\nOptional Parameters (All are false by default):-\n[visualize?]: 0 = False; 1 = True; 2 = True (show keypoints in frame)\n[publish rostopics?]:\n -- 0 = False;\n -- 1 = Show Map using Marker Points (shows map error correction if optimisation thread is on);\n -- 2 = Show Virtual Map Using Color Image Info;\n -- 3 = same as (2) + show map error using Markers (Requires optimisation thread to be on)\n[save trajectory to txt file?]: 0 = False; 1 = True\n[run graph optimisation thread?]: 0 = False; 1 = True\n[baseline for visual odometry]: an integer parameter for visual odometry triangulation (set as 0 for default values)\n[trajectory file name]: optional name of out trajectory txt file\n\n");
              exit(1);
         }
 
@@ -61,8 +61,10 @@ int main(int argc, char** argv)
 
         if ( argc > 2 )
         {
-            visualize_flag = (atoi(argv[2]) == 1); 
+            visualize_flag = (atoi(argv[2]) > 0); 
             std::cout << " visualizing " << std::endl;
+            if (atoi(argv[2]) == 2)
+                show_keypoints_on_image = true;
         }
         if (argc > 3)
         {
@@ -124,9 +126,7 @@ int main(int argc, char** argv)
 
     VideoSource video_source;
     cv::Mat frame;
-    vo::STAM vOdom;
-
-    int i = 0;
+    vo::STAM vOdom(show_keypoints_on_image);
 
     // ----- Initialising STAM using checkerboard method (check in stam.cpp)
     if (template_file_fmt[SCENE-1] == "checkerboard")
@@ -189,14 +189,9 @@ int main(int argc, char** argv)
             if (!ismar_dataset)
                 posemat = posemat*gSlam::SlamParameters::pose_aligner_;
             else posemat = gSlam::SlamParameters::ismar_frame_aligner_*posemat;
-            // else posemat = posemat*ismar_frame_aligner_;
-
-            // gSlam::customtype::ProjMatType projectionMatrix;
-            // cv::cv2eigen(current_odom_frame->projMatrix,projectionMatrix);
 
             // ----- Main slam processing 
             slam->processData(posemat, cam_params, frame, points3d, key_points);
-            i++;
 
             // geometry_msgs::TransformStamped coordinate_correction = gSlam::ros_utils::setFrameCorrection(); // coordinate frame orientation correction for ISMAR dataset
 
@@ -206,7 +201,9 @@ int main(int argc, char** argv)
              visualizer.updateRosMessagesAndPublish(world_points, slam->getDataPool().getDataSpots(), frame_no, posemat, key_points, frame, points3d);   
             }
             // ==========================================================================================================================
-
+            if (frame_no==0)
+                cv::waitKey(0);
+            
             frame_no++;
             // break;
         }
@@ -249,10 +246,6 @@ int main(int argc, char** argv)
     printf("EXITING... \n");
 
     std::cout << "SLAM PARAMETERS:-\n" << gSlam::slam_utils::getSlamParameterInfo(gSlam::SlamParameters::info) << "\n***\n";
-
-    // delete slam;
-    // delete vOdom;
-    // delete visualizer;
 
     return 0;
 }
