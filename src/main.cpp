@@ -132,7 +132,8 @@ int main(int argc, char** argv)
     if (template_file_fmt[SCENE-1] == "checkerboard")
     {
         std::cout << "Initialising STAM using checkerboard method" << std::endl;
-        vOdom.init(video_source.readNextFrame(next_frame_format[SCENE-1]),next_frame_format[SCENE-1], intrinsics_file[SCENE-1], points3d_init_file[SCENE-1], vis_odo_baseline);    
+        // ----- checkerboard dimensions 9x6 (corners per row x corners per col)
+        vOdom.init(video_source.readNextFrame(next_frame_format[SCENE-1]),next_frame_format[SCENE-1], intrinsics_file[SCENE-1], points3d_init_file[SCENE-1], 9, 6, vis_odo_baseline);    
     }
     // ----- Initialise from template files (image patches whose 3D positions in the world frame are known)
     else vOdom.init(video_source.readNextFrame(next_frame_format[SCENE-1]),next_frame_format[SCENE-1], intrinsics_file[SCENE-1], points3d_init_file[SCENE-1], template_file_fmt[SCENE-1], vis_odo_baseline);
