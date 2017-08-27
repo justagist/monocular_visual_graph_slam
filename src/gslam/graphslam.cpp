@@ -1,3 +1,12 @@
+/** @file graph_slam.cpp (main graph_slam library. processes data and performse graph optimisation (if required))
+*
+* @author  Saif Sidhik (sxs1412@student.bham.ac.uk)
+*
+* @project graph_slam_rospkg
+* @version 1.0
+*
+*/
+
 #include "gslam/graphslam.h"
 
 namespace gSlam

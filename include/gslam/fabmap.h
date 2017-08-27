@@ -1,3 +1,13 @@
+/** @file fabmap.h (Modification of Engel's FabMap implementation)
+*
+* @author  Jakob Engel <engelj at in dot tum dot de>
+* @author  Saif Sidhik (sxs1412@student.bham.ac.uk)
+*
+* @project graph_slam_rospkg
+* @version 1.0
+*
+*/
+
 /**
 * This file is part of LSD-SLAM.
 *

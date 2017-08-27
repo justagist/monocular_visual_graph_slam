@@ -1,3 +1,14 @@
+/** @file slam_utils.h (various utility functions required for graph_slam)
+*
+* @author  Saif Sidhik (sxs1412@student.bham.ac.uk)
+*
+* @project graph_slam_rospkg
+* @version 1.0
+*
+*/
+
+// TODO: REMOVE ALL PCL FUNCTIONS (NOT USING ANY MORE)
+
 #ifndef __SLAM_UTILS__
 #define __SLAM_UTILS__
 
@@ -75,7 +86,7 @@ namespace slam_utils
 
     customtype::PointCloudPtr convert3dPointsToCloud(customtype::WorldPtsType wrldpts);
 
-    Eigen::Matrix4d icp(const customtype::PointCloudPtr & cloud_source, //TODO: Should be ConstPtr
+    Eigen::Matrix4d icp(const customtype::PointCloudPtr & cloud_source, 
                         const customtype::PointCloudPtr & cloud_target,
                         double maxCorrespondenceDistance,
                         int maximumIterations,

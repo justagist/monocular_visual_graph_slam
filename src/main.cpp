@@ -1,10 +1,16 @@
-#include "STAM.h"
-#include "VideoSource.h"
-#include "gslam/graphslam.h"
-#include "gslam/ros_visualizer.h"
-#include <fstream>
+/** @file main.cpp
+*
+* @author  Saif Sidhik (sxs1412@student.bham.ac.uk)
+*
+* @project graph_slam_rospkg
+* @version 1.0
+*
+*/
+
 
 /*
+Runs the main graph_slam node. 
+
 USAGE: 
 
 rosrun graph_slam main_slam_node <scene_number> [visualize?] [publish rostopics?] [save trajectory to txt file?] [run graph optimisation thread?] [baseline for visual odometry] [trajectory file name]
@@ -25,6 +31,12 @@ rosrun graph_slam main_slam_node <scene_number> [visualize?] [publish rostopics?
 
 * [trajectory file name]: optional name of output trajectory txt file (if not set, writes to 'trajectory_[scene_number]_[baseline].txt' by default)
 */
+
+#include "STAM.h"
+#include "VideoSource.h"
+#include "gslam/graphslam.h"
+#include "gslam/ros_visualizer.h"
+#include <fstream>
 
 namespace vo = visual_odometry;
 // ----- setting default values

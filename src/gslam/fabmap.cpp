@@ -1,14 +1,12 @@
-/** @file fabmap.cpp
- *
- * @author  Jakob Engel <engelj at in dot tum dot de>
- * @author  Ermano A Arruda (eaa3@cin.ufpe.br)
- *
- * Copyright (c) 2015 Ermano A Arruda. All rights reserved.
- *
- * @version 1.0
- *
- */
-
+/** @file fabmap.cpp (Modification of Engel's FabMap implementation)
+*
+* @author  Jakob Engel <engelj at in dot tum dot de>
+* @author  Saif Sidhik (sxs1412@student.bham.ac.uk)
+*
+* @project graph_slam_rospkg
+* @version 1.0
+*
+*/
 
 /**
 * This file is part of LSD-SLAM.

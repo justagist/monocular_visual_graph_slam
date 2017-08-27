@@ -1,3 +1,12 @@
+/** @file slam_parameters.h (collects all tune-able parameters from various classes that affects the performance of slam. Done for writing all parameters at the end of the trajectory file)
+*
+* @author  Saif Sidhik (sxs1412@student.bham.ac.uk)
+*
+* @project graph_slam_rospkg
+* @version 1.0
+*
+*/
+
 #ifndef __SLAM_PARAMS__
 #define __SLAM_PARAMS__
 

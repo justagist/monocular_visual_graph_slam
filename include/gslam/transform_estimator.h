@@ -1,3 +1,12 @@
+/** @file transform_estimator.h (class for estimating relative transformation of two poses between whom loop closure is possible. Also checks if loop closure is valid using 'optical-flow-check')
+*
+* @author  Saif Sidhik (sxs1412@student.bham.ac.uk)
+*
+* @project graph_slam_rospkg
+* @version 1.0
+*
+*/
+
 #ifndef __TRANSFORM_ESTIMATOR__
 #define __TRANSFORM_ESTIMATOR__
 
@@ -16,9 +25,6 @@ class TransformEstimator
 public:
 
     TransformEstimator(){}
-    // {
-    //     SlamParameters::info->matcher_max_repetition_ = max_repeat_match_counter_;
-    // }
 
     customtype::TransformSE3 estimateTransform(DataSpot3D::DataSpot3DPtr data_spot_src, DataSpot3D::DataSpot3DPtr data_spot_target, double& variance, int& correspondences, double & prop_match, bool & converge_status);
 

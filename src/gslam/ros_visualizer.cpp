@@ -1,3 +1,12 @@
+/** @file ros_visualizer.cpp (class for creating and publishing ros messages for rviz visualization. publishes trajectory, visual-odometry pose, point-map, virtual map)
+*
+* @author  Saif Sidhik (sxs1412@student.bham.ac.uk)
+*
+* @project graph_slam_rospkg
+* @version 1.0
+*
+*/
+
 #include "gslam/ros_visualizer.h"
 
 namespace gSlam

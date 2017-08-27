@@ -1,3 +1,11 @@
+/** @file dataspot.cpp (Creates an object storing all data received in a particular frame/iteration (acts like a node of the graph))
+*
+* @author  Saif Sidhik (sxs1412@student.bham.ac.uk)
+*
+* @project graph_slam_rospkg
+* @version 1.0
+*
+*/
 
 #include "gslam/data_spot.h"
 

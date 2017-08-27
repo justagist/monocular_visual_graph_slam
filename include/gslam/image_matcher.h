@@ -1,3 +1,14 @@
+/** @file image_matcher.h (Class for performing image matching. NOT IN USE CURRENTLY. CAN BE REMOVED WHEN REMOVING PCL)
+*
+* @author  Saif Sidhik (sxs1412@student.bham.ac.uk)
+*
+* @project graph_slam_rospkg
+* @version 1.0
+*
+*/
+
+// TODO: REMOVE THIS FILE WHEN REMOVING PCL (NOT REQUIRED)
+
 #ifndef __IMAGE_MATCHER__
 #define __IMAGE_MATCHER__
 

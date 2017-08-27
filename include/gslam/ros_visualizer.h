@@ -1,3 +1,12 @@
+/** @file ros_visualizer.h (class for creating and publishing ros messages for rviz visualization. publishes trajectory, visual-odometry pose, point-map, virtual map)
+*
+* @author  Saif Sidhik (sxs1412@student.bham.ac.uk)
+*
+* @project graph_slam_rospkg
+* @version 1.0
+*
+*/
+
 #ifndef __ROS_UTILS__
 #define __ROS_UTILS__
 

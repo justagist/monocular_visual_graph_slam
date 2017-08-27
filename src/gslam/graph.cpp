@@ -1,3 +1,13 @@
+/** @file graph.cpp (creates graph and performs graph optimisation using g2o library)
+*
+* @author  Ermano Arruda (eaa3@cin.ufpe.br)
+* @author  Saif Sidhik (sxs1412@student.bham.ac.uk)
+*
+* @project graph_slam_rospkg
+* @version 1.0
+*
+*/
+
 #include <gslam/graph.h>
 
 

@@ -1,3 +1,12 @@
+/** @file dataspot.h (Creates an object storing all data received in a particular frame/iteration (acts like a node of the graph))
+*
+* @author  Saif Sidhik (sxs1412@student.bham.ac.uk)
+*
+* @project graph_slam_rospkg
+* @version 1.0
+*
+*/
+
 #ifndef __DATASPOT__
 #define __DATASPOT__
 
@@ -35,52 +44,9 @@ typedef DataLink<customtype::TransformSE3, customtype::InformationMatrix3D> Data
 class CameraParameters{
 public:
 
-    // union {
-    //     struct {
-    //         float fx_, fy_, cx_, cy_;
-    //     };
-
-    //     float params_[4];
-
-    // };
-
-    // cv::Mat intrinsicsMat_;
     Eigen::Matrix3d intrinsicsMat_;
     cv::Mat intrinsics_;
     cv::Mat distortion_;
-
-    // cv::Mat getIntrinsics(){return intrinsicsMat_;}
-
-    // CameraParameters(float fx, float fy, float cx, float cy) {
-
-    //     fx_ = fx;
-    //     fy_ = fy;
-    //     cx_ = cx;
-    //     cy_ = cy;
-
-    // }
-
-    // CameraParameters(const cv::Mat& intrinsics)
-    // {
-    //     fx_ = intrinsics.at<double>(0,0);
-    //     fy_ = intrinsics.at<double>(1,1);
-    //     cx_ = intrinsics.at<double>(0,2);
-    //     cy_ = intrinsics.at<double>(1,2);
-    //     cv::cv2eigen(intrinsics,intrinsicsMat_);
-    //     intrinsics_ = intrinsics;
-    //     // intrinsicsMat_ = intrinsics_;
-    // }
-
-    // CameraParameters(const CameraParameters& other) {
-    //     fx_ = other.fx_;
-    //     fy_ = other.fy_;
-    //     cx_ = other.cx_;
-    //     cy_ = other.cy_;
-    // }
-
-    // CameraParameters() {
-    //     fx_ = fy_ = cx_ = cy_ = 0;
-    // }
 
     CameraParameters(const cv::Mat& intrinsics, const cv::Mat& distortion)
     {

@@ -71,10 +71,6 @@ SET(GSLAM_SRC_DIR ${PROJECT_SOURCE_DIR}/src)
 
 
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES visual_odom
-#  CATKIN_DEPENDS other_catkin_pkg
-#  DEPENDS system_lib
 )
 
 ###########

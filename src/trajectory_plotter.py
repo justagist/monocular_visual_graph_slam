@@ -1,9 +1,20 @@
 #! /usr/bin/env python
+
+## @file groundtruth_compare.py
+#
+# @author Saif Sidhik (sxs1412@student.bham.ac.uk)
+# 
+# @project graph_slam_rospkg
+# @version 1.0
+
+# Description: Plots trajectory.
+# USAGE: rosrun graph_slam trajectory plotter <trajectory_file.txt>
+# Input: output txt file from running main_slam_node 
+
 import sys
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-# USAGE: rosrun graph_slam trajectory plotter <trajectory_file.txt>
 
 def main(arguments):
     fig = plt.figure()
@@ -28,7 +39,7 @@ def main(arguments):
     ax.scatter(x[0],y[0],z[0],c='g',marker='x',s=500)
     ax.legend()
 
-    
+    ## ----- for ismar dataset (dont use otherwise) (NOT REQUIRED ANYMORE. FIXED COORDINATES IN GRAPH_SLAM)
     # ax.set_xlabel('z')
     # ax.set_ylabel('x')
     # ax.set_zlabel('y')
@@ -37,6 +48,7 @@ def main(arguments):
     # # ax.set_zlim(-1000, 0)
     # ax.invert_zaxis()
     # ax.invert_xaxis()
+    # ------------------------------------------
 
 
     plt.show()

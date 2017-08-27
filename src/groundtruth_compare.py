@@ -1,9 +1,20 @@
 #! /usr/bin/env python
+
+## @file groundtruth_compare.py
+#
+# @author Saif Sidhik (sxs1412@student.bham.ac.uk)
+# 
+# @project graph_slam_rospkg
+# @version 1.0
+
+# Description: Draws 2 plots in the same window. Used to compare output of graph_slam with the ground truth.
+# USAGE: rosrun graph_slam groundtruth_compare <trajectory_file_1.txt> <ground_truth_file.txt>
+# Inputs: (1) output txt file from running main_slam_node (2) output file from running extract_odom_from_bagfile.py for the corresponding dataset.
+
 import sys
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-# USAGE: rosrun graph_slam groundtruth_compare <trajectory_file_1.txt> <trajectory_file_2.txt>
 
 def main(arguments):
     fig = plt.figure()
@@ -41,17 +52,6 @@ def main(arguments):
     ax.plot(x1,y1,z1, label= 'ground_truth')
     ax.scatter(x1[0],y1[0],z1[0],c='r',marker='x',s=500)
     ax.legend()
-
-    
-    # ax.set_xlabel('z')
-    # ax.set_ylabel('x')
-    # ax.set_zlabel('y')
-    # # ax.set_xlim(-1000, 1000)
-    # # ax.set_ylim(-200, 2000)
-    # # ax.set_zlim(-1000, 0)
-    # ax.invert_zaxis()
-    # ax.invert_xaxis()
-
 
     plt.show()
 

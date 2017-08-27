@@ -1,11 +1,18 @@
-
+/** @file graph.h (creates graph and performs graph optimisation using g2o library)
+*
+* @author  Ermano Arruda (eaa3@cin.ufpe.br)
+* @author  Saif Sidhik (sxs1412@student.bham.ac.uk)
+*
+* @project graph_slam_rospkg
+* @version 1.0
+*
+*/
 
 #ifndef _GSLAM_GRAPH_
 #define _GSLAM_GRAPH_
 
-#include <map>
-// #include <gslam/typedefs.h>
 #include <gslam/data_spot.h>
+#include <map>
 
 #include "g2o/core/sparse_optimizer.h"
 #include "g2o/core/block_solver.h"
@@ -17,7 +24,7 @@
 
 #include "g2o/core/optimizable_graph.h"
 
-//#include "g2o/solvers/cholmod/linear_solver_cholmod.h"
+//#include "g2o/solvers/cholmod/linear_solver_cholmod.h" // if using cholmod
 
 #include "g2o/solvers/pcg/linear_solver_pcg.h"
 #include "g2o/solvers/dense/linear_solver_dense.h"
@@ -34,7 +41,7 @@ namespace gSlam {
 
 typedef g2o::BlockSolver< g2o::BlockSolverTraits<6, 3> >  SlamBlockSolver;
 typedef g2o::LinearSolverCSparse<SlamBlockSolver::PoseMatrixType> SlamLinearCSparseSolver;
-//typedef g2o::LinearSolverCholmod<SlamBlockSolver::PoseMatrixType> SlamLinearCholmodSolver;
+//typedef g2o::LinearSolverCholmod<SlamBlockSolver::PoseMatrixType> SlamLinearCholmodSolver; // if using cholmod
 typedef g2o::LinearSolverPCG<SlamBlockSolver::PoseMatrixType> SlamLinearPCGSolver;
 typedef g2o::LinearSolverDense<SlamBlockSolver::PoseMatrixType> SlamLinearDenseSolver;
 

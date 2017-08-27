@@ -1,9 +1,17 @@
+/** @file typedefs.h (defining custom datatypes)
+*
+* @author  Saif Sidhik (sxs1412@student.bham.ac.uk)
+*
+* @project graph_slam_rospkg
+* @version 1.0
+*
+*/
+
 #ifndef __TYPEDEFS__
 #define __TYPEDEFS__
 
 #include <pcl/point_cloud.h>  
 #include <pcl/point_types.h>  
-// #include <boost/shared_ptr.hpp>
 #include <thread>
 #include <chrono>
 #include <mutex>
@@ -11,8 +19,6 @@
 #include "STAM.h"
 #include <assert.h>
 #include "gslam/slam_parameters.h"
-
-// #include <iostream>
 
 namespace gSlam
 {

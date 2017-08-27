@@ -1,5 +1,15 @@
-#include "gslam/slam_utils.h"
+/** @file slam_utils.cpp (various utility functions required for graph_slam)
+*
+* @author  Saif Sidhik (sxs1412@student.bham.ac.uk)
+*
+* @project graph_slam_rospkg
+* @version 1.0
+*
+*/
 
+// TODO: REMOVE ALL PCL FUNCTIONS (NOT USING ANY MORE)
+
+#include "gslam/slam_utils.h"
 
 namespace gSlam
 {
@@ -508,6 +518,7 @@ namespace slam_utils
         return m;
     }
 
+    // ----- get all the tune-able parameters that were used for the implementation, as a string
     std::string getSlamParameterInfo(SlamParameters::SLAMinfo::SLAMinfoPtr info)
     {
         std::string scene_info = "Scene No: " + std::to_string(info->dataset_id_);
@@ -541,10 +552,10 @@ namespace slam_utils
         return ret_val;
     }
 
+    // ----- ESTIMATING PROJECTION MATRIX USING PNP-RANSAC. ADAPTED AND MODIFIED FROM STAM.
     cv::Mat calcProjMatrix(std::vector<cv::Point2f> points2d, customtype::WorldPtsType points3d, cv::Mat intrinsics, cv::Mat distortion) 
     {
 
-        // ESTIMATING PROJECTION MATRIX USING PNP-RANSAC. ADAPTED AND MODIFIED FROM STAM.
 
         assert(points2d.size() == points3d.size());
 
@@ -587,6 +598,7 @@ namespace slam_utils
         return projMatrix;
     }
 
+    // ----- get camera pose from the projection matrix
     customtype::TransformSE3 estimatePoseFromProjection(cv::Mat projmat)
     {
         cv::Mat R1 = projmat(cv::Range::all(), cv::Range(0, 3));

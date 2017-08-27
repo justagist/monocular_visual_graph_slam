@@ -1,9 +1,19 @@
 #! /usr/bin/env python
+
+## @file compare_trajectories.py
+#
+# @author Saif Sidhik (sxs1412@student.bham.ac.uk)
+# 
+# @project graph_slam_rospkg
+
+# Description: Draws 2 plots in the same window. Used to compare two trajectories from the same dataset (optimised and not optimised).
+# USAGE: rosrun graph_slam compare_trajectories.py <trajectory_file_1.txt> <trajectory_file_2.txt>
+# Inputs: output txt files from running main_slam_node 
+
 import sys
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-# USAGE: rosrun graph_slam compare_trajectories.py <trajectory_file_1.txt> <trajectory_file_2.txt>
 
 def main(arguments):
     fig = plt.figure()

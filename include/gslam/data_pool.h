@@ -1,3 +1,12 @@
+/** @file datapool.h (class containing all dataspots. checks for loop closures, creates loop closure constraints, odometry constraints)
+*
+* @author  Saif Sidhik (sxs1412@student.bham.ac.uk)
+*
+* @project graph_slam_rospkg
+* @version 1.0
+*
+*/
+
 #ifndef __DATAPOOL__
 #define __DATAPOOL__
 

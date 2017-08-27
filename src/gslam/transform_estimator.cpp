@@ -1,3 +1,12 @@
+/** @file transform_estimator.cpp (class for estimating relative transformation of two poses between whom loop closure is possible. Also checks if loop closure is valid using 'optical-flow-check')
+*
+* @author  Saif Sidhik (sxs1412@student.bham.ac.uk)
+*
+* @project graph_slam_rospkg
+* @version 1.0
+*
+*/
+
 #include "gslam/transform_estimator.h"
 
 namespace gSlam
@@ -84,11 +93,6 @@ namespace gSlam
             src_cloud = slam_utils::convert3dPointsToCloud(src_wrldpts);
             tgt_cloud = slam_utils::convert3dPointsToCloud(tgt_wrldpts);
 
-
-            // std::cout << "tgt" << tgt_cloud << std::endl;
-            // bool converge_status;
-
-            // relative_transformation = slam_utils::icp(src_cloud, tgt_cloud, 0.1, 50, &converge_status, &variance, &correspondences);
             std::vector<int> inliers;
 
             double inlierThreshold = 10;
@@ -147,7 +151,7 @@ namespace gSlam
 
     }
 
-    // TODO: estimate relative transform as follows: obtain the pose at the 'loop closure image' using tracking similar to STAM, by calculating optical flow from the current image, and then calculating its projection matrix. The relative pose between this pose and the 'actual' pose of the loop image should be the loop closure constraint.
+    // ----- Estimates relative transform as follows: obtain the pose at the 'loop closure image' using tracking similar to STAM, by calculating optical flow from the current image, and then calculating its projection matrix. The relative pose between this pose and the tgt pose should be the constraint
 
     // ******** Tracking from tgt --> src **********
     // tgt: current image
@@ -159,8 +163,6 @@ namespace gSlam
     {
 
         static bool opt_flow_parameters_defined = false;
-
-        // TODO: IF FAILS, TRY CREATING A OPTICAL FLOW PYRAMID OF THE FIRST IMAGE USING BUILDOPTICALFLOWPYRAMID FUNCTION AND PASS TO THE CALCOPTICALFLOWPYRLK FUNCTION INSTEAD OF THE INPUT IMAGE 1
 
         converge_status = false;
 
@@ -290,18 +292,9 @@ namespace gSlam
 
             return relative_transformation;
             // return pose_correct;
-
         }
 
-        // ====================
-
-        // customtype::TransformSE3 relative_transformation;
-
-
-
         return customtype::TransformSE3();
-
-
     }
 
     
