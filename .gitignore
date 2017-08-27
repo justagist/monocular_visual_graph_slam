@@ -5,6 +5,7 @@ rospack_cache
 log
 EXTERNAL/g2o/lib
 EXTERNAL/g2o/bin
+EXTERNAL/STAM
 trajectory_scene*
 **/CMakeFiles/
 !ground_truths/*

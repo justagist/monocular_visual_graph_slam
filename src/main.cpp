@@ -4,7 +4,30 @@
 #include "gslam/ros_visualizer.h"
 #include <fstream>
 
+/*
+USAGE: 
+
+rosrun graph_slam main_slam_node <scene_number> [visualize?] [publish rostopics?] [save trajectory to txt file?] [run graph optimisation thread?] [baseline for visual odometry] [trajectory file name]
+-- where <scene_number> = 1 - 23
+
+-- Optional Parameters (All are false by default) -- 
+
+* [visualize?]: 0 = False; 1 = True; 2 = True (show keypoints in frame)
+
+* [publish rostopics?]
+     -- 0 = False;\n -- 1 = Show Map using Marker Points (shows map error correction if optimisation thread is on);\n -- 2 = Show Virtual Map Using Color Image Info;\n -- 3 = same as (2) + show map error using Markers (Requires optimisation thread to be on)
+
+* [save trajectory to txt file?]: 0 = False; 1 = True (writes to 'trajectory_[scene_number]_[baseline].txt' by default)
+
+* [run graph optimisation thread?]: 0 = False; 1 = True
+
+* [baseline for visual odometry]: an integer parameter for visual odometry triangulation (set as 0 for default values)
+
+* [trajectory file name]: optional name of output trajectory txt file (if not set, writes to 'trajectory_[scene_number]_[baseline].txt' by default)
+*/
+
 namespace vo = visual_odometry;
+// ----- setting default values
 bool visualize_flag = false;
 bool ros_flag = false;
 bool create_virtual_map = false, visualize_virtual_map_error = false, show_keypoints_on_image = false;
@@ -31,7 +54,7 @@ int ideal_baselines_[] ={175, 50, 80,
 bool write_file = false;
 bool optimise_graph = false;
 
-// Creating object for storing all parameterss that can be tuned. (Used for writing all the paramters used while writing trajectory to file)
+// ----- Creating object for storing all parameterss that can be tuned. (Used for writing all the paramters used while writing trajectory to file (for debugging))
 namespace gSlam{ namespace SlamParameters   
     { SLAMinfo::SLAMinfoPtr info(new SLAMinfo); 
       const customtype::TransformSE3 pose_aligner_ = slam_utils::getFrameAligner(); // if no frame alignment required, use Identity
@@ -41,7 +64,7 @@ namespace gSlam{ namespace SlamParameters
 
 int main(int argc, char** argv)
 {
-
+    // ----- defining actions of command line arguments
     if( argc < 2 ){
         printf("\n\n ----- USAGE: rosrun graph_slam main_slam_node <scene_number> [visualize?] [publish rostopics?] [save trajectory to txt file?] [run graph optimisation thread?] [baseline for visual odometry] [trajectory file name]\n\nwhere <scene_number> = 1 - 23\n\nOptional Parameters (All are false by default):-\n[visualize?]: 0 = False; 1 = True; 2 = True (show keypoints in frame)\n[publish rostopics?]:\n -- 0 = False;\n -- 1 = Show Map using Marker Points (shows map error correction if optimisation thread is on);\n -- 2 = Show Virtual Map Using Color Image Info;\n -- 3 = same as (2) + show map error using Markers (Requires optimisation thread to be on)\n[save trajectory to txt file?]: 0 = False; 1 = True\n[run graph optimisation thread?]: 0 = False; 1 = True\n[baseline for visual odometry]: an integer parameter for visual odometry triangulation (set as 0 for default values)\n[trajectory file name]: optional name of out trajectory txt file\n\n");
         exit(1);
@@ -105,12 +128,15 @@ int main(int argc, char** argv)
 
     }
 
-
+    // ----- destination and format of image sequence to run graph slam on
     std::string next_frame_format[] = {"/home/saif/msc_workspace/slam_test_bag_dataset/ismar/S01_INPUT/S01L03_VGA/S01L03_VGA_%04d.png", "/home/saif/msc_workspace/slam_test_bag_dataset/ismar/S02_INPUT/S02L03_VGA/S02L03_VGA_%04d.png", "/home/saif/msc_workspace/slam_test_bag_dataset/ismar/S03_INPUT/S03L03_VGA/S03L03_VGA_%04d.png", "/home/saif/msc_workspace/slam_test_bag_dataset/datasets_12_07_17/frontb1/data/image_%04d.png", "/home/saif/msc_workspace/slam_test_bag_dataset/datasets_12_07_17/frontb2/data/image_%04d.png", "/home/saif/msc_workspace/slam_test_bag_dataset/datasets_17_07_17/ardrone_front_square1/data/image_%04d.png", "/home/saif/msc_workspace/slam_test_bag_dataset/datasets_17_07_17/ardrone_front_square2/data/image_%04d.png", "/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_line_19_07_17/data/image_%04d.png", "/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_checkerboard_22_07_17/ardrone_checkerboard_1/data/image_%04d.png", "/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_checkerboard_22_07_17/ardrone_checkerboard_2/data/image_%04d.png", "/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_checkerboard_22_07_17/ardrone_checkerboard_3/data/image_%04d.png", "/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_circle_08_08_2-017/circle_1/data/image_%04d.png", "/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_circle_08_08_2-017/circle_2/data/image_%04d.png","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_flight_12_08_2017/ardrone_1/data/image_%04d.png","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_flight_12_08_2017/ardrone_2/data/image_%04d.png","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_flight_12_08_2017/ardrone_3/data/image_%04d.png","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_flight_12_08_2017/ardrone_4/data/image_%04d.png","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_flight_12_08_2017/ardrone_5/data/image_%04d.png","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_flight_12_08_2017/data1/image_%04d.png","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_flight_12_08_2017/data2/image_%04d.png","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_flight_12_08_2017/data3/image_%04d.png","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_flight_12_08_2017/data4/image_%04d.png","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_flight_12_08_2017/data5/image_%04d.png"};
+    // ----- location of the calibration file in xml formats
     std::string intrinsics_file[] = {"/home/saif/msc_workspace/slam_test_bag_dataset/ismar/S01_INPUT/intrinsicsS01.xml", "/home/saif/msc_workspace/slam_test_bag_dataset/ismar/S02_INPUT/intrinsicsS02.xml", "/home/saif/msc_workspace/slam_test_bag_dataset/ismar/S03_INPUT/intrinsicsS03.xml", "/home/saif/msc_workspace/slam_test_bag_dataset/datasets_12_07_17/frontb1/intrinsics.xml", "/home/saif/msc_workspace/slam_test_bag_dataset/datasets_12_07_17/frontb2/intrinsics.xml", "/home/saif/msc_workspace/slam_test_bag_dataset/datasets_17_07_17/ardrone_front_square1/intrinsics.xml", "/home/saif/msc_workspace/slam_test_bag_dataset/datasets_17_07_17/ardrone_front_square2/intrinsics.xml","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_line_19_07_17/intrinsics.xml","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_checkerboard_22_07_17/ardrone_checkerboard_1/intrinsics.xml","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_checkerboard_22_07_17/ardrone_checkerboard_2/intrinsics.xml","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_checkerboard_22_07_17/ardrone_checkerboard_3/intrinsics.xml", "/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_circle_08_08_2-017/circle_1/intrinsics.xml", "/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_circle_08_08_2-017/circle_2/intrinsics.xml","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_flight_12_08_2017/ardrone_1/intrinsics.xml","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_flight_12_08_2017/ardrone_2/intrinsics.xml","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_flight_12_08_2017/ardrone_3/intrinsics.xml","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_flight_12_08_2017/ardrone_4/intrinsics.xml","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_flight_12_08_2017/ardrone_5/intrinsics.xml","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_flight_12_08_2017/ardrone_1/intrinsics.xml","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_flight_12_08_2017/ardrone_2/intrinsics.xml","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_flight_12_08_2017/ardrone_3/intrinsics.xml","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_flight_12_08_2017/ardrone_4/intrinsics.xml","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_flight_12_08_2017/ardrone_5/intrinsics.xml"};
+
+    // ----- location of csv file containing the 3D positions of the known initial points. If using checkerboard method in STAM, give the positions of the four extreme inner-corners of the board (top-left to bottom-right). Optionally, while using checkerboard method, the 3d file can be avoided and STAM will use the bottom left corner as the origin.
     std::string points3d_init_file[] = {"/home/saif/msc_workspace/slam_test_bag_dataset/ismar/S01_INPUT/S01_3Ddata_dst_init.csv", "/home/saif/msc_workspace/slam_test_bag_dataset/ismar/S02_INPUT/S02_3Ddata_dst_init.csv", "/home/saif/msc_workspace/slam_test_bag_dataset/ismar/S03_INPUT/S03_3Ddata_dst_init.csv","/home/saif/msc_workspace/slam_test_bag_dataset/datasets_12_07_17/frontb1/3dpoints.csv", "/home/saif/msc_workspace/slam_test_bag_dataset/datasets_12_07_17/frontb2/3dpoints.csv","/home/saif/msc_workspace/slam_test_bag_dataset/datasets_17_07_17/ardrone_front_square1/init_3Ddata.csv", "/home/saif/msc_workspace/slam_test_bag_dataset/datasets_17_07_17/ardrone_front_square2/init_3Ddata.csv", "/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_line_19_07_17/init_3Ddata.csv","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_checkerboard_22_07_17/ardrone_checkerboard_1/init_3Ddata.csv","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_checkerboard_22_07_17/ardrone_checkerboard_2/init_3Ddata.csv","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_checkerboard_22_07_17/ardrone_checkerboard_3/init_3Ddata.csv", "/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_circle_08_08_2-017/circle_1/init_3Ddata.csv", "/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_circle_08_08_2-017/circle_1/init_3Ddata.csv","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_flight_12_08_2017/ardrone_1/init_3Ddata.csv","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_flight_12_08_2017/ardrone_2/init_3Ddata.csv","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_flight_12_08_2017/ardrone_3/init_3Ddata.csv","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_flight_12_08_2017/ardrone_4/init_3Ddata.csv","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_flight_12_08_2017/ardrone_5/init_3Ddata.csv","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_flight_12_08_2017/ardrone_1/init_3Ddata.csv","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_flight_12_08_2017/ardrone_2/init_3Ddata.csv","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_flight_12_08_2017/ardrone_3/init_3Ddata.csv","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_flight_12_08_2017/ardrone_4/init_3Ddata.csv","/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_flight_12_08_2017/ardrone_5/init_3Ddata.csv"};
 
-    // ----- If using initWithCheckerboard method in STAM, the corresponding string should be "checkerboard"
+    // ----- location of the patches. Not required if using initWithCheckerboard. If using initWithCheckerboard method in STAM, the corresponding string should be "checkerboard"
     std::string template_file_fmt[] = {"/home/saif/msc_workspace/slam_test_bag_dataset/ismar/S01_INPUT/S01L03_patch/S01L03_VGA_patch_%04d.png", "/home/saif/msc_workspace/slam_test_bag_dataset/ismar/S02_INPUT/S02L03_patch/S02L03_VGA_patch_%04d.png", "/home/saif/msc_workspace/slam_test_bag_dataset/ismar/ S03_INPUT/S03L03_VGA_patch/S03L03_VGA_patch_%04d.png", "/home/saif/msc_workspace/slam_test_bag_dataset/datasets_12_07_17/frontb1/patches/ptch_%04d.png", "/home/saif/msc_workspace/slam_test_bag_dataset/datasets_12_07_17/frontb2/patches/ptch_%04d.png","/home/saif/msc_workspace/slam_test_bag_dataset/datasets_17_07_17/ardrone_front_square1/patches/ptch_%04d.png","/home/saif/msc_workspace/slam_test_bag_dataset/datasets_17_07_17/ardrone_front_square2/patches/ptch_%04d.png", "/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_line_19_07_17/patches/ptch_%04d.png","checkerboard","checkerboard","checkerboard", "checkerboard", "checkerboard", "checkerboard", "checkerboard", "checkerboard", "checkerboard", "checkerboard", "checkerboard", "checkerboard", "checkerboard", "checkerboard", "checkerboard"};
     
 
