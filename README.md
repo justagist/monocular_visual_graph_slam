@@ -7,7 +7,7 @@ An implementation of Graph-based SLAM using just a sequence of image from a mono
 * OpenCV 2.4.x (non-free version)
 * [LAPACK](http://www.netlib.org/lapack/)
 * [cvsba](https://www.uco.es/investiga/grupos/ava/node/39)
-* g2o (installation included in setup)
+* g2o (included. Follow installation instructions)
 * [PCL 1.8](https://github.com/PointCloudLibrary/pcl) 
 * [Suite-Sparse](https://launchpad.net/ubuntu/+source/suitesparse/)
 
@@ -45,4 +45,4 @@ Run `rosrun graph_slam main_slam_node` for detailed usage instructions
 * Plot and compare 2 trajectories: `rosrun graph_slam compare_trajectories.py <trajectory_file_1.txt> <trajectory_file_2.txt>`
 * Compare trajectory with ground_truth (if available): `rosrun graph_slam groundtruth_compare.py <trajectory_file.txt> <groundtruth.txt>`  
 
-**Function and usage of all nodes are described in the respective source files, along with the format of the input files (if required).**
+**Function and usage of all nodes are described in the respective source files, along with the format of the input files (where required).**
