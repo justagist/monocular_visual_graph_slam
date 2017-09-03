@@ -8,7 +8,7 @@
 # @version 1.0
 
 # Description: Reads Odometry msg sent via topic `/odom' from bagfile, and writes to txt file in the format required by groundtruth_compare.py.
-# Usage: 1) rosrun graph_slam extract_odom_from_bagfile.py 2) Run .bag file when prompted
+# Usage: 1) rosrun graph_slam extract_odom_from_bagfile.py <path_to_file/file_name> 2) Run .bag file when prompted
 
 import cv2 
 import sys
@@ -44,9 +44,12 @@ if __name__ == '__main__':
     dc = DatasetCreator()
     rospy.init_node('ardrone_odom', anonymous=True)
     if len(sys.argv) > 1:
-        filename = str(sys.argv[1]) + ".txt"
+        filename = str(sys.argv[1])
+        if filename[-4:] != ".txt":
+            filename += ".txt"
     else:
         filename = "testfile.txt"
     dc.file = open(filename,"w")
+    print "File Name:", filename
     dc.main()
     print "Done. Total lines written: ", dc.i+1

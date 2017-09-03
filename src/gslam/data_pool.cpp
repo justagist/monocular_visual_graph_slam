@@ -54,7 +54,7 @@ void DataPool::addDataSpot(DataSpot3D::DataSpot3DPtr data_spot_ptr)
 
     if( repeat_match_count_ > min_required_repeat_ && loop_id != prev_loop) 
     {
-        double variance, avg_error;
+        double variance, avg_error, prop_matches;
         int correspondences, max_correspondence;
         bool status_good = false;
         DataLink3D::DataLinkPtr link( new DataLink3D() );

@@ -286,7 +286,7 @@ namespace gSlam
                 cv::drawKeypoints(data_spot_src->getImageColor(), kp2, out2);
                 cv::imshow("matching_tgt", out1);
                 cv::imshow("matching_src", out2);
-                // cv::waitKey(0);
+                cv::waitKey(0);
             }
             // ==========================
 

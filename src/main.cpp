@@ -31,7 +31,7 @@ rosrun graph_slam main_slam_node <scene_number> [visualize?] [publish rostopics?
 
 * [trajectory file name]: optional name of output trajectory txt file (if not set, writes to 'trajectory_[scene_number]_[baseline].txt' by default)
 */
-
+    
 #include "STAM.h"
 #include "VideoSource.h"
 #include "gslam/graphslam.h"
