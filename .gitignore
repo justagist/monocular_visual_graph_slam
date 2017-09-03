@@ -10,3 +10,4 @@ trajectory_scene*
 **/CMakeFiles/
 !ground_truths/*
 !estimated_trajectories/*
+src/view_two_groundtruths.py
