@@ -274,7 +274,7 @@ namespace slam_utils
 
     }
 
-    void ImageMatcher::findMatchingWorldpoints(cv::Mat image1, cv::Mat image2, 
+    void ImageMatcher::findMatchingWorldpoints(cv::Mat img1, cv::Mat img2, 
                                                  customtype::KeyPoints imgpts1,
                                                  customtype::KeyPoints imgpts2, 
                                                  customtype::WorldPtsType wrldpts1,
@@ -284,8 +284,9 @@ namespace slam_utils
                                                  bool& good_match)
     {
 
-        cv::cvtColor(image1, image1, CV_BGR2GRAY);
-        cv::cvtColor(image2, image2, CV_BGR2GRAY);
+        cv::Mat image1, image2;
+        cv::cvtColor(img1, image1, CV_BGR2GRAY);
+        cv::cvtColor(img2, image2, CV_BGR2GRAY);
 
         // cv::undistort()
         // cv2.countNonZero(cv2.subtract(self.mat,cv_img))>0

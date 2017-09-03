@@ -182,6 +182,8 @@ void GrSLAM::optmizeGraphThread()
         //     pose_graph_.fixed_iter_ = true;
         //     pose_graph_.optimizeGraph(50);
         // }
+
+        auto t1 = customtype::Clock::now();
         pose_graph_.optimizeGraph(5);
         pose_graph_.updateVertices(data_pool_.getDataSpots());
         pose_graph_.release();
@@ -206,20 +208,13 @@ void GrSLAM::optmizeGraphThread()
         presently_optimised_ = true;
         std::cout << "Worker thread signals data processing completed\n";//  \nPress return to continue\n";
 
-        // std::cin.get();
-
-        // Restarting loop count
-        // if( optimize_near_ ){
-        //     data_pool_.restartNewLoopsCountNear();
-        //     optimize_near_ = false;
-        // }
-        // if( optimize_far_ ){
-        //     data_pool_.restartNewLoopsCountFar();
-        //     optimize_far_ = false;
-        // }
-
         // Manual unlocking is done before notifying, to avoid waking up
         // the waiting thread only to block again (see notify_one for details)
+        auto t2 = customtype::Clock::now();
+        std::cout << "Number of nodes " << data_pool_.getDataSpots().size() << std::endl;
+        std::cout << "Duration " << std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count()
+              << " milliseconds" << std::endl;
+        // std::cin.get();
         lk.unlock();
         cond_var_.notify_one();
     }

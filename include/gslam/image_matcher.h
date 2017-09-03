@@ -71,7 +71,7 @@ namespace slam_utils
                                                   customtype::WorldPtsType& src_wrldpts, customtype::WorldPtsType& tgt_wrldpts, bool& good_match_status);
 
 
-        void findMatchingWorldpoints(cv::Mat image1, cv::Mat image2, 
+        void findMatchingWorldpoints(cv::Mat img1, cv::Mat img2, 
                                      customtype::KeyPoints imgpts1,
                                      customtype::KeyPoints imgpts2, 
                                      customtype::WorldPtsType wrldpts1,

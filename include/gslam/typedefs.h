@@ -19,6 +19,7 @@
 #include "STAM.h"
 #include <assert.h>
 #include "gslam/slam_parameters.h"
+#include <chrono>
 
 namespace gSlam
 {
@@ -50,6 +51,8 @@ namespace customtype
 
     typedef std::vector<cv::KeyPoint> KeyPoints; // vector of 2d image points in a frame
     typedef std::vector<cv::Point3f> WorldPtsType;
+
+    typedef std::chrono::high_resolution_clock Clock; // for timer
 
     // typedef std::vector<cv::KeyPoint
 } // namespace customtype
