@@ -35,8 +35,8 @@ def main(arguments):
         y = [float(point.split()[2]) for point in plot1]
         z = [float(point.split()[3]) for point in plot1]
         # print x
-    ax.plot(x, y, z,label = 'curve')
-    ax.scatter(x[0],y[0],z[0],c='g',marker='x',s=500)
+    ax.plot(x, y, z,label = 'Estimated Trajectory')
+    ax.scatter(x[0],y[0],z[0],c='r',marker='x',s=500)
     ax.legend()
 
     ## ----- for ismar dataset (dont use otherwise) (NOT REQUIRED ANYMORE. FIXED COORDINATES IN GRAPH_SLAM)

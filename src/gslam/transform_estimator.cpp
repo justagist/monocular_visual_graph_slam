@@ -161,7 +161,7 @@ namespace gSlam
                                                                                    int& correspondences, int& max_correspondences, 
                                                                                    double& avg_error, bool& converge_status)
     {
-
+        auto t1 = customtype::Clock::now();
         static bool opt_flow_parameters_defined = false;
 
         converge_status = false;
@@ -227,7 +227,11 @@ namespace gSlam
         // -------------------------------------------------------------------
 
         std::cout << tgt_points_new.size() << " = tgt_pts size; " << filtered_src.size() << " = filtered_src size; " << avg_error << " = average error"<<std::endl;
-
+        auto t2 = customtype::Clock::now();
+        std::cout << "Optical flow check Duration " << std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count()
+              << " milliseconds" << std::endl;
+        // std::cin.get();
+        
         // ------------------ Estimating Projection matrix and pose if enough features are matched across the loop closure
         if (filtered_src.size() >= opt_flow_min_match_reqd || filtered_src.size()>0.7*tgt_points_new.size())// && tgt_points_new.size() > 700)//|| filtered_src.size()>0.5*tgt_points_new.size())
         {
