@@ -23,7 +23,7 @@ class GrSLAM
 
 public:
 
-    typedef boost::shared_ptr<GrSLAM> Ptr;
+    typedef std::shared_ptr<GrSLAM> Ptr;
 
     GrSLAM();
     ~GrSLAM();

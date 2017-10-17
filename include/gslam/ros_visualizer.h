@@ -12,7 +12,7 @@
 
 #include <ros/ros.h>
 #include <tf/transform_broadcaster.h>
-#include <pcl_ros/point_cloud.h>
+// #include <pcl_ros/point_cloud.h>
 #include "gslam/typedefs.h"
 #include <visualization_msgs/Marker.h>
 #include "gslam/data_pool.h"

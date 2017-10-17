@@ -21,7 +21,7 @@ class DataPool {
 
 public:
 
-    typedef boost::shared_ptr<DataPool> DataPoolPtr;
+    typedef std::shared_ptr<DataPool> DataPoolPtr;
 
 
     DataPool();

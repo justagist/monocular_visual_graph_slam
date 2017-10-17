@@ -10,8 +10,6 @@
 #ifndef __TYPEDEFS__
 #define __TYPEDEFS__
 
-#include <pcl/point_cloud.h>  
-#include <pcl/point_types.h>  
 #include <thread>
 #include <chrono>
 #include <mutex>
@@ -36,18 +34,11 @@ namespace customtype
     typedef std::map<Identifier, TransformSE3, std::less<Identifier>,
                      Eigen::aligned_allocator<std::pair<const Identifier, TransformSE3> > > MapTransformSE3;
 
-
-    typedef pcl::PointXYZ CloudPoint; // A point structure denoting Euclidean xyz coordinates
-    typedef pcl::PointCloud<CloudPoint> PointCloud;
-    typedef pcl::PointCloud<CloudPoint>::Ptr PointCloudPtr;
-
     typedef std::mutex Mutex;
     typedef std::unique_lock<Mutex> Lock; // unique_lock enables choosing std::try_to_lock_t, std::adopt_lock_t or std::defer_lock_t
     typedef std::condition_variable CondVar;
 
     typedef Eigen::Matrix<double,6,6> InformationMatrix3D;
-
-    // typedef Eigen::Matrix<double,3,4> ProjMatType; // projection matrix
 
     typedef std::vector<cv::KeyPoint> KeyPoints; // vector of 2d image points in a frame
     typedef std::vector<cv::Point3f> WorldPtsType;

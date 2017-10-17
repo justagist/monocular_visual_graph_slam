@@ -53,7 +53,7 @@ namespace SlamParameters
 
     public:
 
-        typedef boost::shared_ptr<SLAMinfo> SLAMinfoPtr;
+        typedef std::shared_ptr<SLAMinfo> SLAMinfoPtr;
 
         int frames_processed_;
         bool process_success_;

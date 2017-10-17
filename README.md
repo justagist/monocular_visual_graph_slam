@@ -8,7 +8,6 @@ An implementation of Graph-based SLAM using just a sequence of image from a mono
 * [LAPACK](http://www.netlib.org/lapack/)
 * [cvsba](https://www.uco.es/investiga/grupos/ava/node/39)
 * g2o (included. Follow installation instructions)
-* [PCL 1.8](https://github.com/PointCloudLibrary/pcl) 
 * [Suite-Sparse](https://launchpad.net/ubuntu/+source/suitesparse/)
 
 ### TODO

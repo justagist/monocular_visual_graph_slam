@@ -17,17 +17,6 @@ message("OpenCV include dirs: ${OPENCV_INCLUDE_DIRS}")
 
 find_package(cvsba REQUIRED )
 
-# find_package( Eigen3 REQUIRED ) # for rot matrix to quaternion conversion
-# include_directories( ${EIGEN3_INCLUDE_DIR} )
-
-# PCL ########################## PCL (apparently) links the required BOOST libraries and Eigen3 
-find_package(PCL 1.8 REQUIRED)
-include_directories(${PCL_INCLUDE_DIRS})
-link_directories(${PCL_LIBRARY_DIRS})
-add_definitions(${PCL_DEFINITIONS})
-################################
-
-
 ############ G2O #################
 SET( G2O_INCLUDE ${PROJECT_SOURCE_DIR}/EXTERNAL/g2o CACHE PATH "Directory of G2O")
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR} ${G2O_INCLUDE})
