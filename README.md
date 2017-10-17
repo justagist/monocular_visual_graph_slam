@@ -6,7 +6,6 @@ An implementation of Graph-based SLAM using just a sequence of image from a mono
 
 * OpenCV 2.4.x (non-free version)
 * [LAPACK](http://www.netlib.org/lapack/)
-* [cvsba](https://www.uco.es/investiga/grupos/ava/node/39)
 * g2o (included. Follow installation instructions)
 * [Suite-Sparse](https://launchpad.net/ubuntu/+source/suitesparse/)
 

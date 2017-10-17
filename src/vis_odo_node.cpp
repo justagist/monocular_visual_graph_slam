@@ -131,7 +131,7 @@ int main(int argc, char** argv){
         // break;
     }
 
-    vOdom.optimise();
+    // vOdom.optimise();
     vOdom.dump();
 
 
