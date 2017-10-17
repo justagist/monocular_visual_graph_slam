@@ -19,7 +19,8 @@ An implementation of Graph-based SLAM using just a sequence of image from a mono
     git clone https://git-teaching.cs.bham.ac.uk/mod-msc-proj-2016/sxs1412.git
     
     ## build g2o library ##
-    cd graph_slam/EXTERNAL/g2o/ && make 
+    cd graph_slam/EXTERNAL/g2o/ 
+    cmake . && make 
     
     ## clone STAM library (branch - graphslam_mod) for visual odometry ##
     cd ..
