@@ -1,4 +1,4 @@
-# Install script for directory: /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types
+# Install script for directory: /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/types
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -34,15 +34,15 @@ ENDIF(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 
 IF(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  INCLUDE("/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/data/cmake_install.cmake")
-  INCLUDE("/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam2d/cmake_install.cmake")
-  INCLUDE("/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d/cmake_install.cmake")
-  INCLUDE("/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/sba/cmake_install.cmake")
-  INCLUDE("/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/sim3/cmake_install.cmake")
-  INCLUDE("/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/icp/cmake_install.cmake")
-  INCLUDE("/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/sclam2d/cmake_install.cmake")
-  INCLUDE("/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam2d_addons/cmake_install.cmake")
-  INCLUDE("/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d_addons/cmake_install.cmake")
+  INCLUDE("/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/data/cmake_install.cmake")
+  INCLUDE("/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam2d/cmake_install.cmake")
+  INCLUDE("/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d/cmake_install.cmake")
+  INCLUDE("/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/sba/cmake_install.cmake")
+  INCLUDE("/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/sim3/cmake_install.cmake")
+  INCLUDE("/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/icp/cmake_install.cmake")
+  INCLUDE("/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/sclam2d/cmake_install.cmake")
+  INCLUDE("/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam2d_addons/cmake_install.cmake")
+  INCLUDE("/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d_addons/cmake_install.cmake")
 
 ENDIF(NOT CMAKE_INSTALL_LOCAL_ONLY)
 

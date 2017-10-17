@@ -1,5 +1,5 @@
 #include "VideoSource.h"
-#include "highgui.h"
+#include "opencv/highgui.h"
 #include <iostream>
 
 // namespace vo = visual_odometry;

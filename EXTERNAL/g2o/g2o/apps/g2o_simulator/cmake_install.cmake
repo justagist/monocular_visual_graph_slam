@@ -1,4 +1,4 @@
-# Install script for directory: /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator
+# Install script for directory: /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -33,6 +33,12 @@ IF(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 ENDIF(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
+  IF(EXISTS "$ENV{DESTDIR}/usr/local/lib/libg2o_simulator.so" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}/usr/local/lib/libg2o_simulator.so")
+    FILE(RPATH_CHECK
+         FILE "$ENV{DESTDIR}/usr/local/lib/libg2o_simulator.so"
+         RPATH "")
+  ENDIF()
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
    "/usr/local/lib/libg2o_simulator.so")
   IF (CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
@@ -41,10 +47,24 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
   IF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
-FILE(INSTALL DESTINATION "/usr/local/lib" TYPE SHARED_LIBRARY FILES "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/CMakeFiles/CMakeRelink.dir/libg2o_simulator.so")
+FILE(INSTALL DESTINATION "/usr/local/lib" TYPE SHARED_LIBRARY FILES "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/lib/libg2o_simulator.so")
+  IF(EXISTS "$ENV{DESTDIR}/usr/local/lib/libg2o_simulator.so" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}/usr/local/lib/libg2o_simulator.so")
+    FILE(RPATH_REMOVE
+         FILE "$ENV{DESTDIR}/usr/local/lib/libg2o_simulator.so")
+    IF(CMAKE_INSTALL_DO_STRIP)
+      EXECUTE_PROCESS(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}/usr/local/lib/libg2o_simulator.so")
+    ENDIF(CMAKE_INSTALL_DO_STRIP)
+  ENDIF()
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
+  IF(EXISTS "$ENV{DESTDIR}/usr/local/bin/g2o_simulator2d" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}/usr/local/bin/g2o_simulator2d")
+    FILE(RPATH_CHECK
+         FILE "$ENV{DESTDIR}/usr/local/bin/g2o_simulator2d"
+         RPATH "")
+  ENDIF()
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
    "/usr/local/bin/g2o_simulator2d")
   IF (CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
@@ -53,10 +73,24 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
   IF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
-FILE(INSTALL DESTINATION "/usr/local/bin" TYPE EXECUTABLE FILES "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/CMakeFiles/CMakeRelink.dir/g2o_simulator2d")
+FILE(INSTALL DESTINATION "/usr/local/bin" TYPE EXECUTABLE FILES "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/bin/g2o_simulator2d")
+  IF(EXISTS "$ENV{DESTDIR}/usr/local/bin/g2o_simulator2d" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}/usr/local/bin/g2o_simulator2d")
+    FILE(RPATH_REMOVE
+         FILE "$ENV{DESTDIR}/usr/local/bin/g2o_simulator2d")
+    IF(CMAKE_INSTALL_DO_STRIP)
+      EXECUTE_PROCESS(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}/usr/local/bin/g2o_simulator2d")
+    ENDIF(CMAKE_INSTALL_DO_STRIP)
+  ENDIF()
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
+  IF(EXISTS "$ENV{DESTDIR}/usr/local/bin/g2o_simulator3d" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}/usr/local/bin/g2o_simulator3d")
+    FILE(RPATH_CHECK
+         FILE "$ENV{DESTDIR}/usr/local/bin/g2o_simulator3d"
+         RPATH "")
+  ENDIF()
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
    "/usr/local/bin/g2o_simulator3d")
   IF (CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
@@ -65,10 +99,24 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
   IF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
-FILE(INSTALL DESTINATION "/usr/local/bin" TYPE EXECUTABLE FILES "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/CMakeFiles/CMakeRelink.dir/g2o_simulator3d")
+FILE(INSTALL DESTINATION "/usr/local/bin" TYPE EXECUTABLE FILES "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/bin/g2o_simulator3d")
+  IF(EXISTS "$ENV{DESTDIR}/usr/local/bin/g2o_simulator3d" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}/usr/local/bin/g2o_simulator3d")
+    FILE(RPATH_REMOVE
+         FILE "$ENV{DESTDIR}/usr/local/bin/g2o_simulator3d")
+    IF(CMAKE_INSTALL_DO_STRIP)
+      EXECUTE_PROCESS(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}/usr/local/bin/g2o_simulator3d")
+    ENDIF(CMAKE_INSTALL_DO_STRIP)
+  ENDIF()
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
+  IF(EXISTS "$ENV{DESTDIR}/usr/local/bin/g2o_anonymize_observations" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}/usr/local/bin/g2o_anonymize_observations")
+    FILE(RPATH_CHECK
+         FILE "$ENV{DESTDIR}/usr/local/bin/g2o_anonymize_observations"
+         RPATH "")
+  ENDIF()
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
    "/usr/local/bin/g2o_anonymize_observations")
   IF (CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
@@ -77,7 +125,15 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
   IF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
-FILE(INSTALL DESTINATION "/usr/local/bin" TYPE EXECUTABLE FILES "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/CMakeFiles/CMakeRelink.dir/g2o_anonymize_observations")
+FILE(INSTALL DESTINATION "/usr/local/bin" TYPE EXECUTABLE FILES "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/bin/g2o_anonymize_observations")
+  IF(EXISTS "$ENV{DESTDIR}/usr/local/bin/g2o_anonymize_observations" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}/usr/local/bin/g2o_anonymize_observations")
+    FILE(RPATH_REMOVE
+         FILE "$ENV{DESTDIR}/usr/local/bin/g2o_anonymize_observations")
+    IF(CMAKE_INSTALL_DO_STRIP)
+      EXECUTE_PROCESS(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}/usr/local/bin/g2o_anonymize_observations")
+    ENDIF(CMAKE_INSTALL_DO_STRIP)
+  ENDIF()
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
@@ -90,31 +146,31 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
 FILE(INSTALL DESTINATION "/usr/local/include/g2o/apps/g2o_simulator" TYPE FILE FILES
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/sensor_odometry3d.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/simulator2d_base.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/sensor_pointxyz_depth.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/sensor_pose2d.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/sensor_segment2d_pointline.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/sensor_pointxy.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/sensor_pointxy_offset.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/simulator3d_base.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/sensor_pose3d_offset.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/sensor_line3d.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/sensor_pointxy_bearing.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/sensor_se3_prior.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/simulator.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/sensor_odometry2d.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/sensor_pose3d.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/g2o_simulator_api.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/sensor_pointxyz.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/sensor_odometry.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/sensor_segment2d.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/simutils.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/sensor_pointxyz_disparity.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/simulator3d.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/pointsensorparameters.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/simulator2d.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/sensor_segment2d_line.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/sensor_odometry3d.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/simulator2d_base.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/sensor_pointxyz_depth.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/sensor_pose2d.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/sensor_segment2d_pointline.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/sensor_pointxy.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/sensor_pointxy_offset.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/simulator3d_base.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/sensor_pose3d_offset.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/sensor_line3d.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/sensor_pointxy_bearing.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/sensor_se3_prior.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/simulator.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/sensor_odometry2d.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/sensor_pose3d.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/g2o_simulator_api.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/sensor_pointxyz.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/sensor_odometry.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/sensor_segment2d.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/simutils.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/sensor_pointxyz_disparity.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/simulator3d.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/pointsensorparameters.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/simulator2d.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_simulator/sensor_segment2d_line.h"
     )
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 

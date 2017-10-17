@@ -1,4 +1,4 @@
-# Install script for directory: /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/g2o_interactive
+# Install script for directory: /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/g2o_interactive
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -33,6 +33,12 @@ IF(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 ENDIF(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
+  IF(EXISTS "$ENV{DESTDIR}/usr/local/lib/libg2o_interactive.so" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}/usr/local/lib/libg2o_interactive.so")
+    FILE(RPATH_CHECK
+         FILE "$ENV{DESTDIR}/usr/local/lib/libg2o_interactive.so"
+         RPATH "")
+  ENDIF()
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
    "/usr/local/lib/libg2o_interactive.so")
   IF (CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
@@ -41,10 +47,24 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
   IF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
-FILE(INSTALL DESTINATION "/usr/local/lib" TYPE SHARED_LIBRARY FILES "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/g2o_interactive/CMakeFiles/CMakeRelink.dir/libg2o_interactive.so")
+FILE(INSTALL DESTINATION "/usr/local/lib" TYPE SHARED_LIBRARY FILES "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/lib/libg2o_interactive.so")
+  IF(EXISTS "$ENV{DESTDIR}/usr/local/lib/libg2o_interactive.so" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}/usr/local/lib/libg2o_interactive.so")
+    FILE(RPATH_REMOVE
+         FILE "$ENV{DESTDIR}/usr/local/lib/libg2o_interactive.so")
+    IF(CMAKE_INSTALL_DO_STRIP)
+      EXECUTE_PROCESS(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}/usr/local/lib/libg2o_interactive.so")
+    ENDIF(CMAKE_INSTALL_DO_STRIP)
+  ENDIF()
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
+  IF(EXISTS "$ENV{DESTDIR}/usr/local/bin/g2o_online" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}/usr/local/bin/g2o_online")
+    FILE(RPATH_CHECK
+         FILE "$ENV{DESTDIR}/usr/local/bin/g2o_online"
+         RPATH "")
+  ENDIF()
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
    "/usr/local/bin/g2o_online")
   IF (CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
@@ -53,7 +73,15 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
   IF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
-FILE(INSTALL DESTINATION "/usr/local/bin" TYPE EXECUTABLE FILES "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/g2o_interactive/CMakeFiles/CMakeRelink.dir/g2o_online")
+FILE(INSTALL DESTINATION "/usr/local/bin" TYPE EXECUTABLE FILES "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/bin/g2o_online")
+  IF(EXISTS "$ENV{DESTDIR}/usr/local/bin/g2o_online" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}/usr/local/bin/g2o_online")
+    FILE(RPATH_REMOVE
+         FILE "$ENV{DESTDIR}/usr/local/bin/g2o_online")
+    IF(CMAKE_INSTALL_DO_STRIP)
+      EXECUTE_PROCESS(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}/usr/local/bin/g2o_online")
+    ENDIF(CMAKE_INSTALL_DO_STRIP)
+  ENDIF()
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
@@ -66,12 +94,12 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
 FILE(INSTALL DESTINATION "/usr/local/include/g2o/examples/interactive_slam/g2o_interactive" TYPE FILE FILES
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/g2o_interactive/g2o_interactive_api.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/g2o_interactive/graph_optimizer_sparse_online.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/g2o_interactive/types_slam2d_online.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/g2o_interactive/fast_output.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/g2o_interactive/g2o_slam_interface.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/g2o_interactive/types_slam3d_online.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/g2o_interactive/g2o_interactive_api.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/g2o_interactive/graph_optimizer_sparse_online.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/g2o_interactive/types_slam2d_online.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/g2o_interactive/fast_output.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/g2o_interactive/g2o_slam_interface.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/g2o_interactive/types_slam3d_online.h"
     )
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 

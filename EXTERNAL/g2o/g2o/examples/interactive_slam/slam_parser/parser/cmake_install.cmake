@@ -1,4 +1,4 @@
-# Install script for directory: /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/slam_parser/parser
+# Install script for directory: /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/slam_parser/parser
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -33,6 +33,12 @@ IF(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 ENDIF(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
+  IF(EXISTS "$ENV{DESTDIR}/usr/local/lib/libg2o_parser.so" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}/usr/local/lib/libg2o_parser.so")
+    FILE(RPATH_CHECK
+         FILE "$ENV{DESTDIR}/usr/local/lib/libg2o_parser.so"
+         RPATH "")
+  ENDIF()
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
    "/usr/local/lib/libg2o_parser.so")
   IF (CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
@@ -41,7 +47,13 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
   IF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
-FILE(INSTALL DESTINATION "/usr/local/lib" TYPE SHARED_LIBRARY FILES "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/lib/libg2o_parser.so")
+FILE(INSTALL DESTINATION "/usr/local/lib" TYPE SHARED_LIBRARY FILES "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/lib/libg2o_parser.so")
+  IF(EXISTS "$ENV{DESTDIR}/usr/local/lib/libg2o_parser.so" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}/usr/local/lib/libg2o_parser.so")
+    IF(CMAKE_INSTALL_DO_STRIP)
+      EXECUTE_PROCESS(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}/usr/local/lib/libg2o_parser.so")
+    ENDIF(CMAKE_INSTALL_DO_STRIP)
+  ENDIF()
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
@@ -54,15 +66,15 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
 FILE(INSTALL DESTINATION "/usr/local/include/slam_parser/parser" TYPE FILE FILES
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/slam_parser/parser/commands.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/slam_parser/parser/driver.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/slam_parser/parser/scanner.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/slam_parser/parser/FlexLexer.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/slam_parser/parser/bison_parser.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/slam_parser/parser/slam_context.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/slam_parser/parser/stack.hh"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/slam_parser/parser/position.hh"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/slam_parser/parser/location.hh"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/slam_parser/parser/commands.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/slam_parser/parser/driver.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/slam_parser/parser/scanner.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/slam_parser/parser/FlexLexer.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/slam_parser/parser/bison_parser.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/slam_parser/parser/slam_context.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/slam_parser/parser/stack.hh"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/slam_parser/parser/position.hh"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/interactive_slam/slam_parser/parser/location.hh"
     )
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 

@@ -42,10 +42,10 @@ EQUALS = =
 CMAKE_EDIT_COMMAND = /usr/bin/cmake-gui
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o
+CMAKE_SOURCE_DIR = /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o
+CMAKE_BINARY_DIR = /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -82,6 +82,16 @@ install/local: preinstall
 install/local/fast: install/local
 .PHONY : install/local/fast
 
+# Special rule for the target install/strip
+install/strip: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip
+
+# Special rule for the target install/strip
+install/strip/fast: install/strip
+.PHONY : install/strip/fast
+
 # Special rule for the target list_install_components
 list_install_components:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
@@ -103,9 +113,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/CMakeFiles /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/CMakeFiles /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -145,11 +155,6 @@ freeglut_minimal/fast:
 	$(MAKE) -f EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/build.make EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/build
 .PHONY : freeglut_minimal/fast
 
-# Manual pre-install relink rule for target.
-freeglut_minimal/preinstall:
-	$(MAKE) -f EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/build.make EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/preinstall
-.PHONY : freeglut_minimal/preinstall
-
 #=============================================================================
 # Target rules for targets named opengl_helper
 
@@ -162,11 +167,6 @@ opengl_helper: cmake_check_build_system
 opengl_helper/fast:
 	$(MAKE) -f g2o/stuff/CMakeFiles/opengl_helper.dir/build.make g2o/stuff/CMakeFiles/opengl_helper.dir/build
 .PHONY : opengl_helper/fast
-
-# Manual pre-install relink rule for target.
-opengl_helper/preinstall:
-	$(MAKE) -f g2o/stuff/CMakeFiles/opengl_helper.dir/build.make g2o/stuff/CMakeFiles/opengl_helper.dir/preinstall
-.PHONY : opengl_helper/preinstall
 
 #=============================================================================
 # Target rules for targets named stuff
@@ -181,11 +181,6 @@ stuff/fast:
 	$(MAKE) -f g2o/stuff/CMakeFiles/stuff.dir/build.make g2o/stuff/CMakeFiles/stuff.dir/build
 .PHONY : stuff/fast
 
-# Manual pre-install relink rule for target.
-stuff/preinstall:
-	$(MAKE) -f g2o/stuff/CMakeFiles/stuff.dir/build.make g2o/stuff/CMakeFiles/stuff.dir/preinstall
-.PHONY : stuff/preinstall
-
 #=============================================================================
 # Target rules for targets named core
 
@@ -198,11 +193,6 @@ core: cmake_check_build_system
 core/fast:
 	$(MAKE) -f g2o/core/CMakeFiles/core.dir/build.make g2o/core/CMakeFiles/core.dir/build
 .PHONY : core/fast
-
-# Manual pre-install relink rule for target.
-core/preinstall:
-	$(MAKE) -f g2o/core/CMakeFiles/core.dir/build.make g2o/core/CMakeFiles/core.dir/preinstall
-.PHONY : core/preinstall
 
 #=============================================================================
 # Target rules for targets named g2o_cli_application
@@ -217,11 +207,6 @@ g2o_cli_application/fast:
 	$(MAKE) -f g2o/apps/g2o_cli/CMakeFiles/g2o_cli_application.dir/build.make g2o/apps/g2o_cli/CMakeFiles/g2o_cli_application.dir/build
 .PHONY : g2o_cli_application/fast
 
-# Manual pre-install relink rule for target.
-g2o_cli_application/preinstall:
-	$(MAKE) -f g2o/apps/g2o_cli/CMakeFiles/g2o_cli_application.dir/build.make g2o/apps/g2o_cli/CMakeFiles/g2o_cli_application.dir/preinstall
-.PHONY : g2o_cli_application/preinstall
-
 #=============================================================================
 # Target rules for targets named g2o_cli_library
 
@@ -234,11 +219,6 @@ g2o_cli_library: cmake_check_build_system
 g2o_cli_library/fast:
 	$(MAKE) -f g2o/apps/g2o_cli/CMakeFiles/g2o_cli_library.dir/build.make g2o/apps/g2o_cli/CMakeFiles/g2o_cli_library.dir/build
 .PHONY : g2o_cli_library/fast
-
-# Manual pre-install relink rule for target.
-g2o_cli_library/preinstall:
-	$(MAKE) -f g2o/apps/g2o_cli/CMakeFiles/g2o_cli_library.dir/build.make g2o/apps/g2o_cli/CMakeFiles/g2o_cli_library.dir/preinstall
-.PHONY : g2o_cli_library/preinstall
 
 #=============================================================================
 # Target rules for targets named g2o_hierarchical_application
@@ -292,11 +272,6 @@ g2o_anonymize_observations_application/fast:
 	$(MAKE) -f g2o/apps/g2o_simulator/CMakeFiles/g2o_anonymize_observations_application.dir/build.make g2o/apps/g2o_simulator/CMakeFiles/g2o_anonymize_observations_application.dir/build
 .PHONY : g2o_anonymize_observations_application/fast
 
-# Manual pre-install relink rule for target.
-g2o_anonymize_observations_application/preinstall:
-	$(MAKE) -f g2o/apps/g2o_simulator/CMakeFiles/g2o_anonymize_observations_application.dir/build.make g2o/apps/g2o_simulator/CMakeFiles/g2o_anonymize_observations_application.dir/preinstall
-.PHONY : g2o_anonymize_observations_application/preinstall
-
 #=============================================================================
 # Target rules for targets named g2o_simulator2d_application
 
@@ -309,11 +284,6 @@ g2o_simulator2d_application: cmake_check_build_system
 g2o_simulator2d_application/fast:
 	$(MAKE) -f g2o/apps/g2o_simulator/CMakeFiles/g2o_simulator2d_application.dir/build.make g2o/apps/g2o_simulator/CMakeFiles/g2o_simulator2d_application.dir/build
 .PHONY : g2o_simulator2d_application/fast
-
-# Manual pre-install relink rule for target.
-g2o_simulator2d_application/preinstall:
-	$(MAKE) -f g2o/apps/g2o_simulator/CMakeFiles/g2o_simulator2d_application.dir/build.make g2o/apps/g2o_simulator/CMakeFiles/g2o_simulator2d_application.dir/preinstall
-.PHONY : g2o_simulator2d_application/preinstall
 
 #=============================================================================
 # Target rules for targets named g2o_simulator3d_application
@@ -328,11 +298,6 @@ g2o_simulator3d_application/fast:
 	$(MAKE) -f g2o/apps/g2o_simulator/CMakeFiles/g2o_simulator3d_application.dir/build.make g2o/apps/g2o_simulator/CMakeFiles/g2o_simulator3d_application.dir/build
 .PHONY : g2o_simulator3d_application/fast
 
-# Manual pre-install relink rule for target.
-g2o_simulator3d_application/preinstall:
-	$(MAKE) -f g2o/apps/g2o_simulator/CMakeFiles/g2o_simulator3d_application.dir/build.make g2o/apps/g2o_simulator/CMakeFiles/g2o_simulator3d_application.dir/preinstall
-.PHONY : g2o_simulator3d_application/preinstall
-
 #=============================================================================
 # Target rules for targets named g2o_simulator_library
 
@@ -345,11 +310,6 @@ g2o_simulator_library: cmake_check_build_system
 g2o_simulator_library/fast:
 	$(MAKE) -f g2o/apps/g2o_simulator/CMakeFiles/g2o_simulator_library.dir/build.make g2o/apps/g2o_simulator/CMakeFiles/g2o_simulator_library.dir/build
 .PHONY : g2o_simulator_library/fast
-
-# Manual pre-install relink rule for target.
-g2o_simulator_library/preinstall:
-	$(MAKE) -f g2o/apps/g2o_simulator/CMakeFiles/g2o_simulator_library.dir/build.make g2o/apps/g2o_simulator/CMakeFiles/g2o_simulator_library.dir/preinstall
-.PHONY : g2o_simulator_library/preinstall
 
 #=============================================================================
 # Target rules for targets named g2o_viewer
@@ -364,11 +324,6 @@ g2o_viewer/fast:
 	$(MAKE) -f g2o/apps/g2o_viewer/CMakeFiles/g2o_viewer.dir/build.make g2o/apps/g2o_viewer/CMakeFiles/g2o_viewer.dir/build
 .PHONY : g2o_viewer/fast
 
-# Manual pre-install relink rule for target.
-g2o_viewer/preinstall:
-	$(MAKE) -f g2o/apps/g2o_viewer/CMakeFiles/g2o_viewer.dir/build.make g2o/apps/g2o_viewer/CMakeFiles/g2o_viewer.dir/preinstall
-.PHONY : g2o_viewer/preinstall
-
 #=============================================================================
 # Target rules for targets named viewer_library
 
@@ -381,11 +336,6 @@ viewer_library: cmake_check_build_system
 viewer_library/fast:
 	$(MAKE) -f g2o/apps/g2o_viewer/CMakeFiles/viewer_library.dir/build.make g2o/apps/g2o_viewer/CMakeFiles/viewer_library.dir/build
 .PHONY : viewer_library/fast
-
-# Manual pre-install relink rule for target.
-viewer_library/preinstall:
-	$(MAKE) -f g2o/apps/g2o_viewer/CMakeFiles/viewer_library.dir/build.make g2o/apps/g2o_viewer/CMakeFiles/viewer_library.dir/preinstall
-.PHONY : viewer_library/preinstall
 
 #=============================================================================
 # Target rules for targets named types_data
@@ -400,11 +350,6 @@ types_data/fast:
 	$(MAKE) -f g2o/types/data/CMakeFiles/types_data.dir/build.make g2o/types/data/CMakeFiles/types_data.dir/build
 .PHONY : types_data/fast
 
-# Manual pre-install relink rule for target.
-types_data/preinstall:
-	$(MAKE) -f g2o/types/data/CMakeFiles/types_data.dir/build.make g2o/types/data/CMakeFiles/types_data.dir/preinstall
-.PHONY : types_data/preinstall
-
 #=============================================================================
 # Target rules for targets named types_slam2d
 
@@ -417,11 +362,6 @@ types_slam2d: cmake_check_build_system
 types_slam2d/fast:
 	$(MAKE) -f g2o/types/slam2d/CMakeFiles/types_slam2d.dir/build.make g2o/types/slam2d/CMakeFiles/types_slam2d.dir/build
 .PHONY : types_slam2d/fast
-
-# Manual pre-install relink rule for target.
-types_slam2d/preinstall:
-	$(MAKE) -f g2o/types/slam2d/CMakeFiles/types_slam2d.dir/build.make g2o/types/slam2d/CMakeFiles/types_slam2d.dir/preinstall
-.PHONY : types_slam2d/preinstall
 
 #=============================================================================
 # Target rules for targets named test_isometry3d_mappings
@@ -475,11 +415,6 @@ types_slam3d/fast:
 	$(MAKE) -f g2o/types/slam3d/CMakeFiles/types_slam3d.dir/build.make g2o/types/slam3d/CMakeFiles/types_slam3d.dir/build
 .PHONY : types_slam3d/fast
 
-# Manual pre-install relink rule for target.
-types_slam3d/preinstall:
-	$(MAKE) -f g2o/types/slam3d/CMakeFiles/types_slam3d.dir/build.make g2o/types/slam3d/CMakeFiles/types_slam3d.dir/preinstall
-.PHONY : types_slam3d/preinstall
-
 #=============================================================================
 # Target rules for targets named types_sba
 
@@ -492,11 +427,6 @@ types_sba: cmake_check_build_system
 types_sba/fast:
 	$(MAKE) -f g2o/types/sba/CMakeFiles/types_sba.dir/build.make g2o/types/sba/CMakeFiles/types_sba.dir/build
 .PHONY : types_sba/fast
-
-# Manual pre-install relink rule for target.
-types_sba/preinstall:
-	$(MAKE) -f g2o/types/sba/CMakeFiles/types_sba.dir/build.make g2o/types/sba/CMakeFiles/types_sba.dir/preinstall
-.PHONY : types_sba/preinstall
 
 #=============================================================================
 # Target rules for targets named types_sim3
@@ -511,11 +441,6 @@ types_sim3/fast:
 	$(MAKE) -f g2o/types/sim3/CMakeFiles/types_sim3.dir/build.make g2o/types/sim3/CMakeFiles/types_sim3.dir/build
 .PHONY : types_sim3/fast
 
-# Manual pre-install relink rule for target.
-types_sim3/preinstall:
-	$(MAKE) -f g2o/types/sim3/CMakeFiles/types_sim3.dir/build.make g2o/types/sim3/CMakeFiles/types_sim3.dir/preinstall
-.PHONY : types_sim3/preinstall
-
 #=============================================================================
 # Target rules for targets named types_icp
 
@@ -528,11 +453,6 @@ types_icp: cmake_check_build_system
 types_icp/fast:
 	$(MAKE) -f g2o/types/icp/CMakeFiles/types_icp.dir/build.make g2o/types/icp/CMakeFiles/types_icp.dir/build
 .PHONY : types_icp/fast
-
-# Manual pre-install relink rule for target.
-types_icp/preinstall:
-	$(MAKE) -f g2o/types/icp/CMakeFiles/types_icp.dir/build.make g2o/types/icp/CMakeFiles/types_icp.dir/preinstall
-.PHONY : types_icp/preinstall
 
 #=============================================================================
 # Target rules for targets named types_sclam2d
@@ -547,11 +467,6 @@ types_sclam2d/fast:
 	$(MAKE) -f g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/build.make g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/build
 .PHONY : types_sclam2d/fast
 
-# Manual pre-install relink rule for target.
-types_sclam2d/preinstall:
-	$(MAKE) -f g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/build.make g2o/types/sclam2d/CMakeFiles/types_sclam2d.dir/preinstall
-.PHONY : types_sclam2d/preinstall
-
 #=============================================================================
 # Target rules for targets named types_slam2d_addons
 
@@ -564,11 +479,6 @@ types_slam2d_addons: cmake_check_build_system
 types_slam2d_addons/fast:
 	$(MAKE) -f g2o/types/slam2d_addons/CMakeFiles/types_slam2d_addons.dir/build.make g2o/types/slam2d_addons/CMakeFiles/types_slam2d_addons.dir/build
 .PHONY : types_slam2d_addons/fast
-
-# Manual pre-install relink rule for target.
-types_slam2d_addons/preinstall:
-	$(MAKE) -f g2o/types/slam2d_addons/CMakeFiles/types_slam2d_addons.dir/build.make g2o/types/slam2d_addons/CMakeFiles/types_slam2d_addons.dir/preinstall
-.PHONY : types_slam2d_addons/preinstall
 
 #=============================================================================
 # Target rules for targets named types_slam3d_addons
@@ -583,11 +493,6 @@ types_slam3d_addons/fast:
 	$(MAKE) -f g2o/types/slam3d_addons/CMakeFiles/types_slam3d_addons.dir/build.make g2o/types/slam3d_addons/CMakeFiles/types_slam3d_addons.dir/build
 .PHONY : types_slam3d_addons/fast
 
-# Manual pre-install relink rule for target.
-types_slam3d_addons/preinstall:
-	$(MAKE) -f g2o/types/slam3d_addons/CMakeFiles/types_slam3d_addons.dir/build.make g2o/types/slam3d_addons/CMakeFiles/types_slam3d_addons.dir/preinstall
-.PHONY : types_slam3d_addons/preinstall
-
 #=============================================================================
 # Target rules for targets named solver_pcg
 
@@ -600,11 +505,6 @@ solver_pcg: cmake_check_build_system
 solver_pcg/fast:
 	$(MAKE) -f g2o/solvers/pcg/CMakeFiles/solver_pcg.dir/build.make g2o/solvers/pcg/CMakeFiles/solver_pcg.dir/build
 .PHONY : solver_pcg/fast
-
-# Manual pre-install relink rule for target.
-solver_pcg/preinstall:
-	$(MAKE) -f g2o/solvers/pcg/CMakeFiles/solver_pcg.dir/build.make g2o/solvers/pcg/CMakeFiles/solver_pcg.dir/preinstall
-.PHONY : solver_pcg/preinstall
 
 #=============================================================================
 # Target rules for targets named solver_dense
@@ -619,11 +519,6 @@ solver_dense/fast:
 	$(MAKE) -f g2o/solvers/dense/CMakeFiles/solver_dense.dir/build.make g2o/solvers/dense/CMakeFiles/solver_dense.dir/build
 .PHONY : solver_dense/fast
 
-# Manual pre-install relink rule for target.
-solver_dense/preinstall:
-	$(MAKE) -f g2o/solvers/dense/CMakeFiles/solver_dense.dir/build.make g2o/solvers/dense/CMakeFiles/solver_dense.dir/preinstall
-.PHONY : solver_dense/preinstall
-
 #=============================================================================
 # Target rules for targets named solver_structure_only
 
@@ -636,11 +531,6 @@ solver_structure_only: cmake_check_build_system
 solver_structure_only/fast:
 	$(MAKE) -f g2o/solvers/structure_only/CMakeFiles/solver_structure_only.dir/build.make g2o/solvers/structure_only/CMakeFiles/solver_structure_only.dir/build
 .PHONY : solver_structure_only/fast
-
-# Manual pre-install relink rule for target.
-solver_structure_only/preinstall:
-	$(MAKE) -f g2o/solvers/structure_only/CMakeFiles/solver_structure_only.dir/build.make g2o/solvers/structure_only/CMakeFiles/solver_structure_only.dir/preinstall
-.PHONY : solver_structure_only/preinstall
 
 #=============================================================================
 # Target rules for targets named csparse_extension
@@ -655,11 +545,6 @@ csparse_extension/fast:
 	$(MAKE) -f g2o/solvers/csparse/CMakeFiles/csparse_extension.dir/build.make g2o/solvers/csparse/CMakeFiles/csparse_extension.dir/build
 .PHONY : csparse_extension/fast
 
-# Manual pre-install relink rule for target.
-csparse_extension/preinstall:
-	$(MAKE) -f g2o/solvers/csparse/CMakeFiles/csparse_extension.dir/build.make g2o/solvers/csparse/CMakeFiles/csparse_extension.dir/preinstall
-.PHONY : csparse_extension/preinstall
-
 #=============================================================================
 # Target rules for targets named solver_csparse
 
@@ -672,11 +557,6 @@ solver_csparse: cmake_check_build_system
 solver_csparse/fast:
 	$(MAKE) -f g2o/solvers/csparse/CMakeFiles/solver_csparse.dir/build.make g2o/solvers/csparse/CMakeFiles/solver_csparse.dir/build
 .PHONY : solver_csparse/fast
-
-# Manual pre-install relink rule for target.
-solver_csparse/preinstall:
-	$(MAKE) -f g2o/solvers/csparse/CMakeFiles/solver_csparse.dir/build.make g2o/solvers/csparse/CMakeFiles/solver_csparse.dir/preinstall
-.PHONY : solver_csparse/preinstall
 
 #=============================================================================
 # Target rules for targets named solver_slam2d_linear
@@ -691,11 +571,6 @@ solver_slam2d_linear/fast:
 	$(MAKE) -f g2o/solvers/slam2d_linear/CMakeFiles/solver_slam2d_linear.dir/build.make g2o/solvers/slam2d_linear/CMakeFiles/solver_slam2d_linear.dir/build
 .PHONY : solver_slam2d_linear/fast
 
-# Manual pre-install relink rule for target.
-solver_slam2d_linear/preinstall:
-	$(MAKE) -f g2o/solvers/slam2d_linear/CMakeFiles/solver_slam2d_linear.dir/build.make g2o/solvers/slam2d_linear/CMakeFiles/solver_slam2d_linear.dir/preinstall
-.PHONY : solver_slam2d_linear/preinstall
-
 #=============================================================================
 # Target rules for targets named solver_cholmod
 
@@ -709,11 +584,6 @@ solver_cholmod/fast:
 	$(MAKE) -f g2o/solvers/cholmod/CMakeFiles/solver_cholmod.dir/build.make g2o/solvers/cholmod/CMakeFiles/solver_cholmod.dir/build
 .PHONY : solver_cholmod/fast
 
-# Manual pre-install relink rule for target.
-solver_cholmod/preinstall:
-	$(MAKE) -f g2o/solvers/cholmod/CMakeFiles/solver_cholmod.dir/build.make g2o/solvers/cholmod/CMakeFiles/solver_cholmod.dir/preinstall
-.PHONY : solver_cholmod/preinstall
-
 #=============================================================================
 # Target rules for targets named solver_eigen
 
@@ -726,11 +596,6 @@ solver_eigen: cmake_check_build_system
 solver_eigen/fast:
 	$(MAKE) -f g2o/solvers/eigen/CMakeFiles/solver_eigen.dir/build.make g2o/solvers/eigen/CMakeFiles/solver_eigen.dir/build
 .PHONY : solver_eigen/fast
-
-# Manual pre-install relink rule for target.
-solver_eigen/preinstall:
-	$(MAKE) -f g2o/solvers/eigen/CMakeFiles/solver_eigen.dir/build.make g2o/solvers/eigen/CMakeFiles/solver_eigen.dir/preinstall
-.PHONY : solver_eigen/preinstall
 
 #=============================================================================
 # Target rules for targets named circle_fit
@@ -1044,11 +909,6 @@ interface_library/fast:
 	$(MAKE) -f g2o/examples/interactive_slam/slam_parser/interface/CMakeFiles/interface_library.dir/build.make g2o/examples/interactive_slam/slam_parser/interface/CMakeFiles/interface_library.dir/build
 .PHONY : interface_library/fast
 
-# Manual pre-install relink rule for target.
-interface_library/preinstall:
-	$(MAKE) -f g2o/examples/interactive_slam/slam_parser/interface/CMakeFiles/interface_library.dir/build.make g2o/examples/interactive_slam/slam_parser/interface/CMakeFiles/interface_library.dir/preinstall
-.PHONY : interface_library/preinstall
-
 #=============================================================================
 # Target rules for targets named g2o_interactive_library
 
@@ -1061,11 +921,6 @@ g2o_interactive_library: cmake_check_build_system
 g2o_interactive_library/fast:
 	$(MAKE) -f g2o/examples/interactive_slam/g2o_interactive/CMakeFiles/g2o_interactive_library.dir/build.make g2o/examples/interactive_slam/g2o_interactive/CMakeFiles/g2o_interactive_library.dir/build
 .PHONY : g2o_interactive_library/fast
-
-# Manual pre-install relink rule for target.
-g2o_interactive_library/preinstall:
-	$(MAKE) -f g2o/examples/interactive_slam/g2o_interactive/CMakeFiles/g2o_interactive_library.dir/build.make g2o/examples/interactive_slam/g2o_interactive/CMakeFiles/g2o_interactive_library.dir/preinstall
-.PHONY : g2o_interactive_library/preinstall
 
 #=============================================================================
 # Target rules for targets named g2o_online_application
@@ -1080,11 +935,6 @@ g2o_online_application/fast:
 	$(MAKE) -f g2o/examples/interactive_slam/g2o_interactive/CMakeFiles/g2o_online_application.dir/build.make g2o/examples/interactive_slam/g2o_interactive/CMakeFiles/g2o_online_application.dir/build
 .PHONY : g2o_online_application/fast
 
-# Manual pre-install relink rule for target.
-g2o_online_application/preinstall:
-	$(MAKE) -f g2o/examples/interactive_slam/g2o_interactive/CMakeFiles/g2o_online_application.dir/build.make g2o/examples/interactive_slam/g2o_interactive/CMakeFiles/g2o_online_application.dir/preinstall
-.PHONY : g2o_online_application/preinstall
-
 #=============================================================================
 # Target rules for targets named g2o_incremental_application
 
@@ -1097,11 +947,6 @@ g2o_incremental_application: cmake_check_build_system
 g2o_incremental_application/fast:
 	$(MAKE) -f g2o/examples/interactive_slam/g2o_incremental/CMakeFiles/g2o_incremental_application.dir/build.make g2o/examples/interactive_slam/g2o_incremental/CMakeFiles/g2o_incremental_application.dir/build
 .PHONY : g2o_incremental_application/fast
-
-# Manual pre-install relink rule for target.
-g2o_incremental_application/preinstall:
-	$(MAKE) -f g2o/examples/interactive_slam/g2o_incremental/CMakeFiles/g2o_incremental_application.dir/build.make g2o/examples/interactive_slam/g2o_incremental/CMakeFiles/g2o_incremental_application.dir/preinstall
-.PHONY : g2o_incremental_application/preinstall
 
 #=============================================================================
 # Target rules for targets named g2o_incremental_library
@@ -1116,11 +961,6 @@ g2o_incremental_library/fast:
 	$(MAKE) -f g2o/examples/interactive_slam/g2o_incremental/CMakeFiles/g2o_incremental_library.dir/build.make g2o/examples/interactive_slam/g2o_incremental/CMakeFiles/g2o_incremental_library.dir/build
 .PHONY : g2o_incremental_library/fast
 
-# Manual pre-install relink rule for target.
-g2o_incremental_library/preinstall:
-	$(MAKE) -f g2o/examples/interactive_slam/g2o_incremental/CMakeFiles/g2o_incremental_library.dir/build.make g2o/examples/interactive_slam/g2o_incremental/CMakeFiles/g2o_incremental_library.dir/preinstall
-.PHONY : g2o_incremental_library/preinstall
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -1130,6 +970,7 @@ help:
 	@echo "... edit_cache"
 	@echo "... install"
 	@echo "... install/local"
+	@echo "... install/strip"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
 	@echo "... freeglut_minimal"

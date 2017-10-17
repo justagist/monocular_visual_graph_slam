@@ -1,4 +1,4 @@
-# Install script for directory: /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d
+# Install script for directory: /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -33,6 +33,12 @@ IF(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 ENDIF(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
+  IF(EXISTS "$ENV{DESTDIR}/usr/local/lib/libg2o_types_slam3d.so" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}/usr/local/lib/libg2o_types_slam3d.so")
+    FILE(RPATH_CHECK
+         FILE "$ENV{DESTDIR}/usr/local/lib/libg2o_types_slam3d.so"
+         RPATH "")
+  ENDIF()
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
    "/usr/local/lib/libg2o_types_slam3d.so")
   IF (CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
@@ -41,7 +47,15 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
   IF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
-FILE(INSTALL DESTINATION "/usr/local/lib" TYPE SHARED_LIBRARY FILES "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d/CMakeFiles/CMakeRelink.dir/libg2o_types_slam3d.so")
+FILE(INSTALL DESTINATION "/usr/local/lib" TYPE SHARED_LIBRARY FILES "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/lib/libg2o_types_slam3d.so")
+  IF(EXISTS "$ENV{DESTDIR}/usr/local/lib/libg2o_types_slam3d.so" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}/usr/local/lib/libg2o_types_slam3d.so")
+    FILE(RPATH_REMOVE
+         FILE "$ENV{DESTDIR}/usr/local/lib/libg2o_types_slam3d.so")
+    IF(CMAKE_INSTALL_DO_STRIP)
+      EXECUTE_PROCESS(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}/usr/local/lib/libg2o_types_slam3d.so")
+    ENDIF(CMAKE_INSTALL_DO_STRIP)
+  ENDIF()
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
@@ -54,27 +68,27 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
 FILE(INSTALL DESTINATION "/usr/local/include/g2o/types/slam3d" TYPE FILE FILES
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d/edge_se3_pointxyz.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d/isometry3d_mappings.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d/edge_pointxyz.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d/edge_se3_lotsofxyz.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d/edge_se3.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d/se3_ops.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d/vertex_se3.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d/parameter_camera.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d/se3quat.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d/parameter_stereo_camera.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d/g2o_types_slam3d_api.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d/parameter_se3_offset.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d/edge_se3_offset.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d/edge_se3_pointxyz_disparity.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d/edge_se3_pointxyz_depth.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d/types_slam3d.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d/vertex_pointxyz.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d/edge_se3_prior.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d/isometry3d_gradients.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d/dquat2mat.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d/se3_ops.hpp"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d/edge_se3_pointxyz.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d/isometry3d_mappings.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d/edge_pointxyz.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d/edge_se3_lotsofxyz.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d/edge_se3.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d/se3_ops.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d/vertex_se3.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d/parameter_camera.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d/se3quat.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d/parameter_stereo_camera.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d/g2o_types_slam3d_api.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d/parameter_se3_offset.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d/edge_se3_offset.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d/edge_se3_pointxyz_disparity.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d/edge_se3_pointxyz_depth.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d/types_slam3d.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d/vertex_pointxyz.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d/edge_se3_prior.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d/isometry3d_gradients.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d/dquat2mat.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/types/slam3d/se3_ops.hpp"
     )
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 

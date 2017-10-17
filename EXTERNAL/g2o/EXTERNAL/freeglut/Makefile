@@ -42,10 +42,10 @@ EQUALS = =
 CMAKE_EDIT_COMMAND = /usr/bin/cmake-gui
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o
+CMAKE_SOURCE_DIR = /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o
+CMAKE_BINARY_DIR = /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -82,6 +82,16 @@ install/local: preinstall
 install/local/fast: install/local
 .PHONY : install/local/fast
 
+# Special rule for the target install/strip
+install/strip: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip
+
+# Special rule for the target install/strip
+install/strip/fast: install/strip
+.PHONY : install/strip/fast
+
 # Special rule for the target list_install_components
 list_install_components:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
@@ -103,14 +113,14 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(CMAKE_COMMAND) -E cmake_progress_start /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/CMakeFiles /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/EXTERNAL/freeglut/CMakeFiles/progress.marks
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 EXTERNAL/freeglut/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/CMakeFiles 0
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(CMAKE_COMMAND) -E cmake_progress_start /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/CMakeFiles /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/EXTERNAL/freeglut/CMakeFiles/progress.marks
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 EXTERNAL/freeglut/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 EXTERNAL/freeglut/clean
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 EXTERNAL/freeglut/clean
 .PHONY : clean
 
 # The main clean target
@@ -119,22 +129,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 EXTERNAL/freeglut/preinstall
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 EXTERNAL/freeglut/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 EXTERNAL/freeglut/preinstall
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 EXTERNAL/freeglut/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/rule:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/rule
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/rule
 .PHONY : EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/rule
 
 # Convenience name for target.
@@ -143,20 +153,15 @@ freeglut_minimal: EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/rule
 
 # fast build rule for target.
 freeglut_minimal/fast:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/build.make EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/build
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/build.make EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/build
 .PHONY : freeglut_minimal/fast
-
-# Manual pre-install relink rule for target.
-freeglut_minimal/preinstall:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/preinstall
-.PHONY : freeglut_minimal/preinstall
 
 freeglut_font.o: freeglut_font.cpp.o
 .PHONY : freeglut_font.o
 
 # target to build an object file
 freeglut_font.cpp.o:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/build.make EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/freeglut_font.cpp.o
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/build.make EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/freeglut_font.cpp.o
 .PHONY : freeglut_font.cpp.o
 
 freeglut_font.i: freeglut_font.cpp.i
@@ -164,7 +169,7 @@ freeglut_font.i: freeglut_font.cpp.i
 
 # target to preprocess a source file
 freeglut_font.cpp.i:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/build.make EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/freeglut_font.cpp.i
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/build.make EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/freeglut_font.cpp.i
 .PHONY : freeglut_font.cpp.i
 
 freeglut_font.s: freeglut_font.cpp.s
@@ -172,7 +177,7 @@ freeglut_font.s: freeglut_font.cpp.s
 
 # target to generate assembly for a file
 freeglut_font.cpp.s:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/build.make EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/freeglut_font.cpp.s
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/build.make EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/freeglut_font.cpp.s
 .PHONY : freeglut_font.cpp.s
 
 freeglut_stroke_mono_roman.o: freeglut_stroke_mono_roman.cpp.o
@@ -180,7 +185,7 @@ freeglut_stroke_mono_roman.o: freeglut_stroke_mono_roman.cpp.o
 
 # target to build an object file
 freeglut_stroke_mono_roman.cpp.o:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/build.make EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/freeglut_stroke_mono_roman.cpp.o
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/build.make EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/freeglut_stroke_mono_roman.cpp.o
 .PHONY : freeglut_stroke_mono_roman.cpp.o
 
 freeglut_stroke_mono_roman.i: freeglut_stroke_mono_roman.cpp.i
@@ -188,7 +193,7 @@ freeglut_stroke_mono_roman.i: freeglut_stroke_mono_roman.cpp.i
 
 # target to preprocess a source file
 freeglut_stroke_mono_roman.cpp.i:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/build.make EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/freeglut_stroke_mono_roman.cpp.i
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/build.make EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/freeglut_stroke_mono_roman.cpp.i
 .PHONY : freeglut_stroke_mono_roman.cpp.i
 
 freeglut_stroke_mono_roman.s: freeglut_stroke_mono_roman.cpp.s
@@ -196,7 +201,7 @@ freeglut_stroke_mono_roman.s: freeglut_stroke_mono_roman.cpp.s
 
 # target to generate assembly for a file
 freeglut_stroke_mono_roman.cpp.s:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/build.make EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/freeglut_stroke_mono_roman.cpp.s
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/build.make EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/freeglut_stroke_mono_roman.cpp.s
 .PHONY : freeglut_stroke_mono_roman.cpp.s
 
 freeglut_stroke_roman.o: freeglut_stroke_roman.cpp.o
@@ -204,7 +209,7 @@ freeglut_stroke_roman.o: freeglut_stroke_roman.cpp.o
 
 # target to build an object file
 freeglut_stroke_roman.cpp.o:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/build.make EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/freeglut_stroke_roman.cpp.o
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/build.make EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/freeglut_stroke_roman.cpp.o
 .PHONY : freeglut_stroke_roman.cpp.o
 
 freeglut_stroke_roman.i: freeglut_stroke_roman.cpp.i
@@ -212,7 +217,7 @@ freeglut_stroke_roman.i: freeglut_stroke_roman.cpp.i
 
 # target to preprocess a source file
 freeglut_stroke_roman.cpp.i:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/build.make EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/freeglut_stroke_roman.cpp.i
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/build.make EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/freeglut_stroke_roman.cpp.i
 .PHONY : freeglut_stroke_roman.cpp.i
 
 freeglut_stroke_roman.s: freeglut_stroke_roman.cpp.s
@@ -220,7 +225,7 @@ freeglut_stroke_roman.s: freeglut_stroke_roman.cpp.s
 
 # target to generate assembly for a file
 freeglut_stroke_roman.cpp.s:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/build.make EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/freeglut_stroke_roman.cpp.s
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/build.make EXTERNAL/freeglut/CMakeFiles/freeglut_minimal.dir/freeglut_stroke_roman.cpp.s
 .PHONY : freeglut_stroke_roman.cpp.s
 
 # Help Target
@@ -233,6 +238,7 @@ help:
 	@echo "... freeglut_minimal"
 	@echo "... install"
 	@echo "... install/local"
+	@echo "... install/strip"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
 	@echo "... freeglut_font.o"
@@ -255,6 +261,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

@@ -1,4 +1,4 @@
-# Install script for directory: /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/solvers
+# Install script for directory: /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/solvers
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -34,13 +34,13 @@ ENDIF(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 
 IF(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  INCLUDE("/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/solvers/pcg/cmake_install.cmake")
-  INCLUDE("/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/solvers/dense/cmake_install.cmake")
-  INCLUDE("/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/solvers/structure_only/cmake_install.cmake")
-  INCLUDE("/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/solvers/csparse/cmake_install.cmake")
-  INCLUDE("/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/solvers/slam2d_linear/cmake_install.cmake")
-  INCLUDE("/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/solvers/cholmod/cmake_install.cmake")
-  INCLUDE("/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/solvers/eigen/cmake_install.cmake")
+  INCLUDE("/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/solvers/pcg/cmake_install.cmake")
+  INCLUDE("/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/solvers/dense/cmake_install.cmake")
+  INCLUDE("/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/solvers/structure_only/cmake_install.cmake")
+  INCLUDE("/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/solvers/csparse/cmake_install.cmake")
+  INCLUDE("/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/solvers/slam2d_linear/cmake_install.cmake")
+  INCLUDE("/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/solvers/cholmod/cmake_install.cmake")
+  INCLUDE("/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/solvers/eigen/cmake_install.cmake")
 
 ENDIF(NOT CMAKE_INSTALL_LOCAL_ONLY)
 

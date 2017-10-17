@@ -42,10 +42,10 @@ EQUALS = =
 CMAKE_EDIT_COMMAND = /usr/bin/cmake-gui
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o
+CMAKE_SOURCE_DIR = /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o
+CMAKE_BINARY_DIR = /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -82,6 +82,16 @@ install/local: preinstall
 install/local/fast: install/local
 .PHONY : install/local/fast
 
+# Special rule for the target install/strip
+install/strip: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip
+
+# Special rule for the target install/strip
+install/strip/fast: install/strip
+.PHONY : install/strip/fast
+
 # Special rule for the target list_install_components
 list_install_components:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
@@ -103,14 +113,14 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(CMAKE_COMMAND) -E cmake_progress_start /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/CMakeFiles /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/solvers/csparse/CMakeFiles/progress.marks
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/solvers/csparse/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/CMakeFiles 0
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(CMAKE_COMMAND) -E cmake_progress_start /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/CMakeFiles /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/solvers/csparse/CMakeFiles/progress.marks
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/solvers/csparse/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/solvers/csparse/clean
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/solvers/csparse/clean
 .PHONY : clean
 
 # The main clean target
@@ -119,22 +129,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/solvers/csparse/preinstall
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/solvers/csparse/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/solvers/csparse/preinstall
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/solvers/csparse/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 g2o/solvers/csparse/CMakeFiles/csparse_extension.dir/rule:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/solvers/csparse/CMakeFiles/csparse_extension.dir/rule
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/solvers/csparse/CMakeFiles/csparse_extension.dir/rule
 .PHONY : g2o/solvers/csparse/CMakeFiles/csparse_extension.dir/rule
 
 # Convenience name for target.
@@ -143,17 +153,12 @@ csparse_extension: g2o/solvers/csparse/CMakeFiles/csparse_extension.dir/rule
 
 # fast build rule for target.
 csparse_extension/fast:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/solvers/csparse/CMakeFiles/csparse_extension.dir/build.make g2o/solvers/csparse/CMakeFiles/csparse_extension.dir/build
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/solvers/csparse/CMakeFiles/csparse_extension.dir/build.make g2o/solvers/csparse/CMakeFiles/csparse_extension.dir/build
 .PHONY : csparse_extension/fast
-
-# Manual pre-install relink rule for target.
-csparse_extension/preinstall:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/solvers/csparse/CMakeFiles/csparse_extension.dir/preinstall
-.PHONY : csparse_extension/preinstall
 
 # Convenience name for target.
 g2o/solvers/csparse/CMakeFiles/solver_csparse.dir/rule:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/solvers/csparse/CMakeFiles/solver_csparse.dir/rule
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/solvers/csparse/CMakeFiles/solver_csparse.dir/rule
 .PHONY : g2o/solvers/csparse/CMakeFiles/solver_csparse.dir/rule
 
 # Convenience name for target.
@@ -162,20 +167,15 @@ solver_csparse: g2o/solvers/csparse/CMakeFiles/solver_csparse.dir/rule
 
 # fast build rule for target.
 solver_csparse/fast:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/solvers/csparse/CMakeFiles/solver_csparse.dir/build.make g2o/solvers/csparse/CMakeFiles/solver_csparse.dir/build
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/solvers/csparse/CMakeFiles/solver_csparse.dir/build.make g2o/solvers/csparse/CMakeFiles/solver_csparse.dir/build
 .PHONY : solver_csparse/fast
-
-# Manual pre-install relink rule for target.
-solver_csparse/preinstall:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/solvers/csparse/CMakeFiles/solver_csparse.dir/preinstall
-.PHONY : solver_csparse/preinstall
 
 csparse_helper.o: csparse_helper.cpp.o
 .PHONY : csparse_helper.o
 
 # target to build an object file
 csparse_helper.cpp.o:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/solvers/csparse/CMakeFiles/csparse_extension.dir/build.make g2o/solvers/csparse/CMakeFiles/csparse_extension.dir/csparse_helper.cpp.o
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/solvers/csparse/CMakeFiles/csparse_extension.dir/build.make g2o/solvers/csparse/CMakeFiles/csparse_extension.dir/csparse_helper.cpp.o
 .PHONY : csparse_helper.cpp.o
 
 csparse_helper.i: csparse_helper.cpp.i
@@ -183,7 +183,7 @@ csparse_helper.i: csparse_helper.cpp.i
 
 # target to preprocess a source file
 csparse_helper.cpp.i:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/solvers/csparse/CMakeFiles/csparse_extension.dir/build.make g2o/solvers/csparse/CMakeFiles/csparse_extension.dir/csparse_helper.cpp.i
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/solvers/csparse/CMakeFiles/csparse_extension.dir/build.make g2o/solvers/csparse/CMakeFiles/csparse_extension.dir/csparse_helper.cpp.i
 .PHONY : csparse_helper.cpp.i
 
 csparse_helper.s: csparse_helper.cpp.s
@@ -191,7 +191,7 @@ csparse_helper.s: csparse_helper.cpp.s
 
 # target to generate assembly for a file
 csparse_helper.cpp.s:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/solvers/csparse/CMakeFiles/csparse_extension.dir/build.make g2o/solvers/csparse/CMakeFiles/csparse_extension.dir/csparse_helper.cpp.s
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/solvers/csparse/CMakeFiles/csparse_extension.dir/build.make g2o/solvers/csparse/CMakeFiles/csparse_extension.dir/csparse_helper.cpp.s
 .PHONY : csparse_helper.cpp.s
 
 solver_csparse.o: solver_csparse.cpp.o
@@ -199,7 +199,7 @@ solver_csparse.o: solver_csparse.cpp.o
 
 # target to build an object file
 solver_csparse.cpp.o:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/solvers/csparse/CMakeFiles/solver_csparse.dir/build.make g2o/solvers/csparse/CMakeFiles/solver_csparse.dir/solver_csparse.cpp.o
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/solvers/csparse/CMakeFiles/solver_csparse.dir/build.make g2o/solvers/csparse/CMakeFiles/solver_csparse.dir/solver_csparse.cpp.o
 .PHONY : solver_csparse.cpp.o
 
 solver_csparse.i: solver_csparse.cpp.i
@@ -207,7 +207,7 @@ solver_csparse.i: solver_csparse.cpp.i
 
 # target to preprocess a source file
 solver_csparse.cpp.i:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/solvers/csparse/CMakeFiles/solver_csparse.dir/build.make g2o/solvers/csparse/CMakeFiles/solver_csparse.dir/solver_csparse.cpp.i
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/solvers/csparse/CMakeFiles/solver_csparse.dir/build.make g2o/solvers/csparse/CMakeFiles/solver_csparse.dir/solver_csparse.cpp.i
 .PHONY : solver_csparse.cpp.i
 
 solver_csparse.s: solver_csparse.cpp.s
@@ -215,7 +215,7 @@ solver_csparse.s: solver_csparse.cpp.s
 
 # target to generate assembly for a file
 solver_csparse.cpp.s:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/solvers/csparse/CMakeFiles/solver_csparse.dir/build.make g2o/solvers/csparse/CMakeFiles/solver_csparse.dir/solver_csparse.cpp.s
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/solvers/csparse/CMakeFiles/solver_csparse.dir/build.make g2o/solvers/csparse/CMakeFiles/solver_csparse.dir/solver_csparse.cpp.s
 .PHONY : solver_csparse.cpp.s
 
 # Help Target
@@ -228,6 +228,7 @@ help:
 	@echo "... edit_cache"
 	@echo "... install"
 	@echo "... install/local"
+	@echo "... install/strip"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
 	@echo "... solver_csparse"
@@ -248,6 +249,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

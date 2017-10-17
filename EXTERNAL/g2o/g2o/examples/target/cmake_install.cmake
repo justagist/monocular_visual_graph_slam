@@ -1,4 +1,4 @@
-# Install script for directory: /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/target
+# Install script for directory: /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/target
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)

@@ -42,10 +42,10 @@ EQUALS = =
 CMAKE_EDIT_COMMAND = /usr/bin/cmake-gui
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o
+CMAKE_SOURCE_DIR = /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o
+CMAKE_BINARY_DIR = /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -82,6 +82,16 @@ install/local: preinstall
 install/local/fast: install/local
 .PHONY : install/local/fast
 
+# Special rule for the target install/strip
+install/strip: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip
+
+# Special rule for the target install/strip
+install/strip/fast: install/strip
+.PHONY : install/strip/fast
+
 # Special rule for the target list_install_components
 list_install_components:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
@@ -103,14 +113,14 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(CMAKE_COMMAND) -E cmake_progress_start /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/CMakeFiles /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/slam2d/CMakeFiles/progress.marks
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/slam2d/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/CMakeFiles 0
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(CMAKE_COMMAND) -E cmake_progress_start /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/CMakeFiles /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/slam2d/CMakeFiles/progress.marks
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/slam2d/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/slam2d/clean
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/slam2d/clean
 .PHONY : clean
 
 # The main clean target
@@ -119,22 +129,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/slam2d/preinstall
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/slam2d/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/slam2d/preinstall
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/slam2d/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/rule:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/rule
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f CMakeFiles/Makefile2 g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/rule
 .PHONY : g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/rule
 
 # Convenience name for target.
@@ -143,7 +153,7 @@ slam2d_g2o: g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/rule
 
 # fast build rule for target.
 slam2d_g2o/fast:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/build.make g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/build
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/build.make g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/build
 .PHONY : slam2d_g2o/fast
 
 draw_helpers.o: draw_helpers.cpp.o
@@ -151,7 +161,7 @@ draw_helpers.o: draw_helpers.cpp.o
 
 # target to build an object file
 draw_helpers.cpp.o:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/build.make g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/draw_helpers.cpp.o
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/build.make g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/draw_helpers.cpp.o
 .PHONY : draw_helpers.cpp.o
 
 draw_helpers.i: draw_helpers.cpp.i
@@ -159,7 +169,7 @@ draw_helpers.i: draw_helpers.cpp.i
 
 # target to preprocess a source file
 draw_helpers.cpp.i:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/build.make g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/draw_helpers.cpp.i
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/build.make g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/draw_helpers.cpp.i
 .PHONY : draw_helpers.cpp.i
 
 draw_helpers.s: draw_helpers.cpp.s
@@ -167,7 +177,7 @@ draw_helpers.s: draw_helpers.cpp.s
 
 # target to generate assembly for a file
 draw_helpers.cpp.s:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/build.make g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/draw_helpers.cpp.s
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/build.make g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/draw_helpers.cpp.s
 .PHONY : draw_helpers.cpp.s
 
 main_window.o: main_window.cpp.o
@@ -175,7 +185,7 @@ main_window.o: main_window.cpp.o
 
 # target to build an object file
 main_window.cpp.o:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/build.make g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/main_window.cpp.o
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/build.make g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/main_window.cpp.o
 .PHONY : main_window.cpp.o
 
 main_window.i: main_window.cpp.i
@@ -183,7 +193,7 @@ main_window.i: main_window.cpp.i
 
 # target to preprocess a source file
 main_window.cpp.i:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/build.make g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/main_window.cpp.i
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/build.make g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/main_window.cpp.i
 .PHONY : main_window.cpp.i
 
 main_window.s: main_window.cpp.s
@@ -191,7 +201,7 @@ main_window.s: main_window.cpp.s
 
 # target to generate assembly for a file
 main_window.cpp.s:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/build.make g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/main_window.cpp.s
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/build.make g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/main_window.cpp.s
 .PHONY : main_window.cpp.s
 
 moc_main_window.o: moc_main_window.cpp.o
@@ -199,7 +209,7 @@ moc_main_window.o: moc_main_window.cpp.o
 
 # target to build an object file
 moc_main_window.cpp.o:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/build.make g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/moc_main_window.cpp.o
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/build.make g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/moc_main_window.cpp.o
 .PHONY : moc_main_window.cpp.o
 
 moc_main_window.i: moc_main_window.cpp.i
@@ -207,7 +217,7 @@ moc_main_window.i: moc_main_window.cpp.i
 
 # target to preprocess a source file
 moc_main_window.cpp.i:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/build.make g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/moc_main_window.cpp.i
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/build.make g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/moc_main_window.cpp.i
 .PHONY : moc_main_window.cpp.i
 
 moc_main_window.s: moc_main_window.cpp.s
@@ -215,7 +225,7 @@ moc_main_window.s: moc_main_window.cpp.s
 
 # target to generate assembly for a file
 moc_main_window.cpp.s:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/build.make g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/moc_main_window.cpp.s
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/build.make g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/moc_main_window.cpp.s
 .PHONY : moc_main_window.cpp.s
 
 slam2d_g2o.o: slam2d_g2o.cpp.o
@@ -223,7 +233,7 @@ slam2d_g2o.o: slam2d_g2o.cpp.o
 
 # target to build an object file
 slam2d_g2o.cpp.o:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/build.make g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/slam2d_g2o.cpp.o
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/build.make g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/slam2d_g2o.cpp.o
 .PHONY : slam2d_g2o.cpp.o
 
 slam2d_g2o.i: slam2d_g2o.cpp.i
@@ -231,7 +241,7 @@ slam2d_g2o.i: slam2d_g2o.cpp.i
 
 # target to preprocess a source file
 slam2d_g2o.cpp.i:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/build.make g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/slam2d_g2o.cpp.i
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/build.make g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/slam2d_g2o.cpp.i
 .PHONY : slam2d_g2o.cpp.i
 
 slam2d_g2o.s: slam2d_g2o.cpp.s
@@ -239,7 +249,7 @@ slam2d_g2o.s: slam2d_g2o.cpp.s
 
 # target to generate assembly for a file
 slam2d_g2o.cpp.s:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/build.make g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/slam2d_g2o.cpp.s
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/build.make g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/slam2d_g2o.cpp.s
 .PHONY : slam2d_g2o.cpp.s
 
 slam2d_viewer.o: slam2d_viewer.cpp.o
@@ -247,7 +257,7 @@ slam2d_viewer.o: slam2d_viewer.cpp.o
 
 # target to build an object file
 slam2d_viewer.cpp.o:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/build.make g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/slam2d_viewer.cpp.o
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/build.make g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/slam2d_viewer.cpp.o
 .PHONY : slam2d_viewer.cpp.o
 
 slam2d_viewer.i: slam2d_viewer.cpp.i
@@ -255,7 +265,7 @@ slam2d_viewer.i: slam2d_viewer.cpp.i
 
 # target to preprocess a source file
 slam2d_viewer.cpp.i:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/build.make g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/slam2d_viewer.cpp.i
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/build.make g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/slam2d_viewer.cpp.i
 .PHONY : slam2d_viewer.cpp.i
 
 slam2d_viewer.s: slam2d_viewer.cpp.s
@@ -263,7 +273,7 @@ slam2d_viewer.s: slam2d_viewer.cpp.s
 
 # target to generate assembly for a file
 slam2d_viewer.cpp.s:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/build.make g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/slam2d_viewer.cpp.s
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(MAKE) -f g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/build.make g2o/examples/slam2d/CMakeFiles/slam2d_g2o.dir/slam2d_viewer.cpp.s
 .PHONY : slam2d_viewer.cpp.s
 
 # Help Target
@@ -275,6 +285,7 @@ help:
 	@echo "... edit_cache"
 	@echo "... install"
 	@echo "... install/local"
+	@echo "... install/strip"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
 	@echo "... slam2d_g2o"
@@ -304,6 +315,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

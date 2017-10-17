@@ -1,4 +1,4 @@
-# Install script for directory: /home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/core
+# Install script for directory: /home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/core
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -33,6 +33,12 @@ IF(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 ENDIF(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
+  IF(EXISTS "$ENV{DESTDIR}/usr/local/lib/libg2o_core.so" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}/usr/local/lib/libg2o_core.so")
+    FILE(RPATH_CHECK
+         FILE "$ENV{DESTDIR}/usr/local/lib/libg2o_core.so"
+         RPATH "")
+  ENDIF()
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
    "/usr/local/lib/libg2o_core.so")
   IF (CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
@@ -41,7 +47,15 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
   IF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
-FILE(INSTALL DESTINATION "/usr/local/lib" TYPE SHARED_LIBRARY FILES "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/CMakeFiles/CMakeRelink.dir/libg2o_core.so")
+FILE(INSTALL DESTINATION "/usr/local/lib" TYPE SHARED_LIBRARY FILES "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/lib/libg2o_core.so")
+  IF(EXISTS "$ENV{DESTDIR}/usr/local/lib/libg2o_core.so" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}/usr/local/lib/libg2o_core.so")
+    FILE(RPATH_REMOVE
+         FILE "$ENV{DESTDIR}/usr/local/lib/libg2o_core.so")
+    IF(CMAKE_INSTALL_DO_STRIP)
+      EXECUTE_PROCESS(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}/usr/local/lib/libg2o_core.so")
+    ENDIF(CMAKE_INSTALL_DO_STRIP)
+  ENDIF()
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
@@ -54,53 +68,53 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   ENDIF (CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
 FILE(INSTALL DESTINATION "/usr/local/include/g2o/core" TYPE FILE FILES
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/g2o_core_api.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/linear_solver.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/openmp_mutex.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/creators.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/parameter.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/solver.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/cache.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/robust_kernel_factory.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/batch_stats.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/robust_kernel.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/sparse_optimizer_terminate_action.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/hyper_graph.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/base_multi_edge.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/optimization_algorithm.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/hyper_dijkstra.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/hyper_graph_action.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/optimization_algorithm_levenberg.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/marginal_covariance_cholesky.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/sparse_block_matrix_diagonal.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/robust_kernel_impl.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/parameter_container.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/sparse_optimizer.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/block_solver.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/optimization_algorithm_property.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/sparse_block_matrix_ccs.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/matrix_structure.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/eigen_types.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/optimization_algorithm_dogleg.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/base_vertex.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/optimizable_graph.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/optimization_algorithm_with_hessian.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/estimate_propagator.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/sparse_block_matrix.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/factory.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/base_unary_edge.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/optimization_algorithm_gauss_newton.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/base_binary_edge.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/base_edge.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/jacobian_workspace.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/matrix_operations.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/optimization_algorithm_factory.h"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/block_solver.hpp"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/base_vertex.hpp"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/base_binary_edge.hpp"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/base_unary_edge.hpp"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/base_multi_edge.hpp"
-    "/home/saif/test_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/sparse_block_matrix.hpp"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/g2o_core_api.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/linear_solver.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/openmp_mutex.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/creators.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/parameter.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/solver.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/cache.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/robust_kernel_factory.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/batch_stats.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/robust_kernel.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/sparse_optimizer_terminate_action.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/hyper_graph.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/base_multi_edge.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/optimization_algorithm.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/hyper_dijkstra.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/hyper_graph_action.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/optimization_algorithm_levenberg.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/marginal_covariance_cholesky.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/sparse_block_matrix_diagonal.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/robust_kernel_impl.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/parameter_container.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/sparse_optimizer.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/block_solver.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/optimization_algorithm_property.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/sparse_block_matrix_ccs.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/matrix_structure.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/eigen_types.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/optimization_algorithm_dogleg.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/base_vertex.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/optimizable_graph.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/optimization_algorithm_with_hessian.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/estimate_propagator.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/sparse_block_matrix.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/factory.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/base_unary_edge.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/optimization_algorithm_gauss_newton.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/base_binary_edge.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/base_edge.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/jacobian_workspace.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/matrix_operations.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/optimization_algorithm_factory.h"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/block_solver.hpp"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/base_vertex.hpp"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/base_binary_edge.hpp"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/base_unary_edge.hpp"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/base_multi_edge.hpp"
+    "/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/core/sparse_block_matrix.hpp"
     )
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
