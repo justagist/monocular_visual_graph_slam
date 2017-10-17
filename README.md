@@ -16,7 +16,7 @@ An implementation of Graph-based SLAM using just a sequence of image from a mono
 
 ### Installation (Tested on ROS indigo + Ubuntu 14.04)
     cd <catkin_workspace>/src/
-    git clone https://git-teaching.cs.bham.ac.uk/mod-msc-proj-2016/sxs1412.git
+    git clone https://justagist@bitbucket.org/justagist/graph_slam.git
     
     ## build g2o library ##
     cd graph_slam/EXTERNAL/g2o/ 
