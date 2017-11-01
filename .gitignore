@@ -11,3 +11,5 @@ trajectory_scene*
 !ground_truths/*
 !estimated_trajectories/*
 src/view_two_groundtruths.py
+**/Makefile
+**/cmake_install.cmake*
