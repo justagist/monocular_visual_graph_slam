@@ -66,7 +66,7 @@ int ideal_baselines_[] ={175, 50, 80,
 bool write_file = false;
 bool optimise_graph = false;
 
-// ----- Creating object for storing all parameterss that can be tuned. (Used for writing all the paramters used while writing trajectory to file (for debugging))
+// ----- Creating object for storing all parameterss that can be tuned. (Used for writing all the paramters used while writing trajectory to file (for debugging)). Also defines global constants.
 namespace gSlam{ namespace SlamParameters   
     { SLAMinfo::SLAMinfoPtr info(new SLAMinfo); 
       const customtype::TransformSE3 pose_aligner_ = slam_utils::getFrameAligner(); // if no frame alignment required, use Identity
@@ -151,6 +151,9 @@ int main(int argc, char** argv)
     // ----- location of the patches. Not required if using initWithCheckerboard. If using initWithCheckerboard method in STAM, the corresponding string should be "checkerboard"
     std::string template_file_fmt[] = {"/home/saif/msc_workspace/slam_test_bag_dataset/ismar/S01_INPUT/S01L03_patch/S01L03_VGA_patch_%04d.png", "/home/saif/msc_workspace/slam_test_bag_dataset/ismar/S02_INPUT/S02L03_patch/S02L03_VGA_patch_%04d.png", "/home/saif/msc_workspace/slam_test_bag_dataset/ismar/ S03_INPUT/S03L03_VGA_patch/S03L03_VGA_patch_%04d.png", "/home/saif/msc_workspace/slam_test_bag_dataset/datasets_12_07_17/frontb1/patches/ptch_%04d.png", "/home/saif/msc_workspace/slam_test_bag_dataset/datasets_12_07_17/frontb2/patches/ptch_%04d.png","/home/saif/msc_workspace/slam_test_bag_dataset/datasets_17_07_17/ardrone_front_square1/patches/ptch_%04d.png","/home/saif/msc_workspace/slam_test_bag_dataset/datasets_17_07_17/ardrone_front_square2/patches/ptch_%04d.png", "/home/saif/msc_workspace/slam_test_bag_dataset/ardrone_line_19_07_17/patches/ptch_%04d.png","checkerboard","checkerboard","checkerboard", "checkerboard", "checkerboard", "checkerboard", "checkerboard", "checkerboard", "checkerboard", "checkerboard", "checkerboard", "checkerboard", "checkerboard", "checkerboard", "checkerboard"};
     
+    // ----- Define destination for output trajectory file.
+    std::string output_destination = "/home/saif/ros_ws/other_ws/src/graph_slam/estimated_trajectories/";
+
 
     // ROS Stuff ====================================================================================================
 
@@ -272,7 +275,7 @@ int main(int argc, char** argv)
         if (argc > 7)
             traj_name = argv[7];
 
-        traj_file << "/home/saif/test_ws/src/graph_slam/estimated_trajectories/" << traj_name << "_" << SCENE << "_" << vis_odo_baseline <<".txt";
+        traj_file << output_destination << traj_name << "_" << SCENE << "_" << vis_odo_baseline <<".txt";
 
         if (slam->getDataPool().getDataSpots().size() > 1)
         {

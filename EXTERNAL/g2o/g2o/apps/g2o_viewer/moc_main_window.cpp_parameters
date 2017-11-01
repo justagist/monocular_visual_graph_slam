@@ -1,8 +1,8 @@
 -I/usr/include
--I/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o
+-I/home/saif/ros_ws/other_ws/src/graph_slam/EXTERNAL/g2o
 -I/usr/include/eigen3
--I/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o
+-I/home/saif/ros_ws/other_ws/src/graph_slam/EXTERNAL/g2o
 -DUNIX
 -o
-/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_viewer/moc_main_window.cpp
-/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_viewer/main_window.h
+/home/saif/ros_ws/other_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_viewer/moc_main_window.cpp
+/home/saif/ros_ws/other_ws/src/graph_slam/EXTERNAL/g2o/g2o/apps/g2o_viewer/main_window.h

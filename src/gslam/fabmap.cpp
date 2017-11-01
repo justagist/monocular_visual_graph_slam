@@ -40,9 +40,9 @@ namespace gSlam
 {
     valid = false;
 
-    std::string fabmapTrainDataPath = "/home/saif/msc_workspace/slam_x_lib/training_data/StLuciaShortTraindata.yml";
-    std::string vocabPath =  "/home/saif/msc_workspace/slam_x_lib/training_data/StLuciaShortVocabulary.yml";
-    std::string chowliutreePath =  "/home/saif/msc_workspace/slam_x_lib/training_data/StLuciaShortTree.yml";
+    std::string fabmapTrainDataPath = "/home/saif/msc_workspace/training_data/StLuciaShortTraindata.yml";
+    std::string vocabPath =  "/home/saif/msc_workspace/training_data/StLuciaShortVocabulary.yml";
+    std::string chowliutreePath =  "/home/saif/msc_workspace/training_data/StLuciaShortTree.yml";
 
     // Load training data
     cv::FileStorage fsTraining;

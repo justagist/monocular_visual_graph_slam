@@ -84,7 +84,7 @@ SET(GSLAM_SOURCES ${GSLAM_SRC_DIR}/gslam/ros_visualizer.cpp
 
 
 SET(GSLAM_LINK_LIBS ${PCL_LIBRARIES}) 
-SET(STAM_LINK_LIBS ${OpenCV_LIBS} ${cvsba_LIBS}) 
+SET(STAM_LINK_LIBS ${OpenCV_LIBS}) 
 
 add_library(gslam ${GSLAM_SOURCES})
 
@@ -98,15 +98,15 @@ target_link_libraries(points_and_lines ${catkin_LIBRARIES})
 
 target_link_libraries(vis_odo_node
    ${catkin_LIBRARIES}
-    ${STAM_LIBRARY} ${OpenCV_LIBS} ${cvsba_LIBS}
+    ${STAM_LIBRARY} ${OpenCV_LIBS}
 )
 target_link_libraries(rename_dataset
    ${catkin_LIBRARIES}
-    ${STAM_LIBRARY} ${OpenCV_LIBS} ${cvsba_LIBS}
+    ${STAM_LIBRARY} ${OpenCV_LIBS}
 )
 target_link_libraries(test_node
    ${catkin_LIBRARIES}
-	${STAM_LIBRARY}	${OpenCV_LIBS} ${cvsba_LIBS}
+	${STAM_LIBRARY}	${OpenCV_LIBS}
 )
 target_link_libraries(gslam ${STAM_LIBRARY} ${STAM_LINK_LIBS} ${GSLAM_LINK_LIBS} ${catkin_LIBRARIES} core types_slam3d
                                    solver_csparse)

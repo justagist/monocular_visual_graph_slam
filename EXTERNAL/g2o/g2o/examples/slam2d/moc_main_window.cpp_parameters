@@ -1,7 +1,7 @@
 -I/usr/include
--I/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o
+-I/home/saif/ros_ws/other_ws/src/graph_slam/EXTERNAL/g2o
 -I/usr/include/eigen3
--I/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o
+-I/home/saif/ros_ws/other_ws/src/graph_slam/EXTERNAL/g2o
 -I/usr/include/suitesparse
 -I/usr/include/QGLViewer
 -I/usr/include/qt5
@@ -26,10 +26,10 @@
 -I/usr/include/qt5/QtGui
 -I/usr/include/qt5/QtCore
 -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64
--I/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o
--I/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/slam2d
--I/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/slam2d
+-I/home/saif/ros_ws/other_ws/src/graph_slam/EXTERNAL/g2o
+-I/home/saif/ros_ws/other_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/slam2d
+-I/home/saif/ros_ws/other_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/slam2d
 -DUNIX
 -o
-/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/slam2d/moc_main_window.cpp
-/home/saif/ros_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/slam2d/main_window.h
+/home/saif/ros_ws/other_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/slam2d/moc_main_window.cpp
+/home/saif/ros_ws/other_ws/src/graph_slam/EXTERNAL/g2o/g2o/examples/slam2d/main_window.h
