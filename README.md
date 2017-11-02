@@ -35,7 +35,8 @@ An implementation of Graph-based SLAM using just a sequence of image from a mono
     
 ### Usage
 
-Before running the 
+Before running the graph-slam node, the location of the 'fabmap_training_data' folder has to be entered by editing the value of '*fabmap_training_data_destination_*' parameter in graph_slam/src/main.cpp file.
+The path to the image dataset on which the algorithm is to be run can also be set in the main.cpp file.
 
 ##### Running graph-slam node:
 
