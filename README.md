@@ -34,6 +34,9 @@ An implementation of Graph-based SLAM using just a sequence of image from a mono
     source devel/setup.bash
     
 ### Usage
+
+Before running the 
+
 ##### Running graph-slam node:
 
     rosrun graph_slam main_slam_node <scene_number> [visualize?] [publish rostopics?] [save trajectory to txt file?] [run graph optimisation thread?] [baseline for visual odometry] [trajectory file name] 

@@ -78,15 +78,18 @@ namespace SlamParameters
 
     }; // class SLAMinfo
 
+    // ================= Global values required by multiple files
 
-
-    // static gSlam::Parameters::SLAMinfo::SLAMinfoPtr info(new gSlam::Parameters::SLAMinfo());
-    // static gSlam::Parameters::SLAMinfo info;
     extern SLAMinfo::SLAMinfoPtr info;
 
     // ----- Frame Alignement Transformation to align camera frame of the Ardrone to its body frame
     extern const Eigen::Affine3d pose_aligner_;
     extern const Eigen::Affine3d ismar_frame_aligner_;
+
+    // ----- Making the location of the FabMap Training data folder accessible to other files
+    extern const std::string fabmap_training_data_destination_;
+
+    // =================
 
 } // namespace Constants
 
