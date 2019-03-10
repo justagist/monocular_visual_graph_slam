@@ -2,6 +2,10 @@
 
 An implementation of Graph-based SLAM using just a sequence of image from a monocular camera. It performs feature-based visual odometry (requires STAM library) and graph optimisation using g2o library.
 
+#### Video
+
+Watch implementation of the algorithm on an aerial robot (Parrot AR.Drone) [here](https://youtu.be/gfz0dfJCWEU)
+
 #### Dependencies
 
 * OpenCV 2.4.x (non-free version)
